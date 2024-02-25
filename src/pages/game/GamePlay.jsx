@@ -12,7 +12,17 @@ export const GamePlay = () => {
   const onClickBallReset = useRef();
   const onClickPlacementReset = useRef();
   const [gameData, setGameData] = useState(null);
+  const countStartTime = useRef(0);
+  // ゲームスタート演出の遅延時間
   const GAME_START_DELAY = 300;
+  // ミリ秒から秒に変換
+  const SECONDS_TO_MILLISECONDS = 1000;
+  // 秒から分に変換
+  const MINUTES_TO_SECONDS = 60;
+  // ミリ秒から分に変換
+  const MILLISECONDS_TO_MINUTES = MINUTES_TO_SECONDS * SECONDS_TO_MILLISECONDS;
+  // ミリ秒の切り捨て値
+  const MILLISECONDS_FLOOR_VALUE = 10;
 
   const fetchData = useCallback(async () => {
     try {
@@ -61,15 +71,40 @@ export const GamePlay = () => {
 
   useEffect(() => {
     if (gameClear) {
-      // TODO : ゲームクリア処理や演出
-      alert("ゲームクリア");
+      // NOTE : 2038年問題がありますが短期間の公開と見ているので問題ないと判断
+      const countEndTime = Date.now();
+      // ミリ秒取得
+      const countTime = (countEndTime - countStartTime.current);
+      console.log(countTime);
+      // ミリ秒を分に変換
+      const minutes = twoDigits(Math.floor(countTime / MILLISECONDS_TO_MINUTES));
+      const minutesText = minutes > 0 ? `${minutes}m` : "";
+      // ミリ秒を秒に変換
+      const seconds = twoDigits(Math.floor(countTime / SECONDS_TO_MILLISECONDS));
+      // ミリ秒から分と秒をひいてミリ秒に変換
+      const secondsText = seconds > 0 ? `${seconds}s` : "";
+      // ミリ秒 = 総ミリ秒 - (分からミリ秒に変換した値) - (秒からミリ秒に変換した値)
+      let milliSeconds = countTime - (minutes * MILLISECONDS_TO_MINUTES) - (seconds * SECONDS_TO_MILLISECONDS);
+      // ミリ秒は3桁になるので、10で割ったあとに小数点以下を切り捨てると2桁になる
+      milliSeconds = Math.floor(milliSeconds / MILLISECONDS_FLOOR_VALUE);
+      // 必ず2桁表記にする
+      milliSeconds = twoDigits(milliSeconds);
+      const milliSecondsText = milliSeconds > 0 ? `${milliSeconds}ms` : "";
+      const time = `${minutesText}${secondsText}${milliSecondsText}`;
+      alert(`ゲームクリア！\nクリアタイム ${time}`);
       // TODO : クリア後の演出が終わったらステージ選択画面に遷移
     }
   }, [gameClear]);
 
+  // 2桁表示
+  const twoDigits = (num) => {
+    return ("00" + num).slice(-2);
+  }
+
   const gameStart = () => {
     // TODO : ゲームスタート演出
     alert("ゲームスタート");
+    countStartTime.current = Date.now();
   };
 
   const handlePlacementReset = useCallback(() => {
