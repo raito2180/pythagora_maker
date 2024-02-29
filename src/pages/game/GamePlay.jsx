@@ -7,7 +7,7 @@ import { getStageById } from 'services/supabaseStages';
 export const GamePlay = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const [isGameCompleted, setisGameCompleted] = useState(false);
+  const [isGameCompleted, setIsGameCompleted] = useState(false);
   const onClickPlay = useRef();
   const onClickBallReset = useRef();
   const onClickPlacementReset = useRef();
@@ -141,7 +141,7 @@ export const GamePlay = () => {
               setOnClickPlay={onClickPlay}
               setOnClickPlacementReset={onClickPlacementReset}
               setOnClickBallReset={onClickBallReset}
-              setisGameCompleted={setisGameCompleted} />
+              setIsGameCompleted={setIsGameCompleted} />
           </div>
         </div>
       }

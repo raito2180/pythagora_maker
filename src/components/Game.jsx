@@ -5,7 +5,7 @@ import { MouseEvents } from 'utils/matterjs/MouseEvents';
 import { createObject, createObjects } from 'utils/matterjs/objects/CreateObjects';
 import { ObjectType, UserPlacementBox, WallX } from 'utils/GameSetting';
 
-export const Game = memo(({ stageData, setOnClickPlay, setOnClickPlacementReset, setOnClickBallReset, setGameClear }) => {
+export const Game = memo(({ stageData, setOnClickPlay, setOnClickPlacementReset, setOnClickBallReset, setIsGameCompleted }) => {
   const [isMousePosXLeft, setIsMousePosXLeft] = useState(true);
   const gameDataRef = useRef();
   const matterEngineRef = useRef();
@@ -116,7 +116,7 @@ export const Game = memo(({ stageData, setOnClickPlay, setOnClickPlacementReset,
     const intervalId = setInterval(() => {
       const pos = switchObj.getPosition();
       const results = switchObj.setPositionAnimate(pos.x, startPos_y + PUSH_SWITCH_MOVEMENT);
-      setGameClear(results);
+      setIsGameCompleted(results);
       if (results) {
         clearInterval(intervalId);
       }
