@@ -12,18 +12,14 @@ export const GamePlay = () => {
   const onClickBallReset = useRef();
   const onClickPlacementReset = useRef();
   const [gameData, setGameData] = useState(null);
-  const countStartTime = useRef(0);
+  const [countTime, setCountTime] = useState(0);
+  const [countIntervalId, setCountIntervalId] = useState(null);
   // ゲームスタート演出の遅延時間
   const GAME_START_DELAY = 300;
   // ミリ秒から秒に変換
   const SECONDS_TO_MILLISECONDS = 1000;
-  // 秒から分に変換
-  const MINUTES_TO_SECONDS = 60;
-  // ミリ秒から分に変換
-  const MILLISECONDS_TO_MINUTES = MINUTES_TO_SECONDS * SECONDS_TO_MILLISECONDS;
-  // ミリ秒の切り捨て値
-  const MILLISECONDS_FLOOR_VALUE = 10;
 
+  // useEffectを先に書くと、useCallbackの関数が使えないので、useCallbackを先に書く
   const fetchData = useCallback(async () => {
     try {
       let { result, data } = await getStageById(id);
@@ -71,30 +67,14 @@ export const GamePlay = () => {
 
   useEffect(() => {
     if (gameClear) {
-      // NOTE : 2038年問題がありますが短期間の公開と見ているので問題ないと判断
-      const countEndTime = Date.now();
-      // ミリ秒取得
-      const countTime = (countEndTime - countStartTime.current);
-      console.log(countTime);
-      // ミリ秒を分に変換
-      const minutes = twoDigits(Math.floor(countTime / MILLISECONDS_TO_MINUTES));
-      const minutesText = minutes > 0 ? `${minutes}m` : "";
-      // ミリ秒を秒に変換
-      const seconds = twoDigits(Math.floor(countTime / SECONDS_TO_MILLISECONDS));
-      // ミリ秒から分と秒をひいてミリ秒に変換
-      const secondsText = seconds > 0 ? `${seconds}s` : "";
-      // ミリ秒 = 総ミリ秒 - (分からミリ秒に変換した値) - (秒からミリ秒に変換した値)
-      let milliSeconds = countTime - (minutes * MILLISECONDS_TO_MINUTES) - (seconds * SECONDS_TO_MILLISECONDS);
-      // ミリ秒は3桁になるので、10で割ったあとに小数点以下を切り捨てると2桁になる
-      milliSeconds = Math.floor(milliSeconds / MILLISECONDS_FLOOR_VALUE);
-      // 必ず2桁表記にする
-      milliSeconds = twoDigits(milliSeconds);
-      const milliSecondsText = milliSeconds > 0 ? `${milliSeconds}ms` : "";
-      const time = `${minutesText}${secondsText}${milliSecondsText}`;
-      alert(`ゲームクリア！\nクリアタイム ${time}`);
-      // TODO : クリア後の演出が終わったらステージ選択画面に遷移
+      const time = countTime;
+      alert(`ゲームクリア！\nクリアタイム ${transformTime(time)}`);
+    }
+    return () => {
+      clearInterval(countIntervalId);
     }
   }, [gameClear]);
+
 
   // 2桁表示
   const twoDigits = (num) => {
@@ -104,17 +84,30 @@ export const GamePlay = () => {
   const gameStart = () => {
     // TODO : ゲームスタート演出
     alert("ゲームスタート");
-    countStartTime.current = Date.now();
+    const intervalId = setInterval(() => {
+      setCountTime((prev) => prev + 1);
+    }, SECONDS_TO_MILLISECONDS);
+    setCountIntervalId(intervalId);
   };
 
+  const transformTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    // ミリ秒までやると再レンダリングの負荷がかかりそうなので、秒までにしています
+    return `${twoDigits(minutes)}:${twoDigits(seconds)}`;
+  }
+
+  // リセットボタンの処理
   const handlePlacementReset = useCallback(() => {
     onClickPlacementReset.current();
   }, [onClickPlacementReset]);
 
+  // ボールリセットボタンの処理
   const handleBallReset = useCallback(() => {
     onClickBallReset.current();
   }, [onClickBallReset]);
 
+  // 再生ボタンの処理
   const handleClickPlay = useCallback(() => {
     onClickPlay.current();
   }, [onClickPlay]);
@@ -133,6 +126,7 @@ export const GamePlay = () => {
                 <div className='flex justify-between items-center mx-5'>
                   <button className='hover:bg-blue-200 bg-blue-400 hover:text-slate-500 text-slate-950 transition-all py-2 px-4 my-2' onClick={handleBallReset} aria-label="ボールの位置をリセット">BallReset</button>
                   <h3 className='text-2xl'>{gameData.title}</h3>
+                  <p>{transformTime(countTime)}</p>
                   <button className='hover:text-slate-500 text-slate-950 hover:bg-red-200 bg-red-400 transition-all py-2 px-4 my-2' onClick={handleClickPlay} aria-label="再生">▶</button>
                 </div>
               </div>
