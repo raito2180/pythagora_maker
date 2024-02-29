@@ -67,12 +67,19 @@ export const GamePlay = () => {
     }
   }, [loading]);
 
+  const transformTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    // ミリ秒までやると再レンダリングの負荷がかかりそうなので、秒までにしています
+    return `${twoDigits(minutes)}:${twoDigits(seconds)}`;
+  }
+
   // ゲームクリア時の処理
   // 先に宣言しないとuseEffect内で使えない
   const gameCompleted = useCallback(() => {
     clearInterval(countIntervalId);
     alert(`ゲームクリア！\nクリアタイム ${transformTime(countTime)}`);
-  }, [isGameCompleted, countTime]);
+  }, [countIntervalId, countTime, transformTime]);
 
   // gameCompletedはuseCallbackで囲っているので、変更がなければ再生成されない
   useEffect(() => {
@@ -94,13 +101,6 @@ export const GamePlay = () => {
     }, SECONDS_TO_MILLISECONDS);
     setCountIntervalId(intervalId);
   };
-
-  const transformTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    // ミリ秒までやると再レンダリングの負荷がかかりそうなので、秒までにしています
-    return `${twoDigits(minutes)}:${twoDigits(seconds)}`;
-  }
 
   // リセットボタンの処理
   const handlePlacementReset = useCallback(() => {
