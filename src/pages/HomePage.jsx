@@ -24,7 +24,7 @@ const HomePage = () => {
             <h1 className="text-8xl my-3 mx-10 text-yellow-300">maker</h1>
           </div>
           <Link
-            to={user ? RoutePath.stageSelect.path : RoutePath.stageSelect.path}
+            to={user ? RoutePath.stageSelect.path : "#"}
             className="inline-block mt-0.5 text-5xl py-5 px-10 rounded-xl cursor-pointer font-dotgothic16 font-bold bg-transparent border-none no-underline text-inherit"
           >
             Game Start
