@@ -7,7 +7,7 @@ import { getStageById } from 'services/supabaseStages';
 export const GamePlay = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const [gameClear, setGameClear] = useState(false);
+  const [isGameCompleted, setisGameCompleted] = useState(false);
   const onClickPlay = useRef();
   const onClickBallReset = useRef();
   const onClickPlacementReset = useRef();
@@ -42,6 +42,8 @@ export const GamePlay = () => {
     };
   }, [id]);
 
+  // ページ読み込み時にデータを取得
+  // 取得したデータの変更があるたびに走るが、fetchDataはuseCallBackで囲っているので変更がなければ再生成されない
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -65,17 +67,19 @@ export const GamePlay = () => {
     }
   }, [loading]);
 
-  useEffect(() => {
-    if (gameClear) {
-      clearInterval(countIntervalId);
-      const time = countTime;
-      alert(`ゲームクリア！\nクリアタイム ${transformTime(time)}`);
-    }
-    return () => {
-      clearInterval(countIntervalId);
-    }
-  }, [gameClear]);
+  // ゲームクリア時の処理
+  // 先に宣言しないとuseEffect内で使えない
+  const gameCompleted = useCallback(() => {
+    clearInterval(countIntervalId);
+    alert(`ゲームクリア！\nクリアタイム ${transformTime(countTime)}`);
+  }, [isGameCompleted, countTime]);
 
+  // gameCompletedはuseCallbackで囲っているので、変更がなければ再生成されない
+  useEffect(() => {
+    if (isGameCompleted) {
+      gameCompleted();
+    }
+  }, [isGameCompleted, gameCompleted]);
 
   // 2桁表示
   const twoDigits = (num) => {
@@ -137,7 +141,7 @@ export const GamePlay = () => {
               setOnClickPlay={onClickPlay}
               setOnClickPlacementReset={onClickPlacementReset}
               setOnClickBallReset={onClickBallReset}
-              setGameClear={setGameClear} />
+              setisGameCompleted={setisGameCompleted} />
           </div>
         </div>
       }
