@@ -67,6 +67,7 @@ export const GamePlay = () => {
 
   useEffect(() => {
     if (gameClear) {
+      clearInterval(countIntervalId);
       const time = countTime;
       alert(`ゲームクリア！\nクリアタイム ${transformTime(time)}`);
     }
