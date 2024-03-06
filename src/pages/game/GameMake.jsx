@@ -1,10 +1,4 @@
-import { PithagoraSpaceWidth, GameHeight } from 'utils/GameSetting'
-
 export const GameMake = () => {
-
-  // TODO: 画面サイズを暫定的に調整
-  const STAGE_EDITER_WIDTH = Math.round(PithagoraSpaceWidth * 2/3)
-  const STAGE_EDITER_HEIGHT = GameHeight * 2/3
 
   return (
     <div className="w-[1280px] h-[720px] m-auto font-semibold">
@@ -27,7 +21,7 @@ export const GameMake = () => {
               a
             </div>
           </div>
-          <div className={`w-[${STAGE_EDITER_WIDTH}px] h-[${STAGE_EDITER_HEIGHT}px] mr-4 flex flex-col bg-white`}>
+          <div className="w-[587px] h-[496px] mr-4 flex flex-col bg-white">
             <h2 className="text-1xl border-2 border-gray-500">ステージエディタ</h2>
             <div className="h-full border-b-2 border-r-2 border-l-2 border-gray-500">
               b

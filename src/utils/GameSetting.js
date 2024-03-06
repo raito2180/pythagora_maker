@@ -13,19 +13,13 @@ export const GameHeight = 800 - 56; // 高さ - 親要素のmtのpx
 // ユーザー配置とピタゴラスペースの仕切りX座標
 export const WallX = 304;
 
-// ピタゴラスペースの仕切りの幅
-export const WallWidth = 30;
-
-// ピタゴラスペースの幅
-export const PithagoraSpaceWidth = GameWidth - WallX - (WallWidth / 2);
-
 // ユーザー配置を囲うボックス
 export const UserPlacementBox = [
   {
     bodiesType: "Rectangle",
     x: WallX,
     y: GameHeight / 2,
-    width: WallWidth,
+    width: 30,
     height: GameHeight,
     option: {
       isStatic: true,
