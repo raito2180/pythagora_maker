@@ -80,6 +80,9 @@ export const GameProduction = () => {
         <Link to={RoutePath.gameMake.path}>
           <h1 className="font-bold text-4xl flex mb-7">{RoutePath.gameMake.name}</h1>
         </Link>
+        <Link to={RoutePath.stageSelect.path}>
+          <h1 className="font-bold text-4xl flex mb-7">{RoutePath.stageSelect.name}</h1>
+        </Link>
         <div>
           <h1 className="font-bold text-4xl items-center justify-center flex">
             Edit
