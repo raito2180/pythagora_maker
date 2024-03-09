@@ -29,7 +29,7 @@ const Path = {
   stageSelect: "/game",
   gamePlay: (id = ':id') => `/game/${id}`,
   gameEdit: (id = ':id') => `/game/${id}/edit`,
-  gameProduction: (id= ':id') => `/game/new/${id}`,  // TODO : 本来はユーザーidが必要。暫定処理
+  gameProduction: "/game/new",  // TODO : 本来はユーザーidが必要。暫定処理
   gameMake: "/game/make",
 };
 
@@ -71,7 +71,7 @@ export const RouteSetting = [
     component: <GameEdit />,
   },
   {
-    path: Path.gameProduction(),
+    path: Path.gameProduction,
     component: <GameProduction />,
   },
   {
@@ -118,7 +118,7 @@ export const RoutePath = {
     name: "ゲーム編集",
   },
   gameProduction: {
-    path: (id) => Path.gameProduction(id),
+    path: Path.gameProduction,
     name: "ゲーム制作画面",
   },
   gameMake: {

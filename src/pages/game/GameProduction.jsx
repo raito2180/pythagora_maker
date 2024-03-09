@@ -1,16 +1,62 @@
 import { RoutePath } from "utils/RouteSetting";
 import { Link } from 'react-router-dom';
-// import { FiEdit2, FiTrash2 } from 'react-icons/fi';　アイコンが表示されないため一旦コメントアウト中
-// import { HiMiniPlay } from 'react-icons/hi2';　アイコンが表示されないため一旦コメントアウト中
-import React, { useState } from 'react';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { HiMiniPlay } from 'react-icons/hi2';
+import React, { useState,useEffect,useRef } from 'react';
 import { State } from "utils/GameSetting";
+import supabase from "services/supabaseClient";
+import { useAuth } from "contexts/AuthContext";
+
 
   const UserStageList = () => {
-    const [stages, setStages] = useState([
-      { id: 1, title: 'Stage 1', State: State.private, imageSrc: "/NotSet.png" },
-      { id: 2, title: 'Stage 2', State: State.private, imageSrc: "/NotSet.png" },
-      { id: 3, title: 'Stage 3', State: State.private, imageSrc: "/NotSet.png" }
-    ]);
+    const [stages, setStages] = useState([]);
+    const { user } = useAuth();
+    const [profileId, setProfileId] = useState(null);
+
+    useEffect(() => {
+      if (user){
+      const fetchProfileID = async () => {
+          const { data, error } = await supabase.from("profiles").select("id").eq("user_id", user.id).single();
+          if (error || !data) {
+            console.error("プロフィール情報の取得に失敗しました", error);
+            return;
+          }
+          setProfileId(data.id);
+          console.log('data', data)
+      };
+      fetchProfileID();
+    }}, [user]);
+
+    useEffect(() => {
+      const fetchStagesData = async () => {
+        if (!profileId) return;
+        try {
+          const { data, error } = await supabase.from('stages').select(`*`).eq("profile_id", profileId );
+          console.log('profileId', profileId)
+          if (error) {
+            throw error;
+          }
+          if (data) {
+            const stageArray = data.map(stage => ({
+              id: stage.id,
+              title: stage.title,
+              image: stage.image
+            }
+            ));
+            setStages(stageArray);
+          }
+        } catch (error) {
+          if (error.message.includes("404")) {
+          // TODO : 404ページに遷移？
+          alert("存在しないページです");
+          return;
+        }
+        // TODO : それ以外のエラー。モーダルなどで対処したいetching stages:', error.message);
+        }
+      };
+      fetchStagesData();
+    }, [profileId]); //TODO 削除時にも再マウントされるように変更する
+
     const handleToggleStage = (index) => {
       const updatedStages =  [...stages]
       updatedStages[index].State = updatedStages[index].State === State.release ? State.private : State.release;
@@ -35,8 +81,7 @@ import { State } from "utils/GameSetting";
         <div className="bg-gray-300 flex">
         <div>
           <h1 className="font-bold text-2xl py-4 px-8 w-[200px] truncate">
-            {stage.title}
-          </h1>
+            {stage.title}          </h1>
           <div>
               <h1 className="font-bold text-2xl py-4 px-8">
                 <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
@@ -49,22 +94,22 @@ import { State } from "utils/GameSetting";
         </div>
           <div className="flex-col">
             <div className="pt-4 px-8">
-              {/* <FiEdit2 size={40}/> アイコンが表示されないため一旦コメントアウト中 */}
+              <FiEdit2 size={40}/>
             </div>
             <div className="pt-4 px-8">
-              {/* <FiTrash2 size={40}/> アイコンが表示されないため一旦コメントアウト中 */}
+              <FiTrash2 size={40}/>
             </div>
           </div>
           <div >
             <h1 className="font-bold text-2xl py-12 px-8 text-yellow-200">
               <div className="bg-red-500 flex rounded-lg px-4 py-2">
-                {/* <HiMiniPlay />Test アイコンが表示されないため一旦コメントアウト中 */}
+                <HiMiniPlay />Test
               </div>
             </h1>
           </div>
           <div className="flex-col">
             <h1 className="font-bold text-2xl pt-9 px-8">
-              <img src={stage.imageSrc} alt="NotSet" style={{ width: "150px", height: "auto" }} />
+              <img src={stage.image} alt="NotSet" style={{ width: "150px", height: "auto" }} />
             </h1>
           </div>
         </div>

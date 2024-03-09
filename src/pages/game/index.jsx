@@ -3,6 +3,7 @@ import { DefaultStageCard } from "components/DefaultStageCard";
 import { UsersStageCard } from "components/UsersStageCard";
 import { MyIdeaStageCard } from "components/MyIdeaStageCard";
 
+
 const tabs = ['Default', 'User\'s', 'My idea'];
 
 const tabButtonClasses = {
