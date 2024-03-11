@@ -20,13 +20,11 @@ export const StageEditor = () => {
         height: 496,
         wireframes: false,
         background: "transparent"
-      },
+      }
     }
   );
 
   return (
-    <div id="stageEditor" className="w-[587px] h-[496px] border-b-2 border-r-2 border-l-2 border-gray-500">
-      b
-    </div>
+    <div id="stageEditor" className="w-[587px] h-[496px] border-b-2 border-r-2 border-l-2 border-gray-500"></div>
   );
 }

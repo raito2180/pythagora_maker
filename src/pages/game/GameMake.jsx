@@ -1,4 +1,4 @@
-import { Object } from "components/Object"
+import { ObjectPalette } from "components/ObjectPalette"
 import { StageEditor } from "components/StageEditor"
 
 export const GameMake = () => {
@@ -19,8 +19,8 @@ export const GameMake = () => {
       <div className="w-full h-full m-auto mt-2 flex flex-col">
         <div className="w-full m-auto flex">
           <div className="flex-grow h-full mr-4 flex flex-col bg-white">
-            <h2 className="text-1xl border-2 border-gray-500">オブジェクト</h2>
-            <Object />
+            <h2 className="text-1xl border-2 border-gray-500">オブジェクトパレット</h2>
+            <ObjectPalette />
           </div>
           <div className="mr-4 flex flex-col bg-white">
             <h2 className="text-1xl border-2 border-gray-500">ステージエディタ</h2>
