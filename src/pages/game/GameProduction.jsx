@@ -1,7 +1,6 @@
 import { RoutePath } from "utils/RouteSetting";
 import { Link } from 'react-router-dom';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
-import { HiMiniPlay } from 'react-icons/hi2';
 import React, { useState,useEffect,useRef } from 'react';
 import { State } from "utils/GameSetting";
 import supabase from "services/supabaseClient";
@@ -14,8 +13,9 @@ import { useAuth } from "contexts/AuthContext";
     const [profileId, setProfileId] = useState(null);
 
     useEffect(() => {
-      if (user){
-      const fetchProfileID = async () => {
+      if (!user) return; 
+        {
+        const fetchProfileID = async () => {
           const { data, error } = await supabase.from("profiles").select("id").eq("user_id", user.id).single();
           if (error || !data) {
             console.error("プロフィール情報の取得に失敗しました", error);
@@ -23,7 +23,7 @@ import { useAuth } from "contexts/AuthContext";
           }
           setProfileId(data.id);
           console.log('data', data)
-      };
+        };
       fetchProfileID();
     }}, [user]);
 
@@ -81,15 +81,16 @@ import { useAuth } from "contexts/AuthContext";
         <div className="bg-gray-300 flex">
         <div>
           <h1 className="font-bold text-2xl py-4 px-8 w-[200px] truncate">
-            {stage.title}          </h1>
-          <div>
-              <h1 className="font-bold text-2xl py-4 px-8">
-                <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
-                <button onClick={() => handleToggleStage(index)}>
-                  {stage.State === State.release ? "Open Now" : "To Open"}
-                </button>
-                </span>
-              </h1>
+            {stage.title}          
+          </h1>
+        <div>
+          <h1 className="font-bold text-2xl py-4 px-8">
+            <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
+              <button onClick={() => handleToggleStage(index)}>
+                {stage.State === State.release ? "Open Now" : "To Open"}
+              </button>
+          </span>
+          </h1>
           </div>
         </div>
           <div className="flex-col">
@@ -99,13 +100,6 @@ import { useAuth } from "contexts/AuthContext";
             <div className="pt-4 px-8">
               <FiTrash2 size={40}/>
             </div>
-          </div>
-          <div >
-            <h1 className="font-bold text-2xl py-12 px-8 text-yellow-200">
-              <div className="bg-red-500 flex rounded-lg px-4 py-2">
-                <HiMiniPlay />Test
-              </div>
-            </h1>
           </div>
           <div className="flex-col">
             <h1 className="font-bold text-2xl pt-9 px-8">
