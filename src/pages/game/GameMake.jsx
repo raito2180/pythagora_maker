@@ -1,3 +1,6 @@
+import { Object } from "components/Object"
+import { StageEditor } from "components/StageEditor"
+
 export const GameMake = () => {
 
   return (
@@ -17,19 +20,15 @@ export const GameMake = () => {
         <div className="w-full m-auto flex">
           <div className="flex-grow h-full mr-4 flex flex-col bg-white">
             <h2 className="text-1xl border-2 border-gray-500">オブジェクト</h2>
-            <div className="h-full border-b-2 border-r-2 border-l-2 border-gray-500">
-              a
-            </div>
+            <Object />
           </div>
-          <div className="w-[587px] h-[496px] mr-4 flex flex-col bg-white">
+          <div className="mr-4 flex flex-col bg-white">
             <h2 className="text-1xl border-2 border-gray-500">ステージエディタ</h2>
-            <div className="h-full border-b-2 border-r-2 border-l-2 border-gray-500">
-              b
-            </div>
+            <StageEditor />
           </div>
-          <div className="w-[200px] h-full flex flex-col bg-white">
+          <div className="flex flex-col bg-white">
             <h2 className="text-1xl border-2 border-gray-500">処理</h2>
-            <div className="h-full border-b-2 border-r-2 border-l-2 border-gray-500">
+            <div className="w-[200px] h-[496px] border-b-2 border-r-2 border-l-2 border-gray-500">
               c
             </div>
           </div>

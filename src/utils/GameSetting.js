@@ -30,17 +30,17 @@ export const UserPlacementBox = [
     }
   },
   {
-    "bodiesType": "Rectangle",
-    "x": WallX / 2,
-    "y": GameHeight - 15, // 高さ - オブジェクトの高さの半分
-    "width": WallX,
-    "height": 30,
-    "option": {
-      "isStatic": true,
-      "collisionFilter": {
-        "group": -1
+    bodiesType: "Rectangle",
+    x: WallX / 2,
+    y: GameHeight - 15, // 高さ - オブジェクトの高さの半分
+    width: WallX,
+    height: 30,
+    option: {
+      isStatic: true,
+      collisionFilter: {
+        group: -1
       },
-      "label": "wall"
+      label: "wall"
     }
   },
   {
@@ -58,17 +58,17 @@ export const UserPlacementBox = [
     }
   },
   {
-    "bodiesType": "Rectangle",
-    "x": WallX / 2,
-    "y": -30,
-    "width": WallX,
-    "height": 30,
-    "option": {
-      "isStatic": true,
-      "collisionFilter": {
-        "group": -1
+    bodiesType: "Rectangle",
+    x: WallX / 2,
+    y: -30,
+    width: WallX,
+    height: 30,
+    option: {
+      isStatic: true,
+      collisionFilter: {
+        group: -1
       },
-      "label": "wall"
+      label: "wall"
     }
   },
 ]
