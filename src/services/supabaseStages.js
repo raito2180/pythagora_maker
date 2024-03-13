@@ -13,16 +13,14 @@ export const getStageById = async (stageId) => {
   return { result: Response.success, data: stage };
 }
 
+// データベースから管理者に関連するステージデータを取得
 export const getDefaultStagesRange = async ({ start, end }) => {
   try {
     const { data: userProfiles, error: profilesError } = await supabase.from('profiles').select('id').eq('role', '管理者');
-
     if (profilesError) throw profilesError;
-
     const profileIds = userProfiles.map(profile => profile.id);
 
     const { data: stages, error: stagesError } = await supabase.from('stages').select().in('profile_id', profileIds).range(start, end);
-
     if (stagesError) throw stagesError;
 
     return { result: Response.success, data: stages };
@@ -31,19 +29,26 @@ export const getDefaultStagesRange = async ({ start, end }) => {
   }
 };
 
+// データベースから一般に関連するステージステージを取得
 export const getUsersStagesRange = async ({ start, end }) => {
   try {
-    const { data: userProfiles, error: profilesError } = await supabase.from('profiles').select('id').eq('role', '一般');
-
+    const { data: userProfiles, error: profilesError } = await supabase.from('profiles').select('id, name').eq('role', '一般');
     if (profilesError) throw profilesError;
-
     const profileIds = userProfiles.map(profile => profile.id);
 
-    const { data: stages, error: stagesError } = await supabase.from('stages').select().in('profile_id', profileIds).range(start, end);
-
+    const { data: stages, error: stagesError } = await supabase.from('stages').select('id, profile_id, title, image').in('profile_id', profileIds).range(start, end);
     if (stagesError) throw stagesError;
 
-    return { result: Response.success, data: stages };
+    // ステージデータにユーザー名を合体！
+    const stagesWithUserName = stages.map(stage => {
+      const userProfile = userProfiles.find(profile => profile.id === stage.profile_id);
+      return {
+        ...stage,
+        userName: userProfile ? userProfile.name : 'Unkonwn'
+      };
+    });
+
+    return { result: Response.success, data: stagesWithUserName };
   } catch (error) {
     return { result: Response.error, data: error.message };
   }
@@ -67,15 +72,14 @@ export const getStagesCount = async () => {
   return { result: Response.success, count: count };
 }
 
+// データベースから管理者に紐づくステージ数をカウント
 export const getStagesCountByAdmins = async () => {
   try {
     const { data: adminProfiles, error: profilesError } = await supabase.from('profiles').select('id').eq('role', '管理者');
-
     if (profilesError) throw profilesError;
-
     const profileIds = adminProfiles.map(profile => profile.id);
-    const { count, error: countError } = await supabase.from('stages').select('id',{ count: 'exact' }).in('profile_id', profileIds);
 
+    const { count, error: countError } = await supabase.from('stages').select('id',{ count: 'exact' }).in('profile_id', profileIds);
     if (countError) throw countError;
 
     return { result: Response.success, count };
@@ -84,15 +88,14 @@ export const getStagesCountByAdmins = async () => {
   }
 };
 
+// データベースから一般ユーザーに紐づくステージ数をカウント
 export const getStagesCountByUsers = async () => {
   try {
     const { data: userProfiles, error: profilesError } = await supabase.from('profiles').select('id').eq('role', '一般');
-
     if (profilesError) throw profilesError;
-
     const profileIds = userProfiles.map(profile => profile.id);
-    const { count, error: countError } = await supabase.from('stages').select('id',{ count: 'exact' }).in('profile_id', profileIds);
 
+    const { count, error: countError } = await supabase.from('stages').select('id',{ count: 'exact' }).in('profile_id', profileIds);
     if (countError) throw countError;
 
     return { result: Response.success, count };
