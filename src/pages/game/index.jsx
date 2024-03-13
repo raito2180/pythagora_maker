@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import { DefaultStageCard } from "components/DefaultStageCard";
 import { UsersStageCard } from "components/UsersStageCard";
-import { MyIdeaStageCard } from "components/MyIdeaStageCard";
+import { RoutePath } from 'utils/RouteSetting';
+import { Link } from "react-router-dom";
 
-
-const tabs = ['Default', 'User\'s', 'My idea'];
+const tabs = ['Default', 'User\'s', 'Create Edit'];
 
 const tabButtonClasses = {
   'Default': "bg-teal-100",
   'User\'s': "bg-yellow-300",
-  'My idea': "bg-red-500"
+  'Create Edit': "bg-red-500"
 };
 
 export const StageSelectPage = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const isMyIdeaTab = activeTab === 'My idea';
+  const isMyIdeaTab = activeTab === 'Create Edit';
   const DISABLE_TAB_STYLE = "translate-y-3 hover:translate-y-[-5] transition-all";
 
   // タブに応じて背景色を設定
@@ -33,8 +33,6 @@ export const StageSelectPage = () => {
         return <DefaultStageCard />;
       case 'User\'s':
         return <UsersStageCard />;
-      case 'My idea':
-        return <MyIdeaStageCard />;
     }
   };
 
@@ -44,12 +42,11 @@ export const StageSelectPage = () => {
     };
   }
 
-
   return (
     <div className="w-full max-w-[1280px] m-auto mt-24 flex flex-col">
       <div className="flex justify-between">
         <div className="flex space-x-4 relative">
-          {/* ↓ My idea以外のタブボタンをdiv内に表示する */}
+          {/* ↓Create Edit以外のタブボタンをdiv内に表示する */}
           {tabs.slice(0, -1).map(tab => (
             <button
               key={tab}
@@ -61,13 +58,13 @@ export const StageSelectPage = () => {
           ))}
         </div>
 
-        {/* My ideaボタン */}
-        <button
-          onClick={handleTabClickEvent('My idea')}
-          className={`px-4 py-2 text-3xl font-semibold rounded-md rounded-b-none bg-orange-300 ${isMyIdeaTab ? getTabButtonClass("My idea") : DISABLE_TAB_STYLE}`}
+        {/* Create Editボタン */}
+        <Link
+          to={RoutePath.gameProduction.path}
+          className={`px-4 py-2 text-3xl font-semibold rounded-md rounded-b-none bg-orange-300 ${isMyIdeaTab ? getTabButtonClass("Create Edit") : DISABLE_TAB_STYLE}`}
         >
-          My Idea
-        </button>
+          Create Edit
+        </Link>
       </div>
 
       <div>

@@ -12,18 +12,7 @@ export const DefaultStageCard = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchTotalStages = async () => {
-      try {
-        const response = await getStagesCountByAdmins();
-        setTotalStages(response.count);
-        // エラーハンドリングについては、拡張の余地ありあり
-      } catch (error) {
-        setError('ステージ情報を取得中にエラーが発生しました。');
-        console.error(error);
-      }
-    };
-
-    const fetchStages = async () => {
+    const fetchStagesData = async () => {
       try {
         const startPage = (currentPage - 1) * STAGE_PER_PAGE;
         const response = await getDefaultStagesRange({ start: startPage, end: startPage + STAGE_PER_PAGE - 1 });
@@ -35,9 +24,23 @@ export const DefaultStageCard = () => {
       }
     };
 
-    fetchTotalStages();
-    fetchStages();
+    fetchStagesData();
   }, [currentPage]);
+
+  useEffect(() => {
+    const fetchCountStagesData = async () => {
+      try {
+        const response = await getStagesCountByAdmins();
+        setTotalStages(response.count);
+        // エラーハンドリングについては、拡張の余地ありあり
+      } catch (error) {
+        setError('ステージ情報を取得中にエラーが発生しました。');
+        console.error(error);
+      }
+    };
+
+    fetchCountStagesData();
+  }, []);
 
   // エラーハンドリングについては、拡張の余地ありあり
   if (error) {
