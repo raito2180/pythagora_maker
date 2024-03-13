@@ -1,0 +1,20 @@
+.play-link .play-text {
+  position: relative;
+}
+.play-link .play-text::before {
+  content: "▶";
+  display: inline-block;
+  position: absolute;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.play-link:hover {
+  padding-left: 55px;
+}
+
+.play-link:hover .play-text::before {
+  display: inline-block;
+  transform: translateX(-40px);
+  opacity: 1;
+}
