@@ -8,6 +8,7 @@ import { GameMake } from "pages/game/GameMake";
 import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
+import AboutUs from "pages/static/about_us";
 
 // NOTE : 暫定処理なので必要に応じて修正してくださいっ
 
@@ -29,8 +30,9 @@ const Path = {
   stageSelect: "/game",
   gamePlay: (id = ':id') => `/game/${id}`,
   gameEdit: (id = ':id') => `/game/${id}/edit`,
-  gameProduction: "/game/new",  // TODO : 本来はユーザーidが必要。暫定処理
+  gameProduction: "/game/new",
   gameMake: "/game/make",
+  about: "/about",
 };
 
 // NOTE : ルーティング設定用
@@ -47,6 +49,10 @@ export const RouteSetting = [
   {
     path: Path.login,
     component: <LogInPage />,
+  },
+  {
+    path: Path.about,
+    component: <AboutUs />,
   },
   // ユーザー周り
   {
@@ -94,6 +100,10 @@ export const RoutePath = {
   login: {
     path: Path.login,
     name: "ログイン",
+  },
+  about: {
+    path: Path.about,
+    name: "About Us...",
   },
   // ユーザー周り
   users: {
