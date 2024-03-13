@@ -2,28 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { STAGE_PER_PAGE } from 'utils/Paginate';
 import { Link } from 'react-router-dom';
 import { RoutePath } from 'utils/RouteSetting';
-import { getStagesRange, getStagesCount } from 'services/supabaseStages';
+import { getDefaultStagesRange, getStagesCountByAdmins } from 'services/supabaseStages';
 import "./stageCard.css"
 
 export const DefaultStageCard = () => {
-  // 現在表示されているページに関するステート
   const [currentPage, setCurrentPage] = useState(1);
-
-  // 表示するステージのリストに関するステート
   const [stages, setStages] = useState([]);
-
-  // ステージの総数に関するステート
   const [totalStages, setTotalStages] = useState(0);
-
-  // エラーメッセージに関するステート
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // データベースに登録されているステージの総数を取得する
-    // ページネーションを実装する際、全ページ数の計算に必要なため
     const fetchTotalStages = async () => {
       try {
-        const response = await getStagesCount();
+        const response = await getStagesCountByAdmins();
         setTotalStages(response.count);
         // エラーハンドリングについては、拡張の余地ありあり
       } catch (error) {
@@ -32,11 +23,10 @@ export const DefaultStageCard = () => {
       }
     };
 
-    // ユーザーが現在表示しているページに合わせて、データベースのステージ情報を区切る
     const fetchStages = async () => {
       try {
         const startPage = (currentPage - 1) * STAGE_PER_PAGE;
-        const response = await getStagesRange({ start: startPage, end: startPage + STAGE_PER_PAGE - 1 });
+        const response = await getDefaultStagesRange({ start: startPage, end: startPage + STAGE_PER_PAGE - 1 });
         setStages(response.data);
         // エラーハンドリングについては、拡張の余地ありあり
       } catch (error) {
@@ -82,7 +72,7 @@ export const DefaultStageCard = () => {
         <button onClick={() => paginate(Math.max(1, currentPage - 1))} disabled={currentPage === 1}
           className="bg-green-300 text-black px-4 py-2 rounded-l hover:bg-green-500 cursor-pointer border-lime-500 border transition-all">前のページへ</button>
         <button onClick={() => paginate(currentPage + 1)} disabled={currentPage >= Math.ceil(totalStages / STAGE_PER_PAGE)}
-          className="bg-green-300 text-black px-4 py-2 rounded-r hover:bg-green-500 cursor-pointer border-lime-500 border transition-all">次のページへ</button>
+            className="bg-green-300 text-black px-4 py-2 rounded-r hover:bg-green-500 cursor-pointer border-lime-500 border transition-all">次のページへ</button>
       </section>
     </article>
   );
