@@ -12,6 +12,7 @@ import { FiRefreshCw } from "react-icons/fi";
     const { user } = useAuth();
     const [profileId, setProfileId] = useState(null);
     const [updating, setUpdating] = useState(false);
+    const [disableClick, setDisableClick] = useState(false);
 
     useEffect(() => {
       if (!user) return; 
@@ -57,6 +58,16 @@ import { FiRefreshCw } from "react-icons/fi";
       fetchStagesData();
     }, [profileId]); //TODO 削除時にも再マウントされるように変更する
 
+    useEffect(() => {
+      if (updating) {
+        setDisableClick(true); // ボタンを無効化する
+        setTimeout(() => {
+          setDisableClick(false); // 3秒後にボタンを有効化する
+          setUpdating(false); // updatingをfalseに戻す
+        }, 2000);
+      }
+    }, [updating]);
+
     const handleToggleStage = async (index) => {
       const updatedStages =  [...stages]
       updatedStages[index].state = updatedStages[index].state === State.release ? State.private : State.release;
@@ -86,8 +97,6 @@ import { FiRefreshCw } from "react-icons/fi";
             stateChangedArray.push(data);
           }        
         }
-        alert("公開状態を更新しました");
-        setUpdating(false);
         setStages(stateChangedArray.flat());
       }
         catch (error) {
@@ -107,7 +116,7 @@ import { FiRefreshCw } from "react-icons/fi";
         <div>
           <h1 className="font-bold text-2xl py-4 px-8">
             <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
-              <button onClick={() => handleToggleStage(index)}>
+              <button onClick={() => handleToggleStage(index)} disabele={disableClick}>
                 {updating ? (<span className='flex justify-center font-[Raleway]'>更新中<FiRefreshCw className="animate-spin" /></span>
                 ) : (
                 stage.state === State.release ? "Open Now" : "To Open")}
