@@ -65,6 +65,7 @@ import { FiRefreshCw } from "react-icons/fi";
           setDisableClick(false); // 3秒後にボタンを有効化する
           setUpdating(false); // updatingをfalseに戻す
         }, 2000);
+        return () => clearInterval(setTimeout);
       }
     }, [updating]);
 
@@ -98,6 +99,7 @@ import { FiRefreshCw } from "react-icons/fi";
           }        
         }
         setStages(stateChangedArray.flat());
+        console.log('配列', stateChangedArray);
       }
         catch (error) {
         alert("エラーが発生しました: " + error.message);
@@ -116,7 +118,7 @@ import { FiRefreshCw } from "react-icons/fi";
         <div>
           <h1 className="font-bold text-2xl py-4 px-8">
             <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
-              <button onClick={() => handleToggleStage(index)} disabele={disableClick}>
+              <button onClick={() => handleToggleStage(index)} disabled={disableClick}>
                 {updating ? (<span className='flex justify-center font-[Raleway]'>更新中<FiRefreshCw className="animate-spin" /></span>
                 ) : (
                 stage.state === State.release ? "Open Now" : "To Open")}
