@@ -5,12 +5,13 @@ import React, { useState,useEffect,useRef } from 'react';
 import { State } from "utils/GameSetting";
 import supabase from "services/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
-
+import { FiRefreshCw } from "react-icons/fi";
 
   const UserStageList = () => {
     const [stages, setStages] = useState([]);
     const { user } = useAuth();
     const [profileId, setProfileId] = useState(null);
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
       if (!user) return; 
@@ -22,7 +23,6 @@ import { useAuth } from "contexts/AuthContext";
             return;
           }
           setProfileId(data.id);
-          console.log('data', data)
         };
       fetchProfileID();
     }}, [user]);
@@ -32,7 +32,6 @@ import { useAuth } from "contexts/AuthContext";
         if (!profileId) return;
         try {
           const { data, error } = await supabase.from('stages').select(`*`).eq("profile_id", profileId );
-          console.log('profileId', profileId)
           if (error) {
             throw error;
           }
@@ -40,7 +39,8 @@ import { useAuth } from "contexts/AuthContext";
             const stageArray = data.map(stage => ({
               id: stage.id,
               title: stage.title,
-              image: stage.image
+              image: stage.image,
+              state: stage.state
             }
             ));
             setStages(stageArray);
@@ -57,28 +57,49 @@ import { useAuth } from "contexts/AuthContext";
       fetchStagesData();
     }, [profileId]); //TODO 削除時にも再マウントされるように変更する
 
-    const handleToggleStage = (index) => {
+    const handleToggleStage = async (index) => {
       const updatedStages =  [...stages]
-      updatedStages[index].State = updatedStages[index].State === State.release ? State.private : State.release;
-      
+      updatedStages[index].state = updatedStages[index].state === State.release ? State.private : State.release;
+      setUpdating(true);
+
       const updatedStagesMapped = updatedStages.map((stage, i) => {
         if (i !== index ) {
           return {
           ...stage,
-          State: stage.State === State.release?  State.private : stage.State
+          state: stage.state === State.release?  State.private : stage.state
         };
         }
         return stage;
       });
-      setStages(updatedStagesMapped);  //TODO stage更新中には操作できないようにする仕組みが必要
+      try {
+        const stateChangedArray = [];
+        for (const stage of updatedStagesMapped) {
+          const { data, error } = await supabase
+            .from('stages')
+            .update({ state: stage.state })
+            .eq('id', stage.id)
+            .select('*');
+          if (error) {
+            throw error;
+          }
+          if (data) {
+            stateChangedArray.push(data);
+          }        
+        }
+        alert("公開状態を更新しました");
+        setUpdating(false);
+        setStages(stateChangedArray.flat());
+      }
+        catch (error) {
+        alert("エラーが発生しました: " + error.message);
+        }
       };
-    
 
     return (
       <ul>
       {stages.map((stage, index) => (
       <li className="flex my-7 items-center justify-center" key={stage.id}>
-        <div className="bg-gray-300 flex">
+        <div className="bg-gray-300 flex border border-black rounded-lg">
         <div>
           <h1 className="font-bold text-2xl py-4 px-8 w-[200px] truncate">
             {stage.title}          
@@ -87,9 +108,11 @@ import { useAuth } from "contexts/AuthContext";
           <h1 className="font-bold text-2xl py-4 px-8">
             <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
               <button onClick={() => handleToggleStage(index)}>
-                {stage.State === State.release ? "Open Now" : "To Open"}
+                {updating ? (<span className='flex justify-center font-[Raleway]'>更新中<FiRefreshCw className="animate-spin" /></span>
+                ) : (
+                stage.state === State.release ? "Open Now" : "To Open")}
               </button>
-          </span>
+            </span>
           </h1>
           </div>
         </div>
@@ -115,7 +138,7 @@ import { useAuth } from "contexts/AuthContext";
 export const GameProduction = () => {
   
     return (
-      <div className="w-full relative font-[DotGothic16] mt-14">
+      <div className="w-full relative font-[DotGothic16] mt-14 ">
         <Link to={RoutePath.gameMake.path}>
           <h1 className="font-bold text-4xl flex mb-7">{RoutePath.gameMake.name}</h1>
         </Link>
