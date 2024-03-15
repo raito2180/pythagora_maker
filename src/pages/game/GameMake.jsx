@@ -1,50 +1,35 @@
-import { ObjectPalette } from "components/ObjectPalette"
 import { StageEditor } from "components/StageEditor"
+import { GameMakeProcess } from "components/GameMakeProcess"
+import { PhysicalSettings } from "components/PhysicalSettings"
 
 export const GameMake = () => {
 
   return (
-    <div className="w-[1280px] h-[720px] m-auto font-semibold">
+    <div className="w-[1280px] h-[720px] m-auto font-[DotGothic16]">
       <div className="w-full m-auto mt-14">
         <h1 className="text-5xl">Create</h1>
       </div>
-      <div className="w-full m-auto mt-2 flex">
-        <h2 className="text-2xl">Title:</h2>
-        <input
-          type="text"
-          className="w-full ml-4 border-2 border-gray-500 rounded-md"
-          placeholder="Title"
-        />
-      </div>
       <div className="w-full h-full m-auto mt-2 flex flex-col">
         <div className="w-full m-auto flex">
-          <div className="flex-grow h-full mr-4 flex flex-col bg-white">
-            <h2 className="text-1xl border-2 border-gray-500">オブジェクトパレット</h2>
-            <ObjectPalette />
+          <div className="w-[300px] mr-4 bg-white">
+            <h2 className="text-1xl border-2 border-black">ユーザーオブジェクト</h2>
           </div>
-          <div className="mr-4 flex flex-col bg-white">
-            <h2 className="text-1xl border-2 border-gray-500">ステージエディタ</h2>
-            <StageEditor />
+          <div className="w-[587px] mr-4 bg-white">
+            <h2 className="text-1xl border-2 border-black">ステージ</h2>
           </div>
-          <div className="flex flex-col bg-white">
-            <h2 className="text-1xl border-2 border-gray-500">処理</h2>
-            <div className="w-[200px] h-[496px] border-b-2 border-r-2 border-l-2 border-gray-500">
-              c
-            </div>
+          <div className="w-[361px] bg-white">
+            <h2 className="text-1xl border-2 border-black">オブジェクトパレット</h2>
           </div>
         </div>
-        <div className="w-full flex-grow m-auto mt-4 flex">
+        <StageEditor />
+        <div className="w-full grow m-auto mt-4 flex">
           <div className="w-4/6 h-full mr-4 flex flex-col bg-white">
-            <h2 className="text-1xl border-2 border-gray-500">ユーザーオブジェクト</h2>
-            <div className="h-full border-b-2 border-r-2 border-l-2 border-gray-500">
-              d
-            </div>
+            <h2 className="text-1xl border-2 border-black">物理設定</h2>
+            <PhysicalSettings />
           </div>
           <div className="w-2/6 h-full flex flex-col bg-white">
-            <h2 className="text-1xl border-2 border-gray-500">物理設定</h2>
-            <div className="h-full border-b-2 border-r-2 border-l-2 border-gray-500">
-              g
-            </div>
+            <h2 className="text-1xl border-2 border-black">処理</h2>
+            <GameMakeProcess />
           </div>
         </div>
       </div>

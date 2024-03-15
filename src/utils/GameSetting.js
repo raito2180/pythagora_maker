@@ -73,6 +73,48 @@ export const UserPlacementBox = [
   },
 ]
 
+// ステージ作成画面
+export const StageEditorWidth = 1280;
+export const StageEditorHeight = 496;
+
+// 一つ目の仕切りX座標
+export const StageEditorFirstWallX = 308;
+
+// 二つ目の仕切りX座標
+export const StageEditorSecondWallX = 911;
+
+// ステージ作成画面の仕切り
+export const StageEditorWall = [
+  {
+    bodiesType: "Rectangle",
+    x: StageEditorFirstWallX,
+    y: StageEditorHeight / 2,
+    width: 16,
+    height: StageEditorHeight,
+    option: {
+      isStatic: true,
+      collisionFilter: {
+        group: -1
+      },
+      label: "wall"
+    }
+  },
+  {
+    bodiesType: "Rectangle",
+    x: StageEditorSecondWallX,
+    y: StageEditorHeight / 2,
+    width: 16,
+    height: StageEditorHeight,
+    option: {
+      isStatic: true,
+      collisionFilter: {
+        group: -1
+      },
+      label: "wall"
+    }
+  }
+]
+
 // オブジェクトの種類
 export const ObjectType = {
   Stage: "Stage",
