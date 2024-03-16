@@ -33,12 +33,16 @@ export const GamePlay = () => {
       setGameData(data);
     } catch (error) {
       if (error.message.includes("404")) {
+        // TODO : 404ページに遷移？
         alert("存在しないページです");
         return;
+        // TODO : それ以外のエラー。モーダルなどで対処したい
       }
     }
   }, [id]);
 
+  // ページ読み込み時にデータを取得
+  // 取得したデータの変更があるたびに走るが、fetchDataはuseCallBackで囲っているので変更がなければ再生成されない
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -73,12 +77,15 @@ export const GamePlay = () => {
     }
   }, [countDown, isGameStarted]);
 
+  // ミリ秒までやると再レンダリングの負荷がかかりそうなので、秒までにしています
   const transformTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     return `${twoDigits(minutes)}:${twoDigits(seconds)}`;
   };
 
+  // ゲームクリア時の処理
+  // 先に宣言しないとuseEffect内で使えない
   const gameCompleted = useCallback(() => {
     clearInterval(countIntervalId);
   }, [countIntervalId]);
