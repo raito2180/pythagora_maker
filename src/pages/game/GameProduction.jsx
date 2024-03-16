@@ -61,11 +61,14 @@ import { FiRefreshCw } from "react-icons/fi";
     useEffect(() => {
       if (updating) {
         setDisableClick(true); // ボタンを無効化する
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           setDisableClick(false); // 3秒後にボタンを有効化する
           setUpdating(false); // updatingをfalseに戻す
         }, 2000);
-        return () => clearInterval(setTimeout);
+
+        return () => {
+        if(timeoutId) { clearTimeout(timeoutId) }
+        }; //setTimeoutのクリーンアップ
       }
     }, [updating]);
 
