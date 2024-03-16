@@ -1,10 +1,8 @@
 import {
   useEffect,
-  useRef,
-  useState
+  useRef
 } from "react";
 import {
-  Engine,
   Render,
   Runner,
   Composite
@@ -24,13 +22,13 @@ import {
 import { PaletteObjects } from "utils/PaletteObjects";
 import { MouseEvents } from "utils/matterjs/MouseEvents";
 
-export const StageEditor = () => {
-  const engineRef = useRef();
-  const dragObjectRef = useRef();
-  const [isMouseOnStage, setIsMouseOnStage] = useState(false);
-  const isDragObjectRef = useRef(false);
-  const mouseClickPosition = useRef({ x: 0, y: 0 });
-  const selectObjectRef = useRef(null);
+export const StageEditor = ({
+  engine,
+  selectObjectRef
+}) => {
+  const isMouseDownRef = useRef(false);
+  const isBeforeOnStageRef = useRef(false);
+  const mouseClickPositionRef = useRef({ x: 0, y: 0 });
   const getSelectObjectParent = () =>
       selectObjectRef.current ? selectObjectRef.current.getParent() : null;
   const HALF_SCALE = 0.5;
@@ -38,22 +36,11 @@ export const StageEditor = () => {
   const SELECT_OBJECT_OUTLINE_WIDTH = 5;
 
   useEffect(() => {
-    if (selectObjectRef.current === null || isDragObjectRef.current === false)
-      return;
-    let parent = getSelectObjectParent();
-    if (isMouseOnStage) {
-      parent.multiplyScale(MULTIPLY_SCALE);
-      return;
-    }
-    parent.multiplyScale(HALF_SCALE);
-  }, [isMouseOnStage]);
-
-  useEffect(() => {
-    engineRef.current = Engine.create();
+    if (!engine) return;
     const render = Render.create(
       {
         element: document.getElementById("stageEditor"),
-        engine: engineRef.current,
+        engine: engine,
         options: {
           width: StageEditorWidth,
           height: StageEditorHeight,
@@ -69,39 +56,46 @@ export const StageEditor = () => {
       const wall = object.getObject();
       wall.render.lineWidth = 3;
       wall.render.strokeStyle = "black";
-      Composite.add(engineRef.current.world, wall);
+      Composite.add(engine.world, wall);
     });
 
     // オブジェクトパレットにオブジェクトを配置
     const paletteObjects = createObjects(PaletteObjects, ObjectType.User);
     paletteObjects.forEach((object) => {
-      Composite.add(engineRef.current.world, object.getObject());
+      Composite.add(engine.world, object.getObject());
     });
 
     // キャンバスの外周に影をつける
     const canvas = render.canvas;
     canvas.style.boxShadow = "inset 0 -2px 0 0 #000, inset -2px 0 0 0 #000, inset 2px 0 0 0 #000";
 
-    const mouseEvents = new MouseEvents(render, engineRef.current);
+    const mouseEvents = new MouseEvents(render, engine);
     mouseEvents.onEvents(handleClick, handleDrag, handleClickUp);
 
     Render.run(render);
-    Runner.run(Runner.create(), engineRef.current);
-  }, []);
+    Runner.run(Runner.create(), engine);
+  }, [engine]);
 
   const handleClick = (e) => {
+    isMouseDownRef.current = true;
     const target = e.source.body;
+ 
+    if (!setSelectObject(target)) return;
 
     // クリックしたオブジェクトがユーザーが配置できるオブジェクトなら選択する
-    if (setSelectObject(target)) {
-      const diff_x = e.mouse.position.x - target.position.x;
-      const diff_y = e.mouse.position.y - target.position.y;
-      mouseClickPosition.current = { x: diff_x, y: diff_y };
-    }
+    const diff_x = e.mouse.position.x - target.position.x;
+    const diff_y = e.mouse.position.y - target.position.y;
+    mouseClickPositionRef.current = { x: diff_x, y: diff_y };
+    
+    // パレット上のオブジェクトを選択したら複製する
+    if (isOnPalette(target.position.x)) cloneObject(target);
+
+    // 選択したオブジェクトがステージ上にあるか判定
+    isBeforeOnStageRef.current = isOnStage(target.position.x);
   };
 
   const setSelectObject = (target) => {
-    if (target == null) {
+    if (target == null || target.label === "wall") {
       if (selectObjectRef.current) {
         selectObjectRef.current.render.lineWidth = 0;
       }
@@ -119,34 +113,39 @@ export const StageEditor = () => {
   };
 
   const handleDrag = (e) => {
-    setIsMouseOnStage(e.source.mouse.position.x < StageEditorSecondWallX && e.source.mouse.position.x > StageEditorFirstWallX);
+    // クリック状態でなければ処理しない
+    if (!isMouseDownRef.current) return;
+
     const target = e.source.body;
-    if (!target) return;
+    if (!target || !target.isStatic) return;
 
-    isDragObjectRef.current = true;
-    dragObjectRef.current = target;
-
-    if (!dragObjectRef.current.isStatic) return;
-
-    // パレット上のオブジェクトをドラッグしたら複製する
-    if (e.source.mouse.position.x > StageEditorSecondWallX) cloneObject(dragObjectRef.current);
-
-    if (selectObjectRef.current && selectObjectRef.current === dragObjectRef.current) {
+    if (selectObjectRef.current) {
       const position = e.source.mouse.position;
-      const x = position.x - mouseClickPosition.current.x;
-      const y = position.y - mouseClickPosition.current.y;
+      const x = position.x - mouseClickPositionRef.current.x;
+      const y = position.y - mouseClickPositionRef.current.y;
       // FIX : たまに座標がずれるかも
       const parent = getSelectObjectParent();
       parent.setPosition({ x, y });
+
+      // ドラッグ前後でステージから出入りした場合はスケールを変更
+      if (isBeforeOnStageRef.current === isOnStage(x)) return;
+      if (isBeforeOnStageRef.current) {
+        parent.multiplyScale(HALF_SCALE);
+        isBeforeOnStageRef.current = false;
+        return;
+      }
+      parent.multiplyScale(MULTIPLY_SCALE);
+      isBeforeOnStageRef.current = true;
     }
   };
 
-  const handleClickUp = (e) => {
-    if (e.source.mouse.position.x > StageEditorSecondWallX && dragObjectRef.current) {
-      Composite.remove(engineRef.current.world, dragObjectRef.current);
+  const handleClickUp = () => {
+    // ドラッグしたオブジェクトがパレット内にある場合は削除
+    if (selectObjectRef.current && getSelectObjectParent().getPosition().x > StageEditorSecondWallX) {
+      Composite.remove(engine.world, selectObjectRef.current);
+      selectObjectRef.current = null;
     }
-    isDragObjectRef.current = false;
-    dragObjectRef.current = null;
+    isMouseDownRef.current = false;
   };
   
   const cloneObject = (object) => {
@@ -154,10 +153,20 @@ export const StageEditor = () => {
     PaletteObjects.forEach((paletteObject) => {
       if (paletteObject.option.label === label) {
         const clone = createObject(paletteObject, ObjectType.User).getObject();
-        Composite.add(engineRef.current.world, clone);
+        Composite.add(engine.world, clone);
         return clone;
       }
     });
+  }
+
+  // x座標がステージ上にあるか判定
+  const isOnStage = (x) => {
+    return x > StageEditorFirstWallX && x < StageEditorSecondWallX;
+  }
+
+  // x座標がパレット上にあるか判定
+  const isOnPalette = (x) => {
+    return x > StageEditorSecondWallX;
   }
 
   return (

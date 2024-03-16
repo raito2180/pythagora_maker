@@ -1,8 +1,19 @@
+import { useEffect, useState, useRef } from "react"
+import { Engine } from "matter-js"
 import { StageEditor } from "components/StageEditor"
 import { GameMakeProcess } from "components/GameMakeProcess"
 import { PhysicalSettings } from "components/PhysicalSettings"
 
 export const GameMake = () => {
+  const [ engine, setEngine ] = useState(null);
+  const selectObjectRef = useRef(null);
+
+  useEffect(() => {
+    setEngine(Engine.create());
+    return () => {
+      engine && Engine.clear(engine);
+    };
+  }, []);
 
   return (
     <div className="w-[1280px] h-[720px] m-auto font-[DotGothic16]">
@@ -21,15 +32,21 @@ export const GameMake = () => {
             <h2 className="text-1xl border-2 border-black">オブジェクトパレット</h2>
           </div>
         </div>
-        <StageEditor />
+        <StageEditor
+          engine={engine}
+          selectObjectRef={selectObjectRef}
+          />
         <div className="w-full grow m-auto mt-4 flex">
           <div className="w-4/6 h-full mr-4 flex flex-col bg-white">
             <h2 className="text-1xl border-2 border-black">物理設定</h2>
-            <PhysicalSettings />
+            <PhysicalSettings
+              engine={engine}
+              selectObjectRef={selectObjectRef}
+              />
           </div>
           <div className="w-2/6 h-full flex flex-col bg-white">
             <h2 className="text-1xl border-2 border-black">処理</h2>
-            <GameMakeProcess />
+            <GameMakeProcess engine={engine} />
           </div>
         </div>
       </div>
