@@ -36,8 +36,8 @@ export const GamePlay = () => {
         // TODO : 404ページに遷移？
         alert("存在しないページです");
         return;
-        // TODO : それ以外のエラー。モーダルなどで対処したい
       }
+      // TODO : それ以外のエラー。モーダルなどで対処したい
     }
   }, [id]);
 
@@ -96,6 +96,7 @@ export const GamePlay = () => {
     }
   }, [isGameCompleted, gameCompleted]);
 
+  // 2桁表示
   const twoDigits = (num) => {
     return ("00" + num).slice(-2);
   };
@@ -110,14 +111,17 @@ export const GamePlay = () => {
     setCountIntervalId(intervalId);
   };
 
+  // リセットボタンの処理
   const handlePlacementReset = useCallback(() => {
     onClickPlacementReset.current();
   }, [onClickPlacementReset]);
 
+  // ボールリセットボタンの処理
   const handleBallReset = useCallback(() => {
     onClickBallReset.current();
   }, [onClickBallReset]);
 
+  // 再生ボタンの処理
   const handleClickPlay = useCallback(() => {
     onClickPlay.current();
   }, [onClickPlay]);
