@@ -137,9 +137,14 @@ export const GamePlay = () => {
             <div className="w-full flex">
               <div className="w-1/4 grid grid-flow-col items-center text-start">
                 <button
-                  className="hover:bg-blue-200 bg-blue-400 hover:text-slate-500 text-slate-950 transition-all py-2"
+                  className={`hover:text-slate-500 text-slate-950 ${
+                    countDown > 0
+                      ? "hover:bg-gray-900 bg-gray-600"
+                      : "hover:bg-red-200 bg-blue-400"
+                  } transition-all py-2 px-4 my-2`}
                   onClick={handlePlacementReset}
                   aria-label="ユーザーは位置オブジェクトのリセット"
+                  disabled={countDown > 0}
                 >
                   Reset
                 </button>
@@ -148,9 +153,14 @@ export const GamePlay = () => {
               <div className="w-3/4 flex flex-col">
                 <div className="flex justify-between items-center mx-5">
                   <button
-                    className="hover:bg-blue-200 bg-blue-400 hover:text-slate-500 text-slate-950 transition-all py-2 px-4 my-2"
+                    className={`hover:text-slate-500 text-slate-950 ${
+                      countDown > 0
+                        ? "hover:bg-gray-900 bg-gray-600"
+                        : "hover:bg-red-200 bg-blue-400"
+                    } transition-all py-2 px-4 my-2`}
                     onClick={handleBallReset}
                     aria-label="ボールの位置をリセット"
+                    disabled={countDown > 0}
                   >
                     BallReset
                   </button>
