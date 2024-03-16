@@ -77,10 +77,10 @@ export const GamePlay = () => {
     }
   }, [countDown, isGameStarted]);
 
-  // ミリ秒までやると再レンダリングの負荷がかかりそうなので、秒までにしています
   const transformTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
+    // ミリ秒までやると再レンダリングの負荷がかかりそうなので、秒までにしています
     return `${twoDigits(minutes)}:${twoDigits(seconds)}`;
   };
 
@@ -90,6 +90,7 @@ export const GamePlay = () => {
     clearInterval(countIntervalId);
   }, [countIntervalId]);
 
+  // gameCompletedはuseCallbackで囲っているので、変更がなければ再生成されない
   useEffect(() => {
     if (isGameCompleted) {
       gameCompleted();
