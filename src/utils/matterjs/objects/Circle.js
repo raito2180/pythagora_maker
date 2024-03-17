@@ -1,4 +1,4 @@
-import { Bodies, Body } from "matter-js";
+import { Bodies } from "matter-js";
 import { MatterObject } from "./MatterObject";
 
 class Circle extends MatterObject {
@@ -17,6 +17,7 @@ class Circle extends MatterObject {
     this.object = Bodies.circle(x, y, radius, this.getOptionAddColor(option));
     this.object.getParent = () => this;
     this.initialScale = radius;
+    this.option = option;
   }
 
   // このメソッド内でoptionの"texture"をランダムに選んだ値で更新
@@ -49,6 +50,10 @@ class Circle extends MatterObject {
     option.render.sprite.texture = randomTexture;
 
     return option;
+  }
+
+  setTexture(path) {
+    this.object.render.sprite.texture = path;
   }
 }
 

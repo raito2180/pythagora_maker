@@ -40,8 +40,8 @@ const Header = () => {
         )}
       </div>
       <div className="mx-5">
-        <Link to="#" className="text-black mr-2 font-[DotGothic16]">
-          About Us...
+        <Link to={RoutePath.about.path} className="text-black mr-2 font-[DotGothic16]">
+          {RoutePath.about.name}
         </Link>
         {user ? (
           <button
