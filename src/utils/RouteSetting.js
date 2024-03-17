@@ -107,7 +107,7 @@ export const RoutePath = {
   privacy_policy: {
     path: Path.privacy_policy,
     name: "プライバシーポリシー",
-  }.
+  },
   about: {
     path: Path.about,
     name: "About Us...",
