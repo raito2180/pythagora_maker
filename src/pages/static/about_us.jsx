@@ -148,7 +148,7 @@ const AboutUs = () => {
             <p className="my-2">ゲームをこよなく愛する<br />元エンジニアかつ現エンジニア見習いです！<br />
               主に編集画面を頑張って作りました！<br />(バグだらけ？ははは...)</p>
           </section>
-          <section className="member absolute left-[75px] top-[515px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:right-[33%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[75px] top-[515px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">うぅたん</h4>
             <p className="my-2">主にステージセレクト画面の実装を担当しました！<br />チーム開発最高っ！<br />
               みんなもどんどんチーム開発していこ〜💪</p>
@@ -158,7 +158,7 @@ const AboutUs = () => {
             <p className="my-2">からあげとアニメさえあれば生きていける<br />中年データサイエンティストです！！<br />
               アプリイベント楽しもう〜！！</p>
           </section>
-          <section className="member absolute left-[780px] top-[515px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[34%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[780px] top-[515px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">とぴ</h4>
             <p className="my-2">一応元ゲームプログラマ、ここに見参！<br />楽しんでいただけたら嬉しいです～<br />ちなみに全員のアイコンをクリックすると…？</p>
           </section>
@@ -220,7 +220,7 @@ const yy = {
 const uutan = {
   theme: "",
   bodiesType: "Circle",
-  x: (GameWidth / 4),
+  x: (GameWidth / 4) - 50,
   y: POSITION_Y_BOTTOM,
   type: "",
   radius: CIRCLE_RADIUS,
@@ -246,7 +246,7 @@ const matta = {
 const topi = {
   theme: "",
   bodiesType: "Circle",
-  x: (GameWidth / 2) + (GameWidth / 4),
+  x: (GameWidth / 2) + (GameWidth / 4) + 35,
   y: POSITION_Y_BOTTOM,
   type: "",
   radius: CIRCLE_RADIUS,
