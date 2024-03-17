@@ -12,7 +12,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col w-screen h-screen">
+    <div className="flex flex-col w-full h-screen">
       {isPC && !isMobile &&
         <header className="fixed top-0 h-14 w-full z-10">
           <Header />

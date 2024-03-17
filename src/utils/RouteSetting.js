@@ -8,14 +8,12 @@ import { GameMake } from "pages/game/GameMake";
 import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
-
-// NOTE : 暫定処理なので必要に応じて修正してくださいっ
+import PrivacyPolicy from "pages/static/PrivacyPolicy";
 
 // ルートパス設定
 /**
  * NOTE :
  * ルーティング設定用と各ページで呼び出す用の２種類設定している状態です。
- * この設定は暫定的なもので、必要に応じて修正してください。
  * タイポや設定漏れを防ぐために、パスの文字列設定はここだけでいいようにしています。
  * ルーティング設定と呼び出し用の設定にパスを設定する箇所があるので
  * こちらに設定したものを使うようにするといいかなと考えました。
@@ -24,6 +22,7 @@ const Path = {
   home: "/",
   signup: "/signup",
   login: "/login",
+  privacy_policy: "/privacy_policy",
   users: "/users",
   usersProfile: (id = ':id') => `/users/${id}`,
   stageSelect: "/game",
@@ -47,6 +46,10 @@ export const RouteSetting = [
   {
     path: Path.login,
     component: <LogInPage />,
+  },
+  {
+    path: Path.privacy_policy,
+    component: <PrivacyPolicy />,
   },
   // ユーザー周り
   {
@@ -94,6 +97,10 @@ export const RoutePath = {
   login: {
     path: Path.login,
     name: "ログイン",
+  },
+  privacy_policy: {
+    path: Path.privacy_policy,
+    name: "プライバシーポリシー",
   },
   // ユーザー周り
   users: {
