@@ -9,6 +9,7 @@ import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
 import PrivacyPolicy from "pages/static/PrivacyPolicy";
+import AboutUs from "pages/static/about_us";
 
 // ルートパス設定
 /**
@@ -28,8 +29,9 @@ const Path = {
   stageSelect: "/game",
   gamePlay: (id = ':id') => `/game/${id}`,
   gameEdit: (id = ':id') => `/game/${id}/edit`,
-  gameProduction: "/game/new",  // TODO : 本来はユーザーidが必要。暫定処理
+  gameProduction: "/game/new",
   gameMake: "/game/make",
+  about: "/about",
 };
 
 // NOTE : ルーティング設定用
@@ -50,6 +52,10 @@ export const RouteSetting = [
   {
     path: Path.privacy_policy,
     component: <PrivacyPolicy />,
+  },
+  {
+    path: Path.about,
+    component: <AboutUs />,
   },
   // ユーザー周り
   {
@@ -101,6 +107,10 @@ export const RoutePath = {
   privacy_policy: {
     path: Path.privacy_policy,
     name: "プライバシーポリシー",
+  }.
+  about: {
+    path: Path.about,
+    name: "About Us...",
   },
   // ユーザー周り
   users: {
