@@ -1,4 +1,4 @@
-import "./HomePage.css"
+import Style from "./style.module.css";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "contexts/AuthContext";
@@ -110,7 +110,7 @@ const HomePage = () => {
         {/* tailwindで表現が難しそうだったので別途cssファイル作成してそちらに記述しています。 */}
         <Link
           to={user ? RoutePath.stageSelect.path : RoutePath.login.path}
-          className="game-start-button"
+          className={Style.button}
         >
           Game Start
         </Link>

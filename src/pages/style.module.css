@@ -1,4 +1,4 @@
-.game-start-button {
+.button {
   display: inline-block;
   color: black;
   font-weight: bold;
@@ -23,7 +23,7 @@
   margin: 50px auto;
 }
 
-.game-start-button:hover {
+.button:hover {
   background-position: 0 0;
   color: #000;
 }
