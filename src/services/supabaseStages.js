@@ -1,4 +1,5 @@
 import supabase from "./supabaseClient";
+import { State } from "utils/GameSetting";
 
 const Response = {
   success: "success",
@@ -36,7 +37,7 @@ export const getUsersStagesRange = async ({ start, end }) => {
     if (profilesError) throw profilesError;
     const profileIds = userProfiles.map(profile => profile.id);
 
-    const { data: stages, error: stagesError } = await supabase.from('stages').select('id, profile_id, title, image').in('profile_id', profileIds).range(start, end);
+    const { data: stages, error: stagesError } = await supabase.from('stages').select('id, profile_id, title, image').in('profile_id', profileIds).eq('state', State.release).range(start, end);
     if (stagesError) throw stagesError;
 
     // ステージデータにユーザー名を合体！
