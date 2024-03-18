@@ -35,7 +35,11 @@ import { BiChevronsDown } from "react-icons/bi";
       const fetchStagesData = async () => {
         if (!profileId) return;
         try {
-          const { data, error } = await supabase.from('stages').select(`*`).eq("profile_id", profileId );
+          const { data, error } = await supabase
+          .from('stages')
+          .select(`*`)
+          .eq("profile_id", profileId )
+          .order('id');
           if (error) {
             throw error;
           }
@@ -114,7 +118,8 @@ import { BiChevronsDown } from "react-icons/bi";
         }
       };
 
-const handleAddStage = async () =>{
+const handleSubmit = async (event) => {
+  event.preventDefault(); // フォームのデフォルトの動作を無効にする(処理にReactを適用する)
   if (stages.length >= 3) return;
   const { data, error } = await supabase
   .from('stages')
@@ -128,19 +133,16 @@ const handleAddStage = async () =>{
   } else {
     console.log('データの挿入が成功しました:', newData);
   }
+  console.log('フォームが送信されました:', newData);
   fetchStagesData();
   setNewData('');
-}
-
-const handleSubmit = async (event) => {
-  event.preventDefault(); // フォームのデフォルトの動作を無効にする
-  console.log('フォームが送信されました:', newData);
 };
 
 const handleInputValue = async (event) => {
   const newValue = event.target.value;
-  setNewData(newValue); // 入力されたテキストデータを取得してnewDataステートにセットする
+    setNewData(newValue); // 入力されたテキストデータを取得してnewDataステートにセットする
 };
+
 function stagesMax() {
   if (stages.length < 3) {
     return (
@@ -156,9 +158,10 @@ function stagesMax() {
           onChange={handleInputValue}
           placeholder="タイトルを入力"
           name="title" // input要素にname属性を追加して送信するデータのキーを設定する
+          required
         />
         <div className="items-center justify-center flex">
-        <button onClick={handleAddStage}>
+        <button>
           <FiPlusSquare size={40} />
         </button>
         </div>
