@@ -22,7 +22,6 @@ const LogInPage = () => {
       email,
       password,
     });
-    console.log(data.user);
     if (error) {
       alert("Error: " + error.message);
     } else {
@@ -51,6 +50,7 @@ const LogInPage = () => {
                   placeholder="Email"
                   className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
 
@@ -61,12 +61,12 @@ const LogInPage = () => {
                   placeholder="password"
                   className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
               <div>
                 <button
                   className={Style.button}
-                  onClick={handleLogin}
                 >
                   Let's Login!
                 </button>

@@ -21,9 +21,17 @@
   transition: background-position 0.8s cubic-bezier(0.19, 1, 0.22, 1);
   -webkit-transition: background-position 0.8s cubic-bezier(0.19, 1, 0.22, 1);
   margin: 50px auto;
+  border: solid 4px #eaf373;
+  transition: all 0.3s 0s;
 }
 
 .button:hover {
   background-position: 0 0;
   color: #000;
+  border: solid 4px #ffb74a;
+}
+
+.button:focus {
+  outline: none;
+  border: solid 4px #ffb74a;
 }
