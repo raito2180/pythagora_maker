@@ -10,6 +10,7 @@ import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
 import PrivacyPolicy from "pages/static/PrivacyPolicy";
 import AboutUs from "pages/static/about_us";
+import { TermsOfService } from "pages/static/TermsOfService";
 
 // ルートパス設定
 /**
@@ -23,7 +24,8 @@ const Path = {
   home: "/",
   signup: "/signup",
   login: "/login",
-  privacy_policy: "/privacy_policy",
+  privacyPolicy: "/privacy_policy",
+  termsOfService: "/terms_of_service",
   users: "/users",
   usersProfile: (id = ':id') => `/users/${id}`,
   stageSelect: "/game",
@@ -50,8 +52,12 @@ export const RouteSetting = [
     component: <LogInPage />,
   },
   {
-    path: Path.privacy_policy,
+    path: Path.privacyPolicy,
     component: <PrivacyPolicy />,
+  },
+  {
+    path: Path.termsOfService,
+    component: <TermsOfService />,
   },
   {
     path: Path.about,
@@ -104,9 +110,13 @@ export const RoutePath = {
     path: Path.login,
     name: "ログイン",
   },
-  privacy_policy: {
-    path: Path.privacy_policy,
+  privacyPolicy: {
+    path: Path.privacyPolicy,
     name: "プライバシーポリシー",
+  },
+  termsOfService: {
+    path: Path.termsOfService,
+    name: "利用規約",
   },
   about: {
     path: Path.about,

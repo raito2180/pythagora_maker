@@ -1,0 +1,33 @@
+.role h4 {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 7px auto;
+}
+
+.role p {
+  margin: 14px;
+  line-height: calc(14px + 20px);
+}
+
+.role p:first-of-type {
+  margin-top: 7px;
+}
+
+.role p:last-of-type {
+  margin-bottom: 7px;
+}
+
+.role ul,
+.role ol {
+  margin-left: 40px;
+  margin-right: 14px;
+  line-height: 30px;
+}
+
+.role ul {
+  list-style: disc;
+}
+
+.role ol {
+  list-style: decimal;
+}
