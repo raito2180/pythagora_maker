@@ -136,29 +136,29 @@ const AboutUs = () => {
       <h2 className="text-3xl text-center font-[DotGothic16]">About us ...</h2>
       <div id="about" className="w-[1200px] h-full m-auto relative z-10 mt-6">
         <div className="absolute left-0 top-0 w-full he-full z-[-1]">
-          <section className="member absolute left-[235px] top-[180px] h-[165px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[222px] top-[180px] h-[200px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">ボド</h4>
             <p className="my-2">ボードゲームよりは3度の飯🎲<br />
               元医療系webエンジニア見習いのボドです✨️<br />
               RUNTEQ祭楽しんでる〜？？🥳🎊
             </p>
           </section>
-          <section className="member absolute left-[645px] top-[180px] h-[165px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[635px] top-[180px] h-[200px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">YY</h4>
             <p className="my-2">ゲームをこよなく愛する<br />元エンジニアかつ現エンジニア見習いです！<br />
               主に編集画面を頑張って作りました！<br />(バグだらけ？ははは...)</p>
           </section>
-          <section className="member absolute left-[75px] top-[515px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[38px] top-[530px] h-[180px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">うぅたん</h4>
             <p className="my-2">主にステージセレクト画面の実装を担当しました！<br />チーム開発最高っ！<br />
               みんなもどんどんチーム開発していこ〜💪</p>
           </section>
-          <section className="member absolute left-[458px] top-[515px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[445px] top-[530px] h-[180px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">MaTTa</h4>
             <p className="my-2">からあげとアニメさえあれば生きていける<br />中年データサイエンティストです！！<br />
               アプリイベント楽しもう〜！！</p>
           </section>
-          <section className="member absolute left-[780px] top-[515px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-29px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[780px] top-[530px] h-[180px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">とぴ</h4>
             <p className="my-2">一応元ゲームプログラマ、ここに見参！<br />楽しんでいただけたら嬉しいです～<br />ちなみに全員のアイコンをクリックすると…？</p>
           </section>
@@ -186,7 +186,7 @@ const AboutUs = () => {
 export default AboutUs;
 
 const POSITION_Y_TOP = 100;
-const POSITION_Y_BOTTOM = 435;
+const POSITION_Y_BOTTOM = 450;
 const CIRCLE_RADIUS = 88;
 
 const bodoNiki = {
@@ -220,7 +220,7 @@ const yy = {
 const uutan = {
   theme: "",
   bodiesType: "Circle",
-  x: (GameWidth / 4) - 50,
+  x: (GameWidth / 4) - 75,
   y: POSITION_Y_BOTTOM,
   type: "",
   radius: CIRCLE_RADIUS,
@@ -246,7 +246,7 @@ const matta = {
 const topi = {
   theme: "",
   bodiesType: "Circle",
-  x: (GameWidth / 2) + (GameWidth / 4) + 35,
+  x: (GameWidth / 2) + (GameWidth / 4) + 45,
   y: POSITION_Y_BOTTOM,
   type: "",
   radius: CIRCLE_RADIUS,
