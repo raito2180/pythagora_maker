@@ -1,4 +1,4 @@
-import "./HomePage.css"
+import Style from "./style.module.css";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "contexts/AuthContext";
@@ -54,14 +54,14 @@ const HomePage = () => {
   const createGround = () => {
     // 床部分。透過して見えなくしている。
     const GROUND_HEIGHT = 30;
-    const ground = Bodies.rectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT - GROUND_HEIGHT, SCREEN_WIDTH, GROUND_HEIGHT, { isStatic: true, render: { fillStyle: "transparent" } });
+    const ground = Bodies.rectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT - GROUND_HEIGHT - 20, SCREEN_WIDTH, GROUND_HEIGHT, { isStatic: true, render: { fillStyle: "transparent" } });
     return ground
   }
 
   const createTitleBox = () => {
     // タイトル部分の物理判定。透過して見えなくしている。
     // TODO : スクリーンサイズから計算してタイトル部分の物理オブジェクトの配置を割り出しているが、これで本当に行けるかちょっと不安
-    const POSITION_Y_ADJUST = 55;
+    const POSITION_Y_ADJUST = 58;
     const CENTER_POSITION = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 2 - POSITION_Y_ADJUST }
     const TITLE_BOX_SIZE = { width: 520, height: 265 }
     const titleBox = Bodies.rectangle(CENTER_POSITION.x, CENTER_POSITION.y, TITLE_BOX_SIZE.width, TITLE_BOX_SIZE.height, { isStatic: true, render: { fillStyle: "transparent" } });
@@ -105,12 +105,12 @@ const HomePage = () => {
       <div id="Back-Object" className="w-screen h-screen absolute top-0 left-0 overflow-hidden "></div>
       <div className="relative font-[DotGothic16] flex flex-col items-center justify-center h-full pt-10 z-10">
         <div className="pt-5 pb-5 pl-15 pr-15 rounded-3xl border-4 border-black text-center font-dotgothic16 text-shadow-black ">
-          <h1 className="text-8xl my-3 mx-10 text-yellow-300">Pythagora<br />maker</h1>
+          <h1 className="text-8xl my-3 mx-10 text-yellow-300">Pythagora<br />Maker</h1>
         </div>
         {/* tailwindで表現が難しそうだったので別途cssファイル作成してそちらに記述しています。 */}
         <Link
           to={user ? RoutePath.stageSelect.path : RoutePath.login.path}
-          className="game-start-button"
+          className={Style.button}
         >
           Game Start
         </Link>

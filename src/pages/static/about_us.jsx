@@ -80,7 +80,7 @@ const AboutUs = () => {
     collisionEvents.onTouchEvents();
     collisionEventsRef.current = collisionEvents;
 
-    matterEngine.registerObject([...circleObjects, composite, createObject(ground, ObjectType.Wall), mouseEvents.getMouseConstraint(),]);
+    matterEngine.registerObject([createObject(ground, ObjectType.Wall), mouseEvents.getMouseConstraint(), ...circleObjects, composite]);
 
     matterEngine.run();
   }
@@ -165,18 +165,18 @@ const AboutUs = () => {
         </div>
       </div>
       <div className="fixed left-0 top-0 w-full h-full m-auto text-center font-[DotGothic16] transition duration-200 opacity-0  stack">
-        <h2 className="text-8xl mt-32">MYゆぅとぴあん</h2>
+        <h2 className="text-8xl mt-32">MYゆうぅとぴあ</h2>
         <section className="mt-16 bg-green-300 w-[320px] m-auto p-3 py-5 rounded">
           <h3 className="text-4xl mb-5">技術スタック</h3>
-          <ul className="text-2xl">
-            <li>React</li>
-            <li>JavaScript</li>
-            <li>Vercel</li>
-            <li>Supabase</li>
-            <li>Docker</li>
-            <li>Tailwind CSS</li>
-            <li>matter.js</li>
-          </ul>
+          <div className="text-2xl">
+            <p>React</p>
+            <p>JavaScript</p>
+            <p>Vercel</p>
+            <p>Supabase</p>
+            <p>Docker</p>
+            <p>Tailwind CSS</p>
+            <p>matter.js</p>
+          </div>
         </section>
       </div>
     </article>
