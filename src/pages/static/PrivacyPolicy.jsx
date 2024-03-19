@@ -1,8 +1,8 @@
-import "./PrivacyPolicy.css"
+import Style from './static.module.css'
 
 const PrivacyPolicy = () => {
   return (
-    <article className="mt-16 m-auto w-full">
+    <article className={`mt-16 m-auto w-full ${Style.role}`}>
       <h2 className="text-center w-4/5 m-auto text-3xl py-8">プライバシーポリシー</h2>
       <section className="bg-white rounded w-4/5 m-auto p-8">
         <div>
