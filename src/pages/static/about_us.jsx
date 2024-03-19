@@ -80,7 +80,7 @@ const AboutUs = () => {
     collisionEvents.onTouchEvents();
     collisionEventsRef.current = collisionEvents;
 
-    matterEngine.registerObject([...circleObjects, composite, createObject(ground, ObjectType.Wall), mouseEvents.getMouseConstraint(),]);
+    matterEngine.registerObject([createObject(ground, ObjectType.Wall), mouseEvents.getMouseConstraint(), ...circleObjects, composite]);
 
     matterEngine.run();
   }
@@ -168,7 +168,7 @@ const AboutUs = () => {
         <h2 className="text-8xl mt-32">MYゆうぅとぴあ</h2>
         <section className="mt-16 bg-green-300 w-[320px] m-auto p-3 py-5 rounded">
           <h3 className="text-4xl mb-5">技術スタック</h3>
-          <div className="text-2xl leading-3">
+          <div className="text-2xl">
             <p>React</p>
             <p>JavaScript</p>
             <p>Vercel</p>

@@ -61,7 +61,7 @@ const HomePage = () => {
   const createTitleBox = () => {
     // タイトル部分の物理判定。透過して見えなくしている。
     // TODO : スクリーンサイズから計算してタイトル部分の物理オブジェクトの配置を割り出しているが、これで本当に行けるかちょっと不安
-    const POSITION_Y_ADJUST = 60;
+    const POSITION_Y_ADJUST = 58;
     const CENTER_POSITION = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 2 - POSITION_Y_ADJUST }
     const TITLE_BOX_SIZE = { width: 520, height: 265 }
     const titleBox = Bodies.rectangle(CENTER_POSITION.x, CENTER_POSITION.y, TITLE_BOX_SIZE.width, TITLE_BOX_SIZE.height, { isStatic: true, render: { fillStyle: "transparent" } });
