@@ -54,14 +54,14 @@ const HomePage = () => {
   const createGround = () => {
     // 床部分。透過して見えなくしている。
     const GROUND_HEIGHT = 30;
-    const ground = Bodies.rectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT - GROUND_HEIGHT, SCREEN_WIDTH, GROUND_HEIGHT, { isStatic: true, render: { fillStyle: "transparent" } });
+    const ground = Bodies.rectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT - GROUND_HEIGHT - 20, SCREEN_WIDTH, GROUND_HEIGHT, { isStatic: true, render: { fillStyle: "transparent" } });
     return ground
   }
 
   const createTitleBox = () => {
     // タイトル部分の物理判定。透過して見えなくしている。
     // TODO : スクリーンサイズから計算してタイトル部分の物理オブジェクトの配置を割り出しているが、これで本当に行けるかちょっと不安
-    const POSITION_Y_ADJUST = 55;
+    const POSITION_Y_ADJUST = 60;
     const CENTER_POSITION = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 2 - POSITION_Y_ADJUST }
     const TITLE_BOX_SIZE = { width: 520, height: 265 }
     const titleBox = Bodies.rectangle(CENTER_POSITION.x, CENTER_POSITION.y, TITLE_BOX_SIZE.width, TITLE_BOX_SIZE.height, { isStatic: true, render: { fillStyle: "transparent" } });
