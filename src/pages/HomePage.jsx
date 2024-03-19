@@ -105,7 +105,7 @@ const HomePage = () => {
       <div id="Back-Object" className="w-screen h-screen absolute top-0 left-0 overflow-hidden "></div>
       <div className="relative font-[DotGothic16] flex flex-col items-center justify-center h-full pt-10 z-10">
         <div className="pt-5 pb-5 pl-15 pr-15 rounded-3xl border-4 border-black text-center font-dotgothic16 text-shadow-black ">
-          <h1 className="text-8xl my-3 mx-10 text-yellow-300">Pythagora<br />maker</h1>
+          <h1 className="text-8xl my-3 mx-10 text-yellow-300">Pythagora<br />Maker</h1>
         </div>
         {/* tailwindで表現が難しそうだったので別途cssファイル作成してそちらに記述しています。 */}
         <Link
