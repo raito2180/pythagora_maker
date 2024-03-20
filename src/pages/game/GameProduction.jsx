@@ -1,11 +1,13 @@
 import { RoutePath } from "utils/RouteSetting";
 import { Link } from 'react-router-dom';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
-import React, { useState,useEffect,useRef } from 'react';
+import React, { useState,useEffect } from 'react';
 import { State } from "utils/GameSetting";
 import supabase from "services/supabaseClient";
 import { useAuth } from "contexts/AuthContext";
 import { FiRefreshCw } from "react-icons/fi";
+import { FiPlusSquare } from "react-icons/fi";
+import { BiChevronsDown } from "react-icons/bi";
 
   const UserStageList = () => {
     const [stages, setStages] = useState([]);
@@ -13,6 +15,7 @@ import { FiRefreshCw } from "react-icons/fi";
     const [profileId, setProfileId] = useState(null);
     const [updating, setUpdating] = useState(false);
     const [disableClick, setDisableClick] = useState(false);
+    const [newData, setNewData] = useState('');
 
     useEffect(() => {
       if (!user) return; 
@@ -28,11 +31,15 @@ import { FiRefreshCw } from "react-icons/fi";
       fetchProfileID();
     }}, [user]);
 
-    useEffect(() => {
+    
       const fetchStagesData = async () => {
         if (!profileId) return;
         try {
-          const { data, error } = await supabase.from('stages').select(`*`).eq("profile_id", profileId );
+          const { data, error } = await supabase
+          .from('stages')
+          .select(`*`)
+          .eq("profile_id", profileId )
+          .order('id');
           if (error) {
             throw error;
           }
@@ -55,8 +62,10 @@ import { FiRefreshCw } from "react-icons/fi";
         // TODO : それ以外のエラー。モーダルなどで対処したいetching stages:', error.message);
         }
       };
+
+    useEffect(() => {
       fetchStagesData();
-    }, [profileId]); //TODO 削除時にも再マウントされるように変更する
+    },[profileId]); //TODO 削除時にも再マウントされるように変更する
 
     useEffect(() => {
       if (updating) {
@@ -109,6 +118,61 @@ import { FiRefreshCw } from "react-icons/fi";
         }
       };
 
+const handleSubmit = async (event) => {
+  event.preventDefault(); // フォームのデフォルトの動作を無効にする(処理にReactを適用する)
+  if (stages.length >= 3) return;
+  const { data, error } = await supabase
+  .from('stages')
+  .insert([{
+    title: newData,
+    profile_id: profileId   
+  }]
+  );
+  if (error) {
+    console.error('データの挿入に失敗しました:', error.message);
+  } else {
+    console.log('データの挿入が成功しました:', newData);
+  }
+  console.log('フォームが送信されました:', newData);
+  fetchStagesData();
+  setNewData('');
+};
+
+const handleInputValue = async (event) => {
+  const newValue = event.target.value;
+    setNewData(newValue); // 入力されたテキストデータを取得してnewDataステートにセットする
+};
+
+function stagesMax() {
+  if (stages.length < 3) {
+    return (
+      <>
+        <div>
+          <h1 className="font-bold text-4xl mb-4 items-center justify-center flex"><BiChevronsDown />Stage作成</h1>
+        </div>
+        <form className="items-center justify-center flex font-bold text-xl" onSubmit={handleSubmit}>
+        <h1 className="mr-1">タイトル:</h1>
+        <input className="mr-1"
+          type="text"
+          value={newData}
+          onChange={handleInputValue}
+          placeholder="タイトルを入力"
+          name="title" // input要素にname属性を追加して送信するデータのキーを設定する
+          required
+        />
+        <div className="items-center justify-center flex">
+        <button>
+          <FiPlusSquare size={40} />
+        </button>
+        </div>
+        </form>
+      </>
+    );
+  } else {
+    return null; // 何も表示しない場合
+  }
+};
+
     return (
       <ul>
       {stages.map((stage, index) => (
@@ -132,7 +196,9 @@ import { FiRefreshCw } from "react-icons/fi";
         </div>
           <div className="flex-col">
             <div className="pt-4 px-8">
-              <FiEdit2 size={40}/>
+              <Link to={RoutePath.gameEdit.path(stage.id)}>
+                <FiEdit2 size={40}/>
+              </Link>
             </div>
             <div className="pt-4 px-8">
               <FiTrash2 size={40}/>
@@ -146,16 +212,15 @@ import { FiRefreshCw } from "react-icons/fi";
         </div>
       </li>
       ))}
+      {stagesMax()}
       </ul>
     );
   };
+
 export const GameProduction = () => {
   
     return (
       <div className="w-full relative font-[DotGothic16] mt-14 ">
-        <Link to={RoutePath.gameMake.path}>
-          <h1 className="font-bold text-4xl flex mb-7">{RoutePath.gameMake.name}</h1>
-        </Link>
         <Link to={RoutePath.stageSelect.path}>
           <h1 className="font-bold text-4xl flex mb-7">{RoutePath.stageSelect.name}</h1>
         </Link>
