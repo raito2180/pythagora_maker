@@ -118,6 +118,27 @@ import { BiChevronsDown } from "react-icons/bi";
         }
       };
 
+      const handleDeleteStage = async (index) => {
+        const confirmDelete = window.confirm('本当にこのステージを削除しますか？');
+        if (confirmDelete) { // ユーザーが確認した場合の処理
+        const deleteArray = stages.filter((_, i) => i !== index);
+        try {
+            
+            const { error } = await supabase
+              .from('stages')
+              .delete()
+              .eq('id', stages[index].id)
+              if (error) {
+                console.error('データの削除に失敗しました:', error.message);
+              } else {
+                console.log('データの削除が成功しました');
+                setStages(deleteArray);
+              }
+            } catch (error) {
+              console.error('エラーが発生しました:', error.message);
+            }
+      };}
+
 const handleSubmit = async (event) => {
   event.preventDefault(); // フォームのデフォルトの動作を無効にする(処理にReactを適用する)
   if (stages.length >= 3) return;
@@ -175,7 +196,7 @@ function stagesMax() {
 
     return (
       <ul>
-      {stages.map((stage, index) => (
+      {stages && stages.map((stage, index) => (
       <li className="flex my-7 items-center justify-center" key={stage.id}>
         <div className="bg-gray-300 flex border border-black rounded-lg">
         <div>
@@ -201,7 +222,9 @@ function stagesMax() {
               </Link>
             </div>
             <div className="pt-4 px-8">
-              <FiTrash2 size={40}/>
+              <button onClick={() => handleDeleteStage(index)}>              
+                <FiTrash2 size={40}/>
+              </button>
             </div>
           </div>
           <div className="flex-col">
