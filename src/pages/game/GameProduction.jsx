@@ -8,6 +8,7 @@ import { useAuth } from "contexts/AuthContext";
 import { FiRefreshCw } from "react-icons/fi";
 import { FiPlusSquare } from "react-icons/fi";
 import { BiChevronsDown } from "react-icons/bi";
+import notSet from "../../assets/imgs/notSet/NotSet.png";
 
   const UserStageList = () => {
     const [stages, setStages] = useState([]);
@@ -67,11 +68,19 @@ import { BiChevronsDown } from "react-icons/bi";
       fetchStagesData();
     },[profileId]); //TODO 削除時にも再マウントされるように変更する
 
+    const stateCheck = (stage) =>{
+      if(stage.state === State.draft){
+       return true;
+      }else{
+       return false;
+      }
+    }
+
     useEffect(() => {
       if (updating) {
         setDisableClick(true); // ボタンを無効化する
         const timeoutId = setTimeout(() => {
-          setDisableClick(false); // 3秒後にボタンを有効化する
+          setDisableClick(false); // 2秒後にボタンを有効化する
           setUpdating(false); // updatingをfalseに戻す
         }, 2000);
 
@@ -206,10 +215,10 @@ function stagesMax() {
         <div>
           <h1 className="font-bold text-2xl py-4 px-8">
             <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
-              <button onClick={() => handleToggleStage(index)} disabled={disableClick}>
+              <button onClick={() => handleToggleStage(index)} disabled={stateCheck(stage) || disableClick}>
                 {updating ? (<span className='flex justify-center font-[Raleway]'>更新中<FiRefreshCw className="animate-spin" /></span>
                 ) : (
-                stage.state === State.release ? "Open Now" : "To Open")}
+                  stage.state === State.release ? "公開" : stage.state === State.private ? "非公開" : "未テスト")}
               </button>
             </span>
           </h1>
@@ -227,9 +236,9 @@ function stagesMax() {
               </button>
             </div>
           </div>
-          <div className="flex-col">
-            <h1 className="font-bold text-2xl pt-9 px-8">
-              <img src={stage.image} alt="NotSet" style={{ width: "150px", height: "auto" }} />
+          <div className="flex items-center justify-center">
+            <h1 className="font-bold text-2xl px-8">
+              <img src={notSet} alt="NotSet" style={{ width: "150px", height: "100px" }} />     {/* TODO:画像処理*/}
             </h1>
           </div>
         </div>
