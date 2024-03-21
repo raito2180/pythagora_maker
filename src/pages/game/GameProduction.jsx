@@ -148,60 +148,64 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
             }
       };}
 
-const handleSubmit = async (event) => {
-  event.preventDefault(); // フォームのデフォルトの動作を無効にする(処理にReactを適用する)
-  if (stages.length >= 3) return;
-  const { data, error } = await supabase
-  .from('stages')
-  .insert([{
-    title: newData,
-    profile_id: profileId   
-  }]
-  );
-  if (error) {
-    console.error('データの挿入に失敗しました:', error.message);
-  } else {
-    console.log('データの挿入が成功しました:', newData);
-  }
-  console.log('フォームが送信されました:', newData);
-  fetchStagesData();
-  setNewData('');
-};
+    const handleSubmit = async (event) => {
+      event.preventDefault(); // フォームのデフォルトの動作を無効にする(処理にReactを適用する)
+      if (stages.length >= 3) return;
+      const { data, error } = await supabase
+      .from('stages')
+      .insert([{
+        title: newData,
+        profile_id: profileId   
+      }]
+      );
+      if (error) {
+        console.error('データの挿入に失敗しました:', error.message);
+      } else {
+        console.log('データの挿入が成功しました:', newData);
+      }
+      console.log('フォームが送信されました:', newData);
+      fetchStagesData();
+      setNewData('');
+    };
 
-const handleInputValue = async (event) => {
-  const newValue = event.target.value;
-    setNewData(newValue); // 入力されたテキストデータを取得してnewDataステートにセットする
-};
+    function cursor(stage) {
+      return stage.state === State.draft ? "cursor-no-drop" : ""; // 真の場合は "cursor-no-drop" を返し、偽の場合は空文字列を返す
+    }    
 
-function stagesMax() {
-  if (stages.length < 3) {
-    return (
-      <>
-        <div>
-          <h1 className="font-bold text-4xl mb-4 items-center justify-center flex"><BiChevronsDown />Stage作成</h1>
-        </div>
-        <form className="items-center justify-center flex font-bold text-xl" onSubmit={handleSubmit}>
-        <h1 className="mr-1">タイトル:</h1>
-        <input className="mr-1"
-          type="text"
-          value={newData}
-          onChange={handleInputValue}
-          placeholder="タイトルを入力"
-          name="title" // input要素にname属性を追加して送信するデータのキーを設定する
-          required
-        />
-        <div className="items-center justify-center flex">
-        <button>
-          <FiPlusSquare size={40} />
-        </button>
-        </div>
-        </form>
-      </>
-    );
-  } else {
-    return null; // 何も表示しない場合
-  }
-};
+    const handleInputValue = async (event) => {
+      const newValue = event.target.value;
+        setNewData(newValue); // 入力されたテキストデータを取得してnewDataステートにセットする
+    };
+
+    function stagesMax() {
+      if (stages.length < 3) {
+        return (
+          <>
+            <div>
+              <h1 className="font-bold text-4xl mb-4 items-center justify-center flex"><BiChevronsDown />Stage作成</h1>
+            </div>
+            <form className="items-center justify-center flex font-bold text-xl" onSubmit={handleSubmit}>
+            <h1 className="mr-1">タイトル:</h1>
+            <input className="mr-1"
+              type="text"
+              value={newData}
+              onChange={handleInputValue}
+              placeholder="タイトルを入力"
+              name="title" // input要素にname属性を追加して送信するデータのキーを設定する
+              required
+            />
+            <div className="items-center justify-center flex">
+            <button>
+              <FiPlusSquare size={40} />
+            </button>
+            </div>
+            </form>
+          </>
+        );
+      } else {
+        return null; // 何も表示しない場合
+      }
+    };
 
     return (
       <ul>
@@ -214,8 +218,10 @@ function stagesMax() {
           </h1>
         <div>
           <h1 className="font-bold text-2xl py-4 px-8">
-            <span className="bg-blue-500 text-yellow-200 flex rounded-lg justify-center">
-              <button onClick={() => handleToggleStage(index)} disabled={stateCheck(stage) || disableClick}>
+            <span className={`bg-blue-500 text-yellow-200 flex rounded-lg justify-center`}>
+              <button className={`${cursor(stage)}`}
+                      onClick={() => handleToggleStage(index)} 
+                      disabled={stateCheck(stage) || disableClick}>
                 {updating ? (<span className='flex justify-center font-[Raleway]'>更新中<FiRefreshCw className="animate-spin" /></span>
                 ) : (
                   stage.state === State.release ? "公開" : stage.state === State.private ? "非公開" : "未テスト")}
