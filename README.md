@@ -1,4 +1,4 @@
-![ヘッダー画像](public/readme/Header.png)
+![ヘッダー画像](./public/readme/Header.png)
 
 <br />
 
@@ -21,7 +21,7 @@ URLを記述
 <br />
 
 ## アプリケーションのイメージ
-![アプリケーションのイメージ](public/readme/GamePlay.gif)
+![アプリケーションのイメージ](./public/readme/GamePlay.gif)
 
 ※開発中の画面になります。
 
@@ -30,17 +30,17 @@ URLを記述
 ## 機能一覧
 | トップ画面 |新規ユーザー登録画面 |
 | ---- | ---- |
-| ![トップ画像](public/readme/Top.png) | ![新規ユーザー登録画像](public/readme/UserRegistration.png) |
+| ![トップ画像](./public/readme/Top.png) | ![新規ユーザー登録画像](./public/readme/UserRegistration.png) |
 | ユーザー未登録の方が「Game Start」を押すとユーザー登録画面に遷移するように設定しています。 | すぐに遊んでいただけるようにシンプルな登録項目にしました。 |
 
 | ログイン画面 |　デフォルトステージ画面 |
 | ---- | ---- |
-| ![ログイン画像](public/readme/login.png) | ![デフォルトステージセレクト画像](public/readme/StagesSelect.png) |
+| ![ログイン画像](./public/readme/login.png) | ![デフォルトステージセレクト画像](public/readme/StagesSelect.png) |
 | supabaseを使用することで認証機能を実装しました。 | 初期設定のステージセレクト画面です。<br />難易度が異なる8つのステージを楽しむことができます。 |
 
 | ユーザーステージ画面 |　ステージ編集画面 |
 | ---- | ---- |
-| ![ユーザーステージ画像](public/readme/UsersStage.png) | ![ステージ編集画像](public/readme/StagesCreate.png) |
+| ![ユーザーステージ画像](./public/readme/UsersStage.png) | ![ステージ編集画像](public/readme/StagesCreate.png) |
 | ユーザーが作成したステージのみを表示する画面です。<br />※画像は開発中のものになります。 | ユーザーが作成したステージを確認、編集する画面です。<br />最大3つまで作成することができ、その中から1つだけを公開することができます。 |
 
 | ステージ作成画面 |　テストプレイ画面 |
@@ -85,13 +85,13 @@ URLを記述
 
 ## ER図
 
-![ER図](public/readme/er.png)
+![ER図](./public/readme/er.png)
 
 <br />
 
 ## 画面遷移図
 
-![画面遷移図](public/readme/ScreenTransitionDiagram.png)
+![画面遷移図](./public/readme/ScreenTransitionDiagram.png)
 
 https://www.figma.com/file/TJrwdvgpydCBUVdtDF0Ox0/%E3%83%94%E3%82%BF%E3%82%B4%E3%83%A9%E3%82%81%E3%81%84%E3%81%8B%EF%BD%9E?type=design&node-id=0-1&mode=design&t=FaRmC42fXabSyCa6-0
 
