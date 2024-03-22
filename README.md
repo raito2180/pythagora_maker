@@ -1,4 +1,4 @@
-![ヘッダー画像](https://raw.githubusercontent.com/raito2180/pythagora_maker/feature/Readme/public/assets/readme/Header.png)
+![ヘッダー画像](https://raw.githubusercontent.com/raito2180/pythagora_maker/feature/Readme/public/readme/Header.png)
 
 <br />
 
