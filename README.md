@@ -2,11 +2,9 @@
 
 <br />
 
-## サービスのURL
+## アプリのURL
 
-文章
-
-URL
+URLを記述
 
 <br />
 
@@ -18,12 +16,13 @@ URL
 
 ## アプリを作ったきっかけ
 
-「スクールのカリキュラム外の技術を使って、新しい技術を学びながらチーム開発を体験しよう！」というコンセプト
+「スクールのカリキュラム外の技術を使って、新しい技術を学びながらチーム開発を体験しよう！」というコンセプトから始まりました。<br />そこでフロント技術を中心としたアプリを作成することになり、ReactとMatter.jsをかけ合わせたゲーム「Pythagora Maker」を作ることになりました。
 
 <br />
 
 ## アプリケーションのイメージ
 ![アプリケーションのイメージ](public/readme/GamePlay.gif)
+
 ※開発中の画面になります。
 
 <br />
@@ -76,11 +75,11 @@ URL
 #### インフラ
 <img src="https://img.shields.io/badge/-docker-555.svg?logo=docker&style=popout">
 
+<img src="https://img.shields.io/badge/-vercel-000.svg?logo=vercel&style=popout">
+
 #### その他
 
 <img src="https://img.shields.io/badge/-github-181717.svg?logo=github&style=popout">
-
-<img src="https://img.shields.io/badge/-vercel-000.svg?logo=vercel&style=popout">
 
 <br />
 
@@ -100,7 +99,9 @@ https://www.figma.com/file/TJrwdvgpydCBUVdtDF0Ox0/%E3%83%94%E3%82%BF%E3%82%B4%E3
 
 ## 今後の展望
 
-
+- 〇〇を追加
+- 〇〇を導入
+- etc...
 
 
 
