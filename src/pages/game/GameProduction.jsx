@@ -69,7 +69,7 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
     },[profileId]); //TODO 削除時にも再マウントされるように変更する
 
     const stateCheck = (stage) =>{
-      if(stage.state === State.draft){
+      if(stage.state === State.untested){
        return true;
       }else{
        return false;
@@ -169,7 +169,7 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
     };
 
     function cursor(stage) {
-      return stage.state === State.draft ? "cursor-no-drop" : ""; // 真の場合は "cursor-no-drop" を返し、偽の場合は空文字列を返す
+      return stage.state === State.untested ? "cursor-no-drop" : ""; // 真の場合は "cursor-no-drop" を返し、偽の場合は空文字列を返す
     }    
 
     const handleInputValue = async (event) => {
