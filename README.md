@@ -85,13 +85,13 @@ URLを記述
 
 ## ER図
 
-<img width="918" alt="er" src="https://github.com/raito2180/pythagora_maker/assets/138564916/81c5dcae-967a-4d43-a7e6-ca84f1a36449">
+![ER図画像](https://github.com/raito2180/pythagora_maker/assets/138564916/81c5dcae-967a-4d43-a7e6-ca84f1a36449)
 
 <br />
 
 ## 画面遷移図
 
-<img width="1069" alt="ScreenTransition Diagram" src="https://github.com/raito2180/pythagora_maker/assets/138564916/39166b29-43b9-4bef-a8c8-be8ebb9c7d26">
+![画面遷移図画像](https://github.com/raito2180/pythagora_maker/assets/138564916/39166b29-43b9-4bef-a8c8-be8ebb9c7d26)
 
 
 https://www.figma.com/file/TJrwdvgpydCBUVdtDF0Ox0/%E3%83%94%E3%82%BF%E3%82%B4%E3%83%A9%E3%82%81%E3%81%84%E3%81%8B%EF%BD%9E?type=design&node-id=0-1&mode=design&t=FaRmC42fXabSyCa6-0
