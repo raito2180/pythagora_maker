@@ -1,4 +1,4 @@
-![ヘッダー画像](https://github.com/raito2180/pythagora_maker/assets/138564916/4ad33fde-3a8f-4553-a478-c3703b7a44fe)
+![ヘッダー画像](https://github.com/raito2180/pythagora_maker/assets/138564916/9b841690-2231-4f3d-b62f-ecf356e71f63)
 
 <br />
 
@@ -21,7 +21,7 @@ URLを記述
 <br />
 
 ## アプリケーションのイメージ
-![アプリケーションのイメージ](./public/readme/GamePlay.gif)
+![アプリケーションのイメージ](https://github.com/raito2180/pythagora_maker/assets/138564916/68691df7-a571-4c79-a2e0-032e497ae14a)
 
 ※開発中の画面になります。
 
@@ -30,17 +30,17 @@ URLを記述
 ## 機能一覧
 | トップ画面 |新規ユーザー登録画面 |
 | ---- | ---- |
-| ![トップ画像](./public/readme/Top.png) | ![新規ユーザー登録画像](./public/readme/UserRegistration.png) |
+| ![トップ画像](https://github.com/raito2180/pythagora_maker/assets/138564916/336349e6-b74d-472c-a90c-40eac13ea9a1) | ![新規ユーザー登録画像](https://github.com/raito2180/pythagora_maker/assets/138564916/59d0fe72-4e44-4744-a12e-785e11bc56ae) |
 | ユーザー未登録の方が「Game Start」を押すとユーザー登録画面に遷移するように設定しています。 | すぐに遊んでいただけるようにシンプルな登録項目にしました。 |
 
 | ログイン画面 |　デフォルトステージ画面 |
 | ---- | ---- |
-| ![ログイン画像](./public/readme/login.png) | ![デフォルトステージセレクト画像](public/readme/StagesSelect.png) |
+| ![ログイン画像](https://github.com/raito2180/pythagora_maker/assets/138564916/40fc375a-71f1-4bc8-a14f-71f67af33d44) | ![デフォルトステージセレクト画像](https://github.com/raito2180/pythagora_maker/assets/138564916/1f9d4f26-0584-45e3-af2d-f94f173fb543) |
 | supabaseを使用することで認証機能を実装しました。 | 初期設定のステージセレクト画面です。<br />難易度が異なる8つのステージを楽しむことができます。 |
 
 | ユーザーステージ画面 |　ステージ編集画面 |
 | ---- | ---- |
-| ![ユーザーステージ画像](./public/readme/UsersStage.png) | ![ステージ編集画像](public/readme/StagesCreate.png) |
+| ![ユーザーステージ画像](https://github.com/raito2180/pythagora_maker/assets/138564916/6ce646fe-6a47-4392-b5b8-07e9325c010c) | ![ステージ編集画像](https://github.com/raito2180/pythagora_maker/assets/138564916/0ef4dba2-e0a3-4abc-af71-7ba6a655c99f) |
 | ユーザーが作成したステージのみを表示する画面です。<br />※画像は開発中のものになります。 | ユーザーが作成したステージを確認、編集する画面です。<br />最大3つまで作成することができ、その中から1つだけを公開することができます。 |
 
 | ステージ作成画面 |　テストプレイ画面 |
@@ -48,10 +48,10 @@ URLを記述
 | ![ステージ作成画面画像](画像ディレクトリを記述) | ![テストプレイ画面](画像ディレクトリを記述) |
 | 実際にユーザー自身がステージを作成することができる画面です。 | ユーザー自身が作成したステージをテストできる画面です。 |
 
-| プロフィール画面 |　 |
+| プロフィール画面 |　About us画面 |
 | ---- | ---- |
-| ![プロフィール画面画像](画像ディレクトリを記述) |  |
-| ユーザーのプロフィールを確認、編集できる画面です。<br />クリアした |  |
+| ![プロフィール画面画像](画像ディレクトリを記述) | ![About us画面画像](https://github.com/raito2180/pythagora_maker/assets/138564916/4ad33fde-3a8f-4553-a478-c3703b7a44fe) |
+| ユーザーのプロフィールを確認、編集できる画面です。<br />クリアしたステージやいいねを確認できます。 | チーム開発メンバーのコメントを掲載しています。 |
 
 <br />
 
@@ -85,13 +85,14 @@ URLを記述
 
 ## ER図
 
-![ER図](./public/readme/er.png)
+<img width="918" alt="er" src="https://github.com/raito2180/pythagora_maker/assets/138564916/81c5dcae-967a-4d43-a7e6-ca84f1a36449">
 
 <br />
 
 ## 画面遷移図
 
-![画面遷移図](./public/readme/ScreenTransitionDiagram.png)
+<img width="1069" alt="ScreenTransition Diagram" src="https://github.com/raito2180/pythagora_maker/assets/138564916/39166b29-43b9-4bef-a8c8-be8ebb9c7d26">
+
 
 https://www.figma.com/file/TJrwdvgpydCBUVdtDF0Ox0/%E3%83%94%E3%82%BF%E3%82%B4%E3%83%A9%E3%82%81%E3%81%84%E3%81%8B%EF%BD%9E?type=design&node-id=0-1&mode=design&t=FaRmC42fXabSyCa6-0
 
