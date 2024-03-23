@@ -8,11 +8,11 @@ export default ({ clearTime, stageId }) => {
   const navigate = useNavigate();
   const { width, height } = useWindowSize();
   const post = {
-    title: "ReactとRailsで作るモダンウェブアプリケーション",
+    title: "ピタゴラメーカー",
     url: "https://pythagora-maker.vercel.app/game",
   };
   const handleTweet = () => {
-    const tweetText = `【Pythagora Maker】ステージ${stageId}を${clearTime}でクリアしました！！`;
+    const tweetText = `【${post.title}】ステージ${stageId}を${clearTime}でクリアしました！！`;
     const twitterUrl = `https://twitter.com/share?url=${encodeURIComponent(
       post.url
     )}&text=${encodeURIComponent(tweetText)}`;
