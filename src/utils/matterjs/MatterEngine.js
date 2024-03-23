@@ -80,6 +80,10 @@ export class MatterEngine {
       });
       return;
     }
+    if (typeof object.getObject === 'function') {
+      Composite.add(composite, object.getObject());
+      return;
+    }
     Composite.add(composite, object);
   }
 

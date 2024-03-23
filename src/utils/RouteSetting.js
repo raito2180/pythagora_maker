@@ -8,14 +8,14 @@ import { GameMake } from "pages/game/GameMake";
 import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
-
-// NOTE : 暫定処理なので必要に応じて修正してくださいっ
+import PrivacyPolicy from "pages/static/PrivacyPolicy";
+import AboutUs from "pages/static/about_us";
+import { TermsOfService } from "pages/static/TermsOfService";
 
 // ルートパス設定
 /**
  * NOTE :
  * ルーティング設定用と各ページで呼び出す用の２種類設定している状態です。
- * この設定は暫定的なもので、必要に応じて修正してください。
  * タイポや設定漏れを防ぐために、パスの文字列設定はここだけでいいようにしています。
  * ルーティング設定と呼び出し用の設定にパスを設定する箇所があるので
  * こちらに設定したものを使うようにするといいかなと考えました。
@@ -24,13 +24,16 @@ const Path = {
   home: "/",
   signup: "/signup",
   login: "/login",
+  privacyPolicy: "/privacy_policy",
+  termsOfService: "/terms_of_service",
   users: "/users",
   usersProfile: (id = ':id') => `/users/${id}`,
   stageSelect: "/game",
   gamePlay: (id = ':id') => `/game/${id}`,
   gameEdit: (id = ':id') => `/game/${id}/edit`,
-  gameProduction: "/game/new",  // TODO : 本来はユーザーidが必要。暫定処理
+  gameProduction: "/game/new",
   gameMake: "/game/make",
+  about: "/about",
 };
 
 // NOTE : ルーティング設定用
@@ -47,6 +50,18 @@ export const RouteSetting = [
   {
     path: Path.login,
     component: <LogInPage />,
+  },
+  {
+    path: Path.privacyPolicy,
+    component: <PrivacyPolicy />,
+  },
+  {
+    path: Path.termsOfService,
+    component: <TermsOfService />,
+  },
+  {
+    path: Path.about,
+    component: <AboutUs />,
   },
   // ユーザー周り
   {
@@ -85,7 +100,7 @@ export const RouteSetting = [
 export const RoutePath = {
   home: {
     path: Path.home,
-    name: "Pythagora maker",
+    name: "Pythagora Maker",
   },
   signup: {
     path: Path.signup,
@@ -94,6 +109,18 @@ export const RoutePath = {
   login: {
     path: Path.login,
     name: "ログイン",
+  },
+  privacyPolicy: {
+    path: Path.privacyPolicy,
+    name: "プライバシーポリシー",
+  },
+  termsOfService: {
+    path: Path.termsOfService,
+    name: "利用規約",
+  },
+  about: {
+    path: Path.about,
+    name: "About Us...",
   },
   // ユーザー周り
   users: {

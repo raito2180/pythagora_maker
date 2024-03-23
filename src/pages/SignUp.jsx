@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import Style from "./style.module.css";
+import { useState } from "react";
 import Header from "components/Header";
 import supabase from "services/supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -74,7 +75,7 @@ const SignUpPage = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full p-2 rounded"
+                  className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                 />
               </div>
 
@@ -86,7 +87,7 @@ const SignUpPage = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-2 rounded"
+                  className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                 />
               </div>
 
@@ -98,7 +99,7 @@ const SignUpPage = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full p-2 rounded"
+                  className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                 />
               </div>
 
@@ -110,14 +111,14 @@ const SignUpPage = () => {
                   required
                   value={passwordConf}
                   onChange={(e) => setPasswordConf(e.target.value)}
-                  className="w-full p-2 rounded"
+                  className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                 />
               </div>
 
-              <div className="mt-4 bg-yellow-200 hover:bg-yellow-400 rounded-full">
+              <div>
                 <button
                   type="submit"
-                  className=" text-black font-bold py-2 px-4"
+                  className={Style.button}
                 >
                   Let's Sign Up!
                 </button>

@@ -16,15 +16,9 @@ export const GamePlay = () => {
   const [countTime, setCountTime] = useState(0);
   const [countIntervalId, setCountIntervalId] = useState(null);
   const [isGameStarted, setIsGameStarted] = useState(false);
-  const [showStartMessage, setShowStartMessage] = useState(true);
+  const [countDown, setCountDown] = useState(3); // カウントダウン用のステート
+  const [showCountDown, setShowCountDown] = useState(false); // カウントダウン表示用のステート
 
-  
-  // ゲームスタート演出の遅延時間
-  const GAME_START_DELAY = 1000;
-  // ミリ秒から秒に変換
-  const SECONDS_TO_MILLISECONDS = 1000;
-
-  // useEffectを先に書くと、useCallbackの関数が使えないので、useCallbackを先に書く
   const fetchData = useCallback(async () => {
     try {
       let { result, data } = await getStageById(id);
@@ -61,16 +55,27 @@ export const GamePlay = () => {
 
   useEffect(() => {
     if (loading) return;
-    // NOTE : ローディング終了直後だとレンダリングがされてないのでちょっと待つ
-    const setTimeoutId = setTimeout(() => {
-      // ゲームスタート演出
-      gameStart();
-    }, GAME_START_DELAY);
 
-    return () => {
-      clearTimeout(setTimeoutId);
-    };
+    setShowCountDown(true);
+    // カウントダウンを3から開始する
+    setCountDown(3);
+    const countDownInterval = setInterval(() => {
+      setCountDown((prevCount) => prevCount - 1);
+    }, 1000);
+
+    return () => clearInterval(countDownInterval);
   }, [loading]);
+
+  useEffect(() => {
+    if (countDown < 0) {
+      // カウントダウンが終了したら表示をクリア
+      setShowCountDown(false);
+      // カウントダウンが終了したらゲーム開始の処理を実行
+      if (!isGameStarted) {
+        gameStart();
+      }
+    }
+  }, [countDown, isGameStarted]);
 
   const transformTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -83,8 +88,7 @@ export const GamePlay = () => {
   // 先に宣言しないとuseEffect内で使えない
   const gameCompleted = useCallback(() => {
     clearInterval(countIntervalId);
-    // alert(`ゲームクリア！\nクリアタイム ${transformTime(countTime)}`);
-  }, [countIntervalId, countTime, transformTime]);
+  }, [countIntervalId]);
 
   // gameCompletedはuseCallbackで囲っているので、変更がなければ再生成されない
   useEffect(() => {
@@ -99,13 +103,14 @@ export const GamePlay = () => {
   };
 
   const gameStart = () => {
-  //alert("ゲームスタート");
-  setIsGameStarted(true); // ゲームが開始されたことを示す
-  const intervalId = setInterval(() => {
-    setCountTime((prev) => prev + 1);
-  }, SECONDS_TO_MILLISECONDS);
-  setCountIntervalId(intervalId);
-};
+    setIsGameStarted(true);
+    // ゲームの時間計測を開始
+    setCountTime(0); // ゲーム開始時に時間を0にリセット
+    const intervalId = setInterval(() => {
+      setCountTime((prev) => prev + 1);
+    }, 1000);
+    setCountIntervalId(intervalId);
+  };
 
   // リセットボタンの処理
   const handlePlacementReset = useCallback(() => {
@@ -122,15 +127,6 @@ export const GamePlay = () => {
     onClickPlay.current();
   }, [onClickPlay]);
 
-  useEffect(() => {
-    // 1秒後にメッセージを非表示にする
-    const timer = setTimeout(() => {
-      setShowStartMessage(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <>
       {loading ? (
@@ -141,9 +137,14 @@ export const GamePlay = () => {
             <div className="w-full flex">
               <div className="w-1/4 grid grid-flow-col items-center text-start">
                 <button
-                  className="hover:bg-blue-200 bg-blue-400 hover:text-slate-500 text-slate-950 transition-all py-2"
+                  className={`hover:text-slate-500 text-slate-950 ${
+                    countDown > 0
+                      ? "hover:bg-gray-900 bg-gray-600"
+                      : "hover:bg-red-200 bg-blue-400"
+                  } transition-all py-2 px-4 my-2`}
                   onClick={handlePlacementReset}
                   aria-label="ユーザーは位置オブジェクトのリセット"
+                  disabled={countDown > 0}
                 >
                   Reset
                 </button>
@@ -152,18 +153,28 @@ export const GamePlay = () => {
               <div className="w-3/4 flex flex-col">
                 <div className="flex justify-between items-center mx-5">
                   <button
-                    className="hover:bg-blue-200 bg-blue-400 hover:text-slate-500 text-slate-950 transition-all py-2 px-4 my-2"
+                    className={`hover:text-slate-500 text-slate-950 ${
+                      countDown > 0
+                        ? "hover:bg-gray-900 bg-gray-600"
+                        : "hover:bg-red-200 bg-blue-400"
+                    } transition-all py-2 px-4 my-2`}
                     onClick={handleBallReset}
                     aria-label="ボールの位置をリセット"
+                    disabled={countDown > 0}
                   >
                     BallReset
                   </button>
                   <h3 className="text-2xl">{gameData.title}</h3>
                   <p>{transformTime(countTime)}</p>
                   <button
-                    className="hover:text-slate-500 text-slate-950 hover:bg-red-200 bg-red-400 transition-all py-2 px-4 my-2"
+                    className={`hover:text-slate-500 text-slate-950 ${
+                      countDown > 0
+                        ? "hover:bg-gray-900 bg-gray-600"
+                        : "hover:bg-red-200 bg-red-400"
+                    } transition-all py-2 px-4 my-2`}
                     onClick={handleClickPlay}
                     aria-label="再生"
+                    disabled={countDown > 0} // カウントダウンが0より大きい間はボタンを無効にする
                   >
                     ▶
                   </button>
@@ -177,14 +188,17 @@ export const GamePlay = () => {
               setOnClickBallReset={onClickBallReset}
               setIsGameCompleted={setIsGameCompleted}
               stageId={id}
-              />
-              {showStartMessage && (
-        <div className="fixed text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-black text-shadow-md z-50">
-        <h2 className="text-5xl text-black  font-bold">ゲームスタート！</h2>    
-          </div>
-      )}
-              {/* ゲームクリア時にConfettiコンポーネントを表示 */}
-          {isGameCompleted && <ConfettiComponent clearTime={transformTime(countTime)}/>}
+            />
+            {showCountDown && (
+              <div className="fixed text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl text-black text-shadow-md z-50">
+                <h2 className="text-6xl text-black font-bold">
+                  {countDown > 0 ? countDown : "ゲームスタート！"}
+                </h2>
+              </div>
+            )}
+            {isGameCompleted && (
+              <ConfettiComponent clearTime={transformTime(countTime)} />
+            )}
           </div>
         </div>
       )}

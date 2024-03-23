@@ -1,4 +1,4 @@
-import React from "react";
+import Style from "./style.module.css";
 import Header from "components/Header";
 import { useState } from "react";
 import supabase from "services/supabaseClient";
@@ -22,7 +22,6 @@ const LogInPage = () => {
       email,
       password,
     });
-    console.log(data.user);
     if (error) {
       alert("Error: " + error.message);
     } else {
@@ -49,8 +48,9 @@ const LogInPage = () => {
                   type="email"
                   id="email"
                   placeholder="Email"
-                  className="w-full p-2 rounded"
+                  className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
 
@@ -59,14 +59,14 @@ const LogInPage = () => {
                   type="password"
                   id="password"
                   placeholder="password"
-                  className="w-full p-2 rounded"
+                  className="w-full p-2 border-4 focus:outline-none focus:border-yellow-500 rounded"
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
-              <div className="mt-4 bg-yellow-200 hover:bg-yellow-400 rounded-full">
+              <div>
                 <button
-                  className=" text-black font-bold py-2 px-4"
-                  onClick={handleLogin}
+                  className={Style.button}
                 >
                   Let's Login!
                 </button>
