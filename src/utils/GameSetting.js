@@ -73,6 +73,9 @@ export const UserPlacementBox = [
   },
 ]
 
+// ピタゴラスペースの開始X座標
+export const PythagoraStartX = WallX + (UserPlacementBox[0].width / 2);
+
 // ステージ作成画面
 export const StageEditorWidth = 1280;
 export const StageEditorHeight = 496;
@@ -114,6 +117,12 @@ export const StageEditorWall = [
     }
   }
 ]
+
+// ステージの開始X座標
+export const StageStartX = StageEditorFirstWallX + (StageEditorWall[0].width / 2);
+
+// ステージの終了X座標
+export const StageEndX = StageEditorSecondWallX - (StageEditorWall[1].width / 2);
 
 // オブジェクトの種類
 export const ObjectType = {

@@ -3,7 +3,9 @@ import {
   StageEditorFirstWallX,
   StageEditorSecondWallX,
   StageEditorWall,
-  StageEditorHeight
+  StageEditorHeight,
+  StageStartX,
+  StageEndX
 } from "utils/GameSetting";
 
 export const GameMakeProcess = ({ engine }) => {
@@ -11,17 +13,14 @@ export const GameMakeProcess = ({ engine }) => {
   const handleSaveClick = () => {
     if (!engine.world || !engine.world.bodies) return;
 
-    // ゲーム配置部分のX座標を計算
-    const firstX = StageEditorFirstWallX + (StageEditorWall[0].width / 2);
-    const secondX = StageEditorSecondWallX - (StageEditorWall[1].width / 2);
     // 保存する範囲
     const region = {
-      min: { x: firstX, y: 0 },
-      max: { x: secondX, y: StageEditorHeight }
+      min: { x: StageStartX, y: 0 },
+      max: { x: StageEndX, y: StageEditorHeight }
     }
 
     // 範囲内のオブジェクトを取得
-    const objects = Query.region(engine.world.bodies, region).filter((body) => body.label !== "wall"); 
+    const objects = Query.region(engine.world.bodies, region).filter((body) => body.label !== "wall");
 
     console.log(objects);
   };

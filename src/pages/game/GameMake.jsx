@@ -1,4 +1,8 @@
-import { useEffect, useState, useRef } from "react"
+import {
+  useEffect,
+  useState,
+  useRef
+} from "react"
 import { Engine } from "matter-js"
 import { StageEditor } from "components/StageEditor"
 import { GameMakeProcess } from "components/GameMakeProcess"
@@ -6,6 +10,9 @@ import { PhysicalSettings } from "components/PhysicalSettings"
 
 export const GameMake = () => {
   const [ engine, setEngine ] = useState(null);
+  const [ selectObjectX, setSelectObjectX ] = useState(null);
+  const [ selectObjectY, setSelectObjectY ] = useState(null);
+  const [ selectObjectType, setSelectObjectType ] = useState(null);
   const selectObjectRef = useRef(null);
 
   useEffect(() => {
@@ -35,6 +42,9 @@ export const GameMake = () => {
         <StageEditor
           engine={engine}
           selectObjectRef={selectObjectRef}
+          setSelectObjectX={setSelectObjectX}
+          setSelectObjectY={setSelectObjectY}
+          setSelectObjectType={setSelectObjectType}
           />
         <div className="w-full grow m-auto mt-4 flex">
           <div className="w-4/6 h-full mr-4 flex flex-col bg-white">
@@ -42,6 +52,12 @@ export const GameMake = () => {
             <PhysicalSettings
               engine={engine}
               selectObjectRef={selectObjectRef}
+              selectObjectX={selectObjectX}
+              setSelectObjectX={setSelectObjectX}
+              selectObjectY={selectObjectY}
+              setSelectObjectY={setSelectObjectY}
+              selectObjectType={selectObjectType}
+              setSelectObjectType={setSelectObjectType}
               />
           </div>
           <div className="w-2/6 h-full flex flex-col bg-white">
