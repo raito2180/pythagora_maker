@@ -243,11 +243,6 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
               </button>
             </div>
           </div>
-          <div className="flex items-center justify-center">
-            <h1 className="font-bold text-2xl px-8">
-              <img src={notSet} alt="NotSet" style={{ width: "150px", height: "100px" }} />     {/* TODO:画像処理*/}
-            </h1>
-          </div>
         </div>
       </li>
       ))}
