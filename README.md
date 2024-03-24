@@ -4,7 +4,7 @@
 
 ## アプリのURL
 
-URLを記述
+https://pythagora-maker.vercel.app/
 
 <br />
 
