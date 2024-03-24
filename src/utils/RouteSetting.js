@@ -11,6 +11,7 @@ import { UserProfile } from "pages/users/UserProfile";
 import PrivacyPolicy from "pages/static/PrivacyPolicy";
 import AboutUs from "pages/static/about_us";
 import { TermsOfService } from "pages/static/TermsOfService";
+import HelpCard from "pages/static/HelpCard";
 
 // ルートパス設定
 /**
@@ -34,6 +35,7 @@ const Path = {
   gameProduction: "/game/new",
   gameMake: "/game/make",
   about: "/about",
+  helpCard: "/help",
 };
 
 // NOTE : ルーティング設定用
@@ -62,6 +64,10 @@ export const RouteSetting = [
   {
     path: Path.about,
     component: <AboutUs />,
+  },
+  {
+    path: Path.helpCard,
+    component: <HelpCard />,
   },
   // ユーザー周り
   {
@@ -121,6 +127,10 @@ export const RoutePath = {
   about: {
     path: Path.about,
     name: "About Us...",
+  },
+  helpCard: {
+    path: Path.helpCard,
+    name: "ヘルプ",
   },
   // ユーザー周り
   users: {
