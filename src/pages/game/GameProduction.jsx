@@ -8,6 +8,7 @@ import { useAuth } from "contexts/AuthContext";
 import { FiRefreshCw } from "react-icons/fi";
 import { FiPlusSquare } from "react-icons/fi";
 import { BiChevronsDown } from "react-icons/bi";
+import { RiArrowGoBackFill } from "react-icons/ri";
 import notSet from "../../assets/imgs/notSet/NotSet.png";
 
   const UserStageList = () => {
@@ -211,7 +212,7 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
       <ul>
       {stages && stages.map((stage, index) => (
       <li className="flex my-7 items-center justify-center" key={stage.id}>
-        <div className="bg-gray-300 flex border border-black rounded-lg">
+        <div className="bg-orange-300 flex border border-black rounded-lg  translate-y-3 hover:translate-y-[-5] transition-all">
         <div>
           <h1 className="font-bold text-2xl py-4 px-8 w-[200px] truncate">
             {stage.title}          
@@ -242,11 +243,6 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
               </button>
             </div>
           </div>
-          <div className="flex items-center justify-center">
-            <h1 className="font-bold text-2xl px-8">
-              <img src={notSet} alt="NotSet" style={{ width: "150px", height: "100px" }} />     {/* TODO:画像処理*/}
-            </h1>
-          </div>
         </div>
       </li>
       ))}
@@ -259,9 +255,13 @@ export const GameProduction = () => {
   
     return (
       <div className="w-full relative font-[DotGothic16] mt-14 ">
-        <Link to={RoutePath.stageSelect.path}>
-          <h1 className="font-bold text-4xl flex mb-7">{RoutePath.stageSelect.name}</h1>
-        </Link>
+        <div>
+            <Link to={RoutePath.stageSelect.path}>
+              <h1 className="font-bold text-4xl items-center justify-center flex mb-7">{RoutePath.stageSelect.name}へ
+                <RiArrowGoBackFill />
+              </h1>  
+            </Link>
+        </div>
         <div>
           <h1 className="font-bold text-4xl items-center justify-center flex">
             Edit
