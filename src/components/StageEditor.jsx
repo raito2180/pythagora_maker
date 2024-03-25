@@ -1,19 +1,18 @@
 import {
   useEffect,
-  useRef,
-  useState
+  useRef
 } from "react";
 import {
   Render,
   Runner,
-  Composite,
-  use
+  Composite
 } from "matter-js";
 import { getStageById } from "services/supabaseStages";
 import {
   PythagoraStartX,
   StageEditorWidth,
   StageEditorHeight,
+  StageEditorUserPlacementCenterX,
   ObjectType,
   StageEditorWall,
   StageStartX,
@@ -28,19 +27,19 @@ import { MouseEvents } from "utils/matterjs/MouseEvents";
 
 export const StageEditor = ({
   engine,
+  gameData,
+  setGameData,
   selectObjectRef,
   setSelectObjectX,
   setSelectObjectY,
-  setSelectObjectType
+  setSelectObjectType,
+  stageId
 }) => {
-  const [ gameData, setGameData ] = useState(null);
   const isMouseDownRef = useRef(false);
   const isBeforeOnStageRef = useRef(false);
   const mouseClickPositionRef = useRef({ x: 0, y: 0 });
-  const getSelectObjectParent = () =>
-      selectObjectRef.current ? selectObjectRef.current.getParent() : null;
   const EDIT_SCALE = 2/3;
-  const HALF_SCALE = 0.5;
+  const HALF_SCALE = 1/2;
   const MULTIPLY_SCALE = 2;
   const SELECT_OBJECT_OUTLINE_WIDTH = 5;
 
@@ -71,29 +70,57 @@ export const StageEditor = ({
 
     Render.run(render);
     Runner.run(Runner.create(), engine);
+
+    return () => {
+      Render.stop(render);
+      Runner.stop(engine);
+      mouseEvents.clear();
+    }
   }, [engine]);
 
   useEffect(() => {
-    if (!gameData || !gameData.content) return;
+
+    if (!engine || !gameData) return;
 
     // ボールデータを生成
-    const ballObjects = createObjects(gameData.content.Ball, ObjectType.Ball);
-    ballObjects.forEach((object) => {
-      changeScale(object);
-      Composite.add(engine.world, object.getObject());
-    });
+    if (gameData.content && gameData.content.Ball) {
+      const ballObjects = createObjects(gameData.content.Ball, ObjectType.Ball);
+      ballObjects.forEach((object) => {
+        changeScale(object);
+        Composite.add(engine.world, object.getObject());
+      });
+    }
 
     // スイッチデータを生成
-    const switchObject = createObject(gameData.content.Switch, ObjectType.Switch);
-    changeScale(switchObject);
-    Composite.add(engine.world, switchObject.getObject());
+    if (gameData.content && gameData.content.Switch) {
+      const switchObject = createObject(gameData.content.Switch, ObjectType.Switch);
+      changeScale(switchObject);
+      Composite.add(engine.world, switchObject.getObject());
+    }
 
     // ステージデータを生成
-    const stageObjects = createObjects(gameData.content.Stage, ObjectType.Stage);
-    stageObjects.forEach((object) => {
-      changeScale(object);
-      Composite.add(engine.world, object.getObject());
-    });
+    if (gameData.content && gameData.content.Stage) {
+      const stageObjects = createObjects(gameData.content.Stage, ObjectType.Stage);
+      stageObjects.forEach((object) => {
+        changeScale(object);
+        Composite.add(engine.world, object.getObject());
+      });
+    }
+
+    // ユーザーオブジェクトデータをステージオブジェクトとして生成
+    if (gameData.content && gameData.content.UserPlacement) {
+      const userObjects = createObjects(gameData.content.UserPlacement, ObjectType.Stage);
+      userObjects.forEach((userObject) => {
+        changeScale(userObject);
+        userObject.multiplyScale(HALF_SCALE);
+        const position = userObject.getPosition();
+        userObject.setPosition({ x: StageEditorUserPlacementCenterX, y: position.y });
+        const object = userObject.getObject();
+        // ユーザーオブジェクトはステージオブジェクトとして配置
+        object.objectType = ObjectType.Stage;
+        Composite.add(engine.world, object);
+      });
+    }
 
     // 仕切り壁を配置
     const wallObjects = createObjects(StageEditorWall, ObjectType.Wall);
@@ -112,12 +139,12 @@ export const StageEditor = ({
       Composite.add(engine.world, object.getObject());
     });
 
-  }, [gameData]);
+  }, [engine, gameData]);
 
   const fetchData = async () => {
 
     // TODO: エラー処理未実装
-    const ret = await getStageById(1);
+    const ret = await getStageById(stageId);
     setGameData(ret.data);
   };
 
@@ -184,7 +211,7 @@ export const StageEditor = ({
     y = y < 0 ? 0 : y;
     y = y > StageEditorHeight ? StageEditorHeight : y;
 
-    const parent = getSelectObjectParent();
+    const parent = selectObjectRef.current.getParent();
 
     // パレットに存在しないオブジェクトはパレットに移動できないようにする
     if (!parent.object.label.startsWith("Palette")) {
@@ -209,15 +236,17 @@ export const StageEditor = ({
 
   // オブジェクトをドラッグ終了したときの処理
   const handleClickUp = () => {
-    const objectPosition = selectObjectRef.current ? getSelectObjectParent().getPosition() : { x: 0, y: 0 };
-
+    const objectPosition = selectObjectRef.current ? selectObjectRef.current.getParent().getPosition() : { x: 0, y: 0 };
+    isMouseDownRef.current = false;
     // ドラッグしたオブジェクトがパレット内にある場合は削除
     if (selectObjectRef.current && isOnPalette(objectPosition.x)) {
       Composite.remove(engine.world, selectObjectRef.current);
       selectObjectRef.current = null;
+      setSelectObjectXY(null, null);
+      setSelectObjectType(null);
+      return;
     }
     setSelectObjectXY(objectPosition.x, objectPosition.y);
-    isMouseDownRef.current = false;
   };
 
   // データベースから読み込んだオブジェクトの座標および大きさを編集画面に合わせて変更
@@ -244,15 +273,10 @@ export const StageEditor = ({
     });
   }
 
-  // ステージ上にオブジェクトがある場合、フックに座標をセット
+  // フックに座標をセット
   const setSelectObjectXY = (x, y) => {
-    if (isOnStage(x)) {
-      setSelectObjectX(x);
-      setSelectObjectY(y);
-      return
-    }
-    setSelectObjectX(null);
-    setSelectObjectY(null);
+    setSelectObjectX(x);
+    setSelectObjectY(y);
   }
 
   // x座標がステージ上にあるか判定

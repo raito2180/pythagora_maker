@@ -9,12 +9,16 @@ import {
   createObject
 } from 'utils/matterjs/objects/CreateObjects';
 import {
+  ObjectType,
+  PythagoraStartX,
   StageStartX,
-  StageEndX
+  StageEndX,
+  StageEditorUserPlacementCenterX
 } from 'utils/GameSetting';
 
-export const PhysicalSettings = ({
+export const GameEditSettings = ({
   engine,
+  gameData,
   selectObjectRef,
   selectObjectX,
   setSelectObjectX,
@@ -30,10 +34,8 @@ export const PhysicalSettings = ({
   const radiusRef = useRef();
   const sidesRef = useRef();
   const angleRef = useRef();
+  const typeRef = useRef();
   const reGenerateObjectRef = useRef();
-  const isOnStage = (x) => {
-    return x >= StageStartX && x <= StageEndX;
-  }
   const DEFAULT_X = 0;
   const DEFAULT_Y = 0;
   const DEFAULT_ANGLE = 0;
@@ -47,19 +49,21 @@ export const PhysicalSettings = ({
   const HEIGHT_ZERO = 0;
   const SELECT_OBJECT_OUTLINE_WIDTH = 5;
   const EDIT_SCALE = 2/3;
-  const MULTIPLY_SCALE = 2;
+  const HALF_SCALE = 1/2;
 
   useEffect(() => {
     if (!engine) return;
     
     setXY();
     setSizeSettings();
+    setType();
 
   }, [engine, selectObjectX, selectObjectY, selectObjectType]);
 
   // X座標とY座標を設定
   const setXY = () => {
-    if (!selectObjectRef.current) {
+    // オブジェクトが選択されていないもしくはパレット上の場合は座標を0にする
+    if (!selectObjectRef.current || isOnPalette(selectObjectX)) {
       xRef.current.value = DEFAULT_X;
       yRef.current.value = DEFAULT_Y;
       return;
@@ -72,8 +76,8 @@ export const PhysicalSettings = ({
 
   // サイズ関連の項目を設定
   const setSizeSettings = () => {
-    // オブジェクトが選択されていない、またはステージ上にない場合はサイズと角度を0にする
-    if (!selectObjectType || !selectObjectRef.current || !isOnStage(selectObjectX)) {
+    // オブジェクトが選択されていない場合はサイズと角度を0にする
+    if (!selectObjectType || !selectObjectRef.current) {
       widthRef.current.value = WIDTH_ZERO;
       heightRef.current.value = HEIGHT_ZERO;
       angleRef.current.value = DEFAULT_ANGLE;
@@ -114,18 +118,95 @@ export const PhysicalSettings = ({
     }
   }
 
-  // オブジェクトタイプに応じてオブジェクトを再生成
+  // オブジェクトの種類を設定
+  const setType = () => {
+    // オブジェクトが選択されていない場合はステージを選択
+    if (!selectObjectRef.current) {
+      typeRef.current.value = 'Stage';
+      return;
+    }
+
+    typeRef.current.value = selectObjectRef.current.getParent().object.objectType;
+  }
+
+  // ボディタイプに応じてオブジェクトを再生成
   const reGenerateObject = () => {
-    // オブジェクト未選択もしくはステージ上にない場合は処理をしない
-    if (!selectObjectRef.current || !isOnStage(selectObjectX)) return;
+    // オブジェクト未選択もしくはパレット上の場合は処理をしない
+    if (!selectObjectRef.current || isOnPalette(selectObjectX)) return;
 
-    if (selectObjectType === 'Rectangle') reGenerateRectangle();
+    // 共通の設定
+    const x = (xRef.current.value ? Number(xRef.current.value) : DEFAULT_X) + StageStartX;
+    const y = yRef.current.value ? Number(yRef.current.value) : DEFAULT_Y;
+    const object = selectObjectRef.current.getParent().object;
+    const label = object.label;
+    const bodiesType = object.bodiesType;
+    const objectType = typeRef.current.value;
+    const objectId = object.objectId;
 
-    if (selectObjectType === 'Circle') reGenerateCircle();
+    let property = {
+      x: x,
+      y: y,
+      option: {
+        objectId: objectId,
+        isStatic: true,
+        label: label,
+        bodiesType: bodiesType,
+        objectType: objectType
+      },
+      bodiesType: bodiesType
+    };
 
-    if (selectObjectType === 'Triangle') reGenerateTriangle();
+    // 長方形の場合
+    if (bodiesType === 'Rectangle') {
+      const width = widthRef.current.value ? Number(widthRef.current.value) : DEFAULT_RECTANGLE_WIDTH;
+      const height = heightRef.current.value ? Number(heightRef.current.value) : DEFAULT_RECTANGLE_HEIGHT;
+      const angle = angleRef.current.value ? parseFloat(angleRef.current.value) : DEFAULT_ANGLE;
 
-    if (selectObjectType === 'Polygon') reGeneratePolygon();
+      property.width = width;
+      property.height = height;
+      property.option.width = width;
+      property.option.height = height;
+      property.option.angle = angle;
+
+      reGenerateObjectRef.current = createObject(property, objectType).getObject();
+    }
+
+    // 円の場合
+    if (bodiesType === 'Circle') {
+      const radius = radiusRef.current.value ? Number(radiusRef.current.value) : DEFAULT_CIRCLE_RADIUS;
+
+      property.radius = radius;
+      property.option.radius = radius;
+
+      reGenerateObjectRef.current = createObject(property, objectType).getObject();
+    }
+
+    // 三角形の場合
+    if (bodiesType === 'Triangle') {
+      const height = heightRef.current.value ? Number(heightRef.current.value) : DEFAULT_TRIANGLE_HEIGHT;
+      const angle = angleRef.current.value ? parseFloat(angleRef.current.value) : DEFAULT_ANGLE;
+
+      property.height = height;
+      property.option.height = height;
+      property.option.angle = angle;
+
+      reGenerateObjectRef.current = createObject(property, objectType).getObject();
+    }
+
+    // 多角形の場合
+    if (bodiesType === 'Polygon') {
+      const sides = sidesRef.current.value ? Number(sidesRef.current.value) : DEFAULT_POLYGON_SIDES;
+      const radius = radiusRef.current.value ? Number(radiusRef.current.value) : DEFAULT_POLYGON_RADIUS;
+      const angle = angleRef.current.value ? parseFloat(angleRef.current.value) : DEFAULT_ANGLE;
+
+      property.sides = sides;
+      property.radius = radius;
+      property.option.sides = sides;
+      property.option.radius = radius;
+      property.option.angle = angle;
+
+      reGenerateObjectRef.current = createObject(property, objectType).getObject();
+    }
 
     Composite.remove(engine.world, selectObjectRef.current);
     Composite.add(engine.world, reGenerateObjectRef.current);
@@ -138,172 +219,146 @@ export const PhysicalSettings = ({
     selectObjectRef.current.render.strokeStyle = "red";
     const parent = selectObjectRef.current.getParent();
     parent.multiplyScale(EDIT_SCALE);
+    if (selectObjectRef.current.position.x < StageStartX) parent.multiplyScale(HALF_SCALE);
   }
 
-  // 長方形を生成
-  const reGenerateRectangle = () => {
-    const width = widthRef.current.value ? Number(widthRef.current.value) : DEFAULT_RECTANGLE_WIDTH;
-    const height = heightRef.current.value ? Number(heightRef.current.value) : DEFAULT_RECTANGLE_HEIGHT;
-    const x = (xRef.current.value ? Number(xRef.current.value) : DEFAULT_X) + StageStartX;
-    const y = yRef.current.value ? Number(yRef.current.value) : DEFAULT_Y;
-    const angle = angleRef.current.value ? parseFloat(angleRef.current.value) : DEFAULT_ANGLE;
-    const object = selectObjectRef.current.getParent().object;
-    const label = object.label;
-    const bodiesType = object.bodiesType;
-    const objectType = object.objectType;
+  // オブジェクトをリセット
+  const resetObject = () => {
+    // オブジェクト未選択の場合は処理をしない
+    if (!selectObjectRef.current) return;
 
-    reGenerateObjectRef.current = createObject({
-      x: x,
-      y: y,
-      width: width,
-      height: height,
-      option: {
-        isStatic: true,
-        label: label,
-        bodiesType: bodiesType,
-        objectType: objectType,
-        width: width,
-        height: height,
-        angle: angle
-      },
-      bodiesType: bodiesType
-    }, objectType).getObject();
+    const parent = selectObjectRef.current.getParent();
+
+    // パレットから複製してきたオブジェクトの場合は削除
+    if (parent.object.label.startsWith('Palette')) {
+      Composite.remove(engine.world, selectObjectRef.current);
+      setSelectObjectX(null);
+      setSelectObjectY(null);
+      setSelectObjectType(null);
+      selectObjectRef.current = null;
+      return;
+    }
+
+    // データベースから読み込んだオブジェクトの場合は再生成
+    const contents = gameData.content;
+
+    let source = null;
+
+    Object.values(contents).forEach((content) => {
+      if (Array.isArray(content)) {
+        content.forEach((object) => {
+          if (object.option.objectId !== parent.object.objectId) return;
+
+          source = object;
+        });
+        return;
+      }
+      if (content.option.objectId !== parent.object.objectId) return;
+
+      source = content;
+    });
+
+    const type = source.option.objectType;
+    // ユーザー配置オブジェクトの場合はステージオブジェクトとして再生成
+    const clone = createObject(source, type === ObjectType.UserPlacement ? ObjectType.Stage : type);
+    changeScale(clone);
+    const resizedClone = clone.getObject();
+
+    // ユーザー配置オブジェクトの場合はオブジェクトタイプにステージを設定
+    if (type === ObjectType.UserPlacement) {
+      resizedClone.objectType = ObjectType.Stage;
+    }
+
+    Composite.add(engine.world, resizedClone);
+    Composite.remove(engine.world, selectObjectRef.current);
+    selectObjectRef.current = resizedClone;
+    setSelectObjectX(resizedClone.position.x);
+    setSelectObjectY(resizedClone.position.y);
+    setSelectObjectType(resizedClone.bodiesType);
   }
 
-  // 円を生成
-  const reGenerateCircle = () => {
-    const radius = radiusRef.current.value ? Number(radiusRef.current.value) : DEFAULT_CIRCLE_RADIUS;
-    const x = (xRef.current.value ? Number(xRef.current.value) : DEFAULT_X) + StageStartX;
-    const y = yRef.current.value ? Number(yRef.current.value) : DEFAULT_Y;
-    const object = selectObjectRef.current.getParent().object;
-    const label = object.label;
-    const bodiesType = object.bodiesType;
-    const objectType = object.objectType;
+  const removeObject = () => {
+    // オブジェクト未選択の場合は処理をしない
+    if (!selectObjectRef.current) return;
 
-    reGenerateObjectRef.current = createObject({
-      x: x,
-      y: y,
-      radius: radius,
-      option: {
-        isStatic: true,
-        label: label,
-        bodiesType: bodiesType,
-        objectType: objectType,
-        radius: radius
-      },
-      bodiesType: bodiesType
-    }, objectType).getObject();
+    Composite.remove(engine.world, selectObjectRef.current);
+    selectObjectRef.current = null;
+    setSelectObjectX(null);
+    setSelectObjectY(null);
+    setSelectObjectType(null);
   }
 
-  // 三角形を生成
-  const reGenerateTriangle = () => {
-    const height = heightRef.current.value ? Number(heightRef.current.value) : DEFAULT_TRIANGLE_HEIGHT;
-    const x = (xRef.current.value ? Number(xRef.current.value) : DEFAULT_X) + StageStartX;
-    const y = yRef.current.value ? Number(yRef.current.value) : DEFAULT_Y;
-    const angle = angleRef.current.value ? parseFloat(angleRef.current.value) : DEFAULT_ANGLE;
-    const object = selectObjectRef.current.getParent().object;
-    const label = object.label;
-    const bodiesType = object.bodiesType;
-    const objectType = object.objectType;
-
-    reGenerateObjectRef.current = createObject({
-      x: x,
-      y: y,
-      height: height,
-      option: {
-        isStatic: true,
-        label: label,
-        bodiesType: bodiesType,
-        objectType: objectType,
-        height: height,
-        angle: angle
-      },
-      bodiesType: bodiesType
-    }, objectType).getObject();
+  // データベースから読み込んだオブジェクトの座標および大きさを編集画面に合わせて変更
+  const changeScale = (object) => {
+    const position = object.getPosition();
+    object.multiplyScale(EDIT_SCALE);
+    const posY = Math.round(position.y * EDIT_SCALE);
+    if (object.object.objectType === ObjectType.UserPlacement) {
+      object.setPosition({ x: StageEditorUserPlacementCenterX, y: posY });
+      object.multiplyScale(HALF_SCALE);
+      return;
+    }
+    const posX = Math.round(((position.x - PythagoraStartX) * EDIT_SCALE) + StageStartX);
+    object.setPosition({ x: posX, y: posY });
   }
 
-  // 多角形を生成
-  const reGeneratePolygon = () => {
-    const sides = sidesRef.current.value ? Number(sidesRef.current.value) : DEFAULT_POLYGON_SIDES;
-    const radius = radiusRef.current.value ? Number(radiusRef.current.value) : DEFAULT_POLYGON_RADIUS;
-    const x = (xRef.current.value ? Number(xRef.current.value) : DEFAULT_X) + StageStartX;
-    const y = yRef.current.value ? Number(yRef.current.value) : DEFAULT_Y;
-    const angle = angleRef.current.value ? parseFloat(angleRef.current.value) : DEFAULT_ANGLE;
-    const object = selectObjectRef.current.getParent().object;
-    const label = object.label;
-    const bodiesType = object.bodiesType;
-    const objectType = object.objectType;
-
-    reGenerateObjectRef.current = createObject({
-      x: x,
-      y: y,
-      sides: sides,
-      radius: radius,
-      option: {
-        isStatic: true,
-        label: label,
-        bodiesType: bodiesType,
-        objectType: objectType,
-        sides: sides,
-        radius: radius,
-        angle: angle
-      },
-      bodiesType: bodiesType
-    }, objectType).getObject();
+  // x座標がパレット上にあるか判定
+  const isOnPalette = (x) => {
+    return x > StageEndX;
   }
 
   return (
     <div className="h-full flex flex-col border-b-2 border-r-2 border-l-2 border-black">
       <div className="w-full h-1/2 flex">
-        {(selectObjectType === null || selectObjectType === 'Rectangle' || !isOnStage(selectObjectX)) && (
+        {(selectObjectType === null || selectObjectType === 'Rectangle') && (
           <div className="w-1/6 h-full flex flex-col items-center">
             <label>幅</label>
             <input type="number" ref={widthRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === null || selectObjectType === 'Rectangle' || !isOnStage(selectObjectX)) && (
+        {(selectObjectType === null || selectObjectType === 'Rectangle') && (
           <div className="w-1/6 h-full flex flex-col items-center">
             <label>高さ</label>
             <input type="number" ref={heightRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === null || selectObjectType === 'Rectangle' || !isOnStage(selectObjectX)) && (
+        {(selectObjectType === null || selectObjectType === 'Rectangle') && (
           <div className="w-1/6 h-full flex flex-col items-center">
             <label>角度</label>
             <input type="number" step="0.1" ref={angleRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === 'Circle' && isOnStage(selectObjectX)) && (
+        {(selectObjectType === 'Circle') && (
           <div className="w-3/6 h-full flex flex-col items-center">
             <label>大きさ</label>
             <input type="number" ref={radiusRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === 'Triangle' && isOnStage(selectObjectX)) && (
+        {(selectObjectType === 'Triangle') && (
           <div className="w-2/6 h-full flex flex-col items-center">
             <label>大きさ</label>
             <input type="number" ref={heightRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === 'Triangle' && isOnStage(selectObjectX)) && (
+        {(selectObjectType === 'Triangle') && (
           <div className="w-1/6 h-full flex flex-col items-center">
             <label>角度</label>
             <input type="number" step="0.1" ref={angleRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === 'Polygon' && isOnStage(selectObjectX)) && (
+        {(selectObjectType === 'Polygon') && (
           <div className="w-1/6 h-full flex flex-col items-center">
             <label>角の数</label>
             <input type="number" ref={sidesRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === 'Polygon' && isOnStage(selectObjectX)) && (
+        {(selectObjectType === 'Polygon') && (
           <div className="w-1/6 h-full flex flex-col items-center">
             <label>大きさ</label>
             <input type="number" ref={radiusRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
           </div>
         )}
-        {(selectObjectType === 'Polygon' && isOnStage(selectObjectX)) && (
+        {(selectObjectType === 'Polygon') && (
           <div className="w-1/6 h-full flex flex-col items-center">
             <label>角度</label>
             <input type="number" step="0.1" ref={angleRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
@@ -317,22 +372,37 @@ export const PhysicalSettings = ({
           <label>Y座標</label>
           <input type="number" ref={yRef} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center" />
         </div>
+        <div className="w-1/6 h-full flex flex-col items-center">
+          <label>種類</label>
+          <select ref={typeRef} className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
+            <option value="Ball">ボール</option>
+            <option value="Stage">ステージ</option>
+            <option value="Switch">スイッチ</option>
+          </select>
+        </div>
+      </div>
+      <div className="w-full h-1/2 flex">
+        <div className="w-3/6 h-full"></div>
+        <div className="w-1/6 h-full flex items-center justify-center">
+          <button
+            type="button"
+            className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+            onClick={removeObject}
+          >削除</button>
+        </div>
+        <div className="w-1/6 h-full flex items-center justify-center">
+          <button
+            type="button"
+            className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+            onClick={resetObject}
+          >リセット</button>
+        </div>
         <div className="w-1/6 h-full flex items-center justify-center">
           <button
             type="button"
             className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
             onClick={reGenerateObject}
           >反映</button>
-        </div>
-      </div>
-      <div className="w-full h-1/2 flex">
-        <div className="w-1/6 h-full">f</div>
-        <div className="w-1/6 h-full">g</div>
-        <div className="w-1/6 h-full">h</div>
-        <div className="w-1/6 h-full">i</div>
-        <div className="w-1/6 h-full">i</div>
-        <div className="w-1/6 h-full flex items-center justify-center">
-          <button type="button" className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">リセット</button>
         </div>
       </div>
     </div>

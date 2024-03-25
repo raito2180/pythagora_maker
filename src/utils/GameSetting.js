@@ -13,6 +13,9 @@ export const GameHeight = 800 - 56; // 高さ - 親要素のmtのpx
 // ユーザー配置とピタゴラスペースの仕切りX座標
 export const WallX = 304;
 
+// ユーザー配置の中心X座標
+export const UserPlacementCenterX = WallX / 2;
+
 // ユーザー配置を囲うボックス
 export const UserPlacementBox = [
   {
@@ -86,6 +89,9 @@ export const StageEditorFirstWallX = 308;
 // 二つ目の仕切りX座標
 export const StageEditorSecondWallX = 911;
 
+// ユーザー配置の中心X座標
+export const StageEditorUserPlacementCenterX = StageEditorFirstWallX / 2;
+
 // ステージ作成画面の仕切り
 export const StageEditorWall = [
   {
@@ -131,6 +137,7 @@ export const ObjectType = {
   User: "User",
   Ball: "Ball",
   Wall: "Wall",
+  UserPlacement: "UserPlacement"
 }
 
 // オブジェクトの配色
