@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 
-export default ({ clearTime, stageId }) => {
+export default ({ clearTime, stageTitle }) => {
   const navigate = useNavigate();
   const { width, height } = useWindowSize();
   const post = {
@@ -12,7 +12,7 @@ export default ({ clearTime, stageId }) => {
     url: "https://pythagora-maker.vercel.app/game",
   };
   const handleTweet = () => {
-    const tweetText = `【${post.title}】ステージ${stageId}を${clearTime}でクリアしました！！`;
+    const tweetText = `【${post.title}】ステージ「${stageTitle}」を${clearTime}でクリアしました！！`;
     const twitterUrl = `https://twitter.com/share?url=${encodeURIComponent(
       post.url
     )}&text=${encodeURIComponent(tweetText)}`;
