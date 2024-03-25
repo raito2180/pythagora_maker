@@ -3,7 +3,7 @@ import "./App.css";
 import Header from "components/Header";
 import { Footer } from "components/Footer";
 import { useDevice } from "hooks/useDevice";
-import { usePageTracking } from "utils/useTracking.js";
+import { usePageTracking } from "utils/useTracking";
 
 function App() {
   const { isPC, isMobile } = useDevice();
