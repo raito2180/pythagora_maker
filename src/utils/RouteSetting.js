@@ -9,7 +9,7 @@ import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
 import PrivacyPolicy from "pages/static/PrivacyPolicy";
-import AboutUs from "pages/static/about_us";
+import AboutUs from "pages/static/AboutUs";
 import { TermsOfService } from "pages/static/TermsOfService";
 import HelpCard from "pages/static/HelpCard";
 
