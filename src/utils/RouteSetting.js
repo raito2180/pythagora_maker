@@ -126,7 +126,7 @@ export const RoutePath = {
   },
   about: {
     path: Path.about,
-    name: "About Us...",
+    name: "About us...",
   },
   helpCard: {
     path: Path.helpCard,
