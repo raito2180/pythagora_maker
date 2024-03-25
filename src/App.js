@@ -3,10 +3,11 @@ import "./App.css";
 import Header from "components/Header";
 import { Footer } from "components/Footer";
 import { useDevice } from "hooks/useDevice";
+import { usePageTracking } from "utils/useTracking.js";
 
 function App() {
   const { isPC, isMobile } = useDevice();
-
+  usePageTracking();
   if (isPC === null && isMobile === null) {
     return;
   }
