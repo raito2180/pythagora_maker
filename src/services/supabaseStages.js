@@ -112,3 +112,11 @@ export const getStagesCountByUserId = async (userId) => {
   }
   return { result: Response.success, count: count };
 }
+
+export const updateStage = async (stageId, stageData) => {
+  let { data, error } = await supabase.from('stages').update({content: stageData, state: State.untested, updated_at: new Date()}).eq('id', stageId);
+  if (error) {
+    return { result: Response.error, data: error };
+  }
+  return { result: Response.success, data: data };
+}
