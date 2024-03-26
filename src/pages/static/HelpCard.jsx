@@ -33,12 +33,14 @@ const HelpCard = () => {
   };
 
   return (
-    <article className="relative bg-pink-300 p-4 rounded-b-md mt-28">
+    <article className="relative bg-pink-300 p-4 rounded-b-md mt-28 mx-auto max-w-7xl">
       {/* 1つのステージを表示する要素 */}
       <section className="flex justify-center">
         {currentStages.map(({ help, imagePath }, index) => (
-          <div key={index} className="m-2 p-6 border border-gray-300 shadow-lg rounded-md bg-white hover:translate-y-2 hover:shadow-none transition-all">
-            <img src={imagePath} alt={`Help ${help}`}/>
+          <div key={index} className="relative flex m-1 p-6 border border-gray-300 shadow-lg rounded-md bg-white hover:translate-y-2 hover:shadow-none transition-all">
+            <div>
+              <img src={imagePath} alt={`Help ${help}` }/>
+            </div>
           </div>
         ))}
       </section>
