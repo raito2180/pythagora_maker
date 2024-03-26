@@ -16,7 +16,7 @@ export const GameEditProcess = ({
 }) => {
   const GAME_SCALE = 3/2;
   // 保存の丸め誤差の修正値
-  const ROUNDING_ERROR_FIX = 13;
+  const ROUNDING_ERROR_ADJUST = 13;
 
   // 保存ボタンの処理
   const handleSaveClick = () => {
@@ -72,8 +72,6 @@ export const GameEditProcess = ({
     if (retStages.length > 0) properties.Stage = retStages;
     if (retSwitch.length > 0) properties.Switch = retSwitch[0];
     if (retUserPlacements.length > 0) properties.UserPlacement = retUserPlacements;
-
-    console.log(properties);
 
     updateData(stageId, properties);
   };
@@ -137,7 +135,7 @@ export const GameEditProcess = ({
     // 共通プロパティ
     let property = {
       // 丸め誤差の修正
-      x: position.x - ROUNDING_ERROR_FIX,
+      x: position.x - ROUNDING_ERROR_ADJUST,
       y: position.y,
       option: {
         label: label,
