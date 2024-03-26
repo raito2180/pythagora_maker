@@ -4,13 +4,6 @@ const helpStages = [
   { help: 'help1', imagePath: '/assets/imgs/help/help1.png' },
   { help: 'help2', imagePath: '/assets/imgs/help/help2.png' },
   { help: 'help3', imagePath: '/assets/imgs/help/help3.png' },
-  { help: 'help4', imagePath: '/assets/imgs/help/help4.png' },
-  { help: 'help5', imagePath: '/assets/imgs/help/help5.png' },
-  { help: 'help6', imagePath: '/assets/imgs/help/help6.png' },
-  { help: 'help7', imagePath: '/assets/imgs/help/help7.png' },
-  { help: 'help8', imagePath: '/assets/imgs/help/help8.png' },
-  { help: 'help9', imagePath: '/assets/imgs/help/help9.png' },
-  // { help: 'help10', imagePath: '/assets/imgs/help/help10.png' },
 ];
 
 const STAGE_PER_PAGE = 1;
