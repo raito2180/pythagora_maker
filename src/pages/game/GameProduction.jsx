@@ -9,7 +9,6 @@ import { FiRefreshCw } from "react-icons/fi";
 import { FiPlusSquare } from "react-icons/fi";
 import { BiChevronsDown } from "react-icons/bi";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import notSet from "../../assets/imgs/notSet/NotSet.png";
 
   const UserStageList = () => {
     const [stages, setStages] = useState([]);
