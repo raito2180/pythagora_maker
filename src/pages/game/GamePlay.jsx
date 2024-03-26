@@ -197,7 +197,7 @@ export const GamePlay = () => {
               </div>
             )}
             {isGameCompleted && (
-              <ConfettiComponent clearTime={transformTime(countTime)} />
+              <ConfettiComponent clearTime={transformTime(countTime)} stageTitle={gameData.title} />
             )}
           </div>
         </div>
