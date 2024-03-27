@@ -131,16 +131,19 @@ export const TestPlay = () => {
 
   // リセットボタンの処理
   const handlePlacementReset = useCallback(() => {
+    if (!onClickPlacementReset.current) return;
     onClickPlacementReset.current();
   }, [onClickPlacementReset]);
 
   // ボールリセットボタンの処理
   const handleBallReset = useCallback(() => {
+    if (!onClickBallReset.current) return;
     onClickBallReset.current();
   }, [onClickBallReset]);
 
   // 再生ボタンの処理
   const handleClickPlay = useCallback(() => {
+    if (!onClickPlay.current) return;
     onClickPlay.current();
   }, [onClickPlay]);
 
@@ -214,11 +217,22 @@ export const TestPlay = () => {
                         ? "hover:bg-gray-900 bg-gray-600"
                         : "hover:bg-blue-200 bg-blue-400"
                         } transition-all py-2 px-4 my-2`}
-                      onClick={handleBallReset}
+                      onClick={() => window.location.reload()}
                       aria-label="データを再読み込み"
                       disabled={countDown > 0}
                     >
                       再読み込み
+                    </button>
+                    <button
+                      className={`hover:text-slate-500 text-slate-950 ${countDown > 0
+                        ? "hover:bg-gray-900 bg-gray-600"
+                        : "hover:bg-blue-200 bg-blue-400"
+                        } transition-all py-2 px-4 my-2`}
+                      onClick={() => window.close()}
+                      aria-label="編集に戻る"
+                      disabled={countDown > 0}
+                    >
+                      編集に戻る
                     </button>
                   </div>
                   <h3 className="text-2xl">{gameData.title}</h3>
@@ -230,7 +244,7 @@ export const TestPlay = () => {
                       } transition-all py-2 px-4 my-2`}
                     onClick={handleClickPlay}
                     aria-label="再生"
-                    disabled={countDown > 0} // カウントダウンが0より大きい間はボタンを無効にする
+                    disabled={countDown > 0}
                   >
                     ▶
                   </button>

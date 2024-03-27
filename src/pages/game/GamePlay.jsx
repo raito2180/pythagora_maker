@@ -114,16 +114,19 @@ export const GamePlay = () => {
 
   // リセットボタンの処理
   const handlePlacementReset = useCallback(() => {
+    if (!onClickPlacementReset.current) return;
     onClickPlacementReset.current();
   }, [onClickPlacementReset]);
 
   // ボールリセットボタンの処理
   const handleBallReset = useCallback(() => {
+    if (!onClickBallReset.current) return;
     onClickBallReset.current();
   }, [onClickBallReset]);
 
   // 再生ボタンの処理
   const handleClickPlay = useCallback(() => {
+    if (!onClickPlay.current) return;
     onClickPlay.current();
   }, [onClickPlay]);
 
@@ -137,11 +140,10 @@ export const GamePlay = () => {
             <div className="w-full flex">
               <div className="w-1/4 grid grid-flow-col items-center text-start">
                 <button
-                  className={`hover:text-slate-500 text-slate-950 ${
-                    countDown > 0
+                  className={`hover:text-slate-500 text-slate-950 ${countDown > 0
                       ? "hover:bg-gray-900 bg-gray-600"
                       : "hover:bg-red-200 bg-blue-400"
-                  } transition-all py-2 px-4 my-2`}
+                    } transition-all py-2 px-4 my-2`}
                   onClick={handlePlacementReset}
                   aria-label="ユーザーは位置オブジェクトのリセット"
                   disabled={countDown > 0}
@@ -153,11 +155,10 @@ export const GamePlay = () => {
               <div className="w-3/4 flex flex-col">
                 <div className="flex justify-between items-center mx-5">
                   <button
-                    className={`hover:text-slate-500 text-slate-950 ${
-                      countDown > 0
+                    className={`hover:text-slate-500 text-slate-950 ${countDown > 0
                         ? "hover:bg-gray-900 bg-gray-600"
                         : "hover:bg-red-200 bg-blue-400"
-                    } transition-all py-2 px-4 my-2`}
+                      } transition-all py-2 px-4 my-2`}
                     onClick={handleBallReset}
                     aria-label="ボールの位置をリセット"
                     disabled={countDown > 0}
@@ -167,11 +168,10 @@ export const GamePlay = () => {
                   <h3 className="text-2xl">{gameData.title}</h3>
                   <p>{transformTime(countTime)}</p>
                   <button
-                    className={`hover:text-slate-500 text-slate-950 ${
-                      countDown > 0
+                    className={`hover:text-slate-500 text-slate-950 ${countDown > 0
                         ? "hover:bg-gray-900 bg-gray-600"
                         : "hover:bg-red-200 bg-red-400"
-                    } transition-all py-2 px-4 my-2`}
+                      } transition-all py-2 px-4 my-2`}
                     onClick={handleClickPlay}
                     aria-label="再生"
                     disabled={countDown > 0} // カウントダウンが0より大きい間はボタンを無効にする
