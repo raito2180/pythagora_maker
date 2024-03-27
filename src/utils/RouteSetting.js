@@ -4,7 +4,6 @@ import SignUpPage from "pages/SignUp";
 import { StageSelectPage } from "pages/game";
 import UsersIndex from "pages/users/UsersIndex";
 import { GameProduction } from "pages/game/GameProduction";
-import { GameMake } from "pages/game/GameMake";
 import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
@@ -94,11 +93,7 @@ export const RouteSetting = [
   {
     path: Path.gameProduction,
     component: <GameProduction />,
-  },
-  {
-    path: Path.gameMake,
-    component: <GameMake />,
-  },
+  }
 ];
 
 // 各ページのパスと名前を定義
@@ -157,9 +152,5 @@ export const RoutePath = {
   gameProduction: {
     path: Path.gameProduction,
     name: "ゲーム制作画面",
-  },
-  gameMake: {
-    path: Path.gameMake,
-    name: "ゲーム新規作成",
   }
 };
