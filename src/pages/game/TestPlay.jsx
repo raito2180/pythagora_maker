@@ -137,7 +137,7 @@ export const TestPlay = () => {
 
   // 公開ボタン
   const handleRelease = async () => {
-    const response = await updateStage(id, { state: State.release });
+    const response = await updateStageInTestPlay(id, { state: State.release });
     if (response.result === "error") {
       // TODO : エラー処理
       return;

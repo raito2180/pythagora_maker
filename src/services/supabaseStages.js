@@ -114,7 +114,8 @@ export const getStagesCountByUserId = async (userId) => {
 }
 
 // ステージの更新
-export const updateStage = async (stageId, stageData) => {
+// TODO : 後で統一
+export const updateStageInTestPlay = async (stageId, stageData) => {
   try {
     let { error } = await supabase.from('stages').update(stageData).eq('id', stageId);
     if (error) throw error;
@@ -123,3 +124,11 @@ export const updateStage = async (stageId, stageData) => {
     return { result: Response.error, data: error.message };
   }
 };
+
+export const updateStage = async (stageId, stageData) => {
+  let { data, error } = await supabase.from('stages').update({ content: stageData, state: State.untested, updated_at: new Date() }).eq('id', stageId);
+  if (error) {
+    return { result: Response.error, data: error };
+  }
+  return { result: Response.success, data: data };
+}

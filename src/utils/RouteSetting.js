@@ -4,7 +4,6 @@ import SignUpPage from "pages/SignUp";
 import { StageSelectPage } from "pages/game";
 import UsersIndex from "pages/users/UsersIndex";
 import { GameProduction } from "pages/game/GameProduction";
-import { GameMake } from "pages/game/GameMake";
 import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
@@ -36,6 +35,7 @@ const Path = {
   gameProduction: "/game/new",
   gameMake: "/game/make",
   gameTestPlay: (id = ":id") => `/game/${id}/test_play`,
+  about: "/about"
 };
 
 // NOTE : ルーティング設定用
