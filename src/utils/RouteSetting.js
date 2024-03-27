@@ -33,7 +33,6 @@ const Path = {
   gamePlay: (id = ":id") => `/game/${id}`,
   gameEdit: (id = ":id") => `/game/${id}/edit`,
   gameProduction: "/game/new",
-  gameMake: "/game/make",
   gameTestPlay: (id = ":id") => `/game/${id}/test_play`,
   about: "/about"
 };
@@ -92,9 +91,6 @@ export const RouteSetting = [
     component: <GameProduction />,
   },
   {
-    path: Path.gameMake,
-    component: <GameMake />,
-  }, {
     path: Path.gameTestPlay(),
     component: <TestPlay />,
   }
@@ -152,10 +148,6 @@ export const RoutePath = {
   gameProduction: {
     path: Path.gameProduction,
     name: "ゲーム制作画面",
-  },
-  gameMake: {
-    path: Path.gameMake,
-    name: "ゲーム新規作成",
   },
   gameTestPlay: {
     path: (id) => Path.gameTestPlay(id),

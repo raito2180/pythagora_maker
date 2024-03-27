@@ -6,6 +6,9 @@ import { getStageById, updateStage } from "services/supabaseStages";
 import { RoutePath } from "utils/RouteSetting";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "contexts/AuthContext";
+import { getUserByAuthId } from "services/supabaseUsers";
+import Loading from "components/Loading";
+import { use } from "matter-js";
 
 // TODO : GamePlayと処理がほとんど同じなのでコンポーネント化できるか…？
 export const TestPlay = () => {
@@ -26,17 +29,27 @@ export const TestPlay = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      let { result, data } = await getStageById(id);
+      const { result, data } = await getStageById(id);
       if (result === "error") {
         throw new Error("505");
       }
+      console.log(result);
 
-      // TODO : 作成者のみアクセス可能にする
-      const id = 0; // TODO : supabaseからprofile_idを取得する
+      console.log(user.id);
 
-      if (data.profile_id !== user.id) {
+      const { result: userResult, data: userData } = await getUserByAuthId(user.id);
+      const userId = userData.data.id;
+      console.log(userResult);
+
+      if (userResult === "error") {
+        throw new Error("505");
+      }
+
+      if (data.profile_id !== userId) {
         throw new Error("404");
       }
+
+      console.log(use)
 
       setGameData(data);
     } catch (error) {
@@ -45,8 +58,12 @@ export const TestPlay = () => {
         alert("存在しないページです");
         navigate(RoutePath.stageSelect.path);
         return;
+      } else if (error.message.includes("505")) {
+        // TODO : 500ページに遷移？
+        alert("エラーが発生しました");
+        navigate(RoutePath.stageSelect.path);
+        return;
       }
-      // TODO : それ以外のエラー。モーダルなどで対処したい
     }
   }, [id]);
 
@@ -137,7 +154,7 @@ export const TestPlay = () => {
 
   // 公開ボタン
   const handleRelease = async () => {
-    const response = await updateStageInTestPlay(id, { state: State.release });
+    const response = await updateStage(id, { state: State.release });
     if (response.result === "error") {
       // TODO : エラー処理
       return;
@@ -151,13 +168,24 @@ export const TestPlay = () => {
   const handleReleaseShare = async () => {
     await handleRelease();
 
-    // TODO : シェア機能
+    const post = {
+      title: "ピタゴラメーカー",
+      url: "https://pythagora-maker.vercel.app/game",
+    };
+
+    const tweetText = `【${post.title}】ステージ「${gameData.title}」を作成しました！！ぜひ遊んでね！`;
+    const twitterUrl = `https://twitter.com/share?url=${encodeURIComponent(
+      post.url
+    )}&text=${encodeURIComponent(tweetText)}`;
+
+    // 新しいタブでTwitter共有ページを開く
+    window.open(twitterUrl, "_blank");
   }
 
   return (
     <>
       {loading ? (
-        <div>loading...</div>
+        <Loading />
       ) : (
         <div className={`w-[1200px] m-auto`}>
           <div className="w-full m-auto mt-14 flex flex-col font-[DotGothic16] ">
