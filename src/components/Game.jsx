@@ -17,6 +17,7 @@ export const Game = memo(
     setIsGameCompleted,
     stageId,
   }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
     const [isMousePosXLeft, setIsMousePosXLeft] = useState(true);
     const gameDataRef = useRef();
     const matterEngineRef = useRef();
@@ -213,6 +214,7 @@ export const Game = memo(
     };
 
     const resetBall = () => {
+      setIsPlaying(false);
       // 親コンポーネントのボールリセットボタンの処理
       matterEngineRef.current.clearComposite(ballCompositeRef.current);
       const ball = createObjects(gameDataRef.current.Ball, ObjectType.Ball);
@@ -223,6 +225,7 @@ export const Game = memo(
     };
 
     const play = () => {
+      setIsPlaying(true);
       // 親コンポーネントのプレイボタンの処理
       ballCompositeRef.current.bodies.forEach((ball) => {
         ball.getParent().setStatic(false);
@@ -244,10 +247,13 @@ export const Game = memo(
     };
 
     return (
-      <div
-        id="Game"
-        className={`w-[1200px] m-auto bg-white overflow-hidden ${stageNum}`}
-      ></div>
+      <>
+        <div
+          id="Game"
+          className={`w-[1200px] m-auto bg-white overflow-hidden ${stageNum}`}
+        ></div>
+        {isPlaying && <div className="fixed top-28 left-0 w-full h-full z-10"></div>}
+      </>
     );
   }
 );
