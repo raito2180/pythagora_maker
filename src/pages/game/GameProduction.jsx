@@ -34,7 +34,6 @@ import { RiArrowGoBackFill } from "react-icons/ri";
           }
           setProfileId(data.id);
           setProfileRole(data.role);
-          console.log("プロファイルIDデータ", data)
         };
       fetchProfileID();
     }}, [user]);
