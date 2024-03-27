@@ -9,23 +9,15 @@ import {
 import { State } from "utils/GameSetting";
 import { updateStage } from "services/supabaseStages";
 import { RoutePath } from "utils/RouteSetting";
-import { useEffect, useState } from "react";
 
 export const GameEditProcess = ({
   engine,
   stageId,
   gameData
 }) => {
-  const [timeoutId, setTimeoutId] = useState(null);
   const GAME_SCALE = 3 / 2;
   // 保存の丸め誤差の修正値
   const ROUNDING_ERROR_ADJUST = 13;
-
-  useEffect(() => {
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
 
   // 保存
   const saveStage = async () => {
@@ -301,13 +293,7 @@ export const GameEditProcess = ({
       return false;
     }
 
-    // // NOTE : DBに反映されるまでちょっと待つ
-    // const timeoutId = setTimeout(() => {
-    //   // テストプレイ画面に遷移
-    //   alert("テストプレイ開始");
-    // }, 1000);
-    // setTimeoutId(timeoutId);
-    window.open(RoutePath.gameTestPlay.path(stageId), '_blank');
+    window.open(`${RoutePath.gameTestPlay.path(stageId)}`, '_blank');
   };
 
   return (

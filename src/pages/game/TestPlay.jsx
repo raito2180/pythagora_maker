@@ -3,18 +3,14 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { State } from "utils/GameSetting";
 import { getStageById, updateStage } from "services/supabaseStages";
-import { RoutePath } from "utils/RouteSetting";
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from "contexts/AuthContext";
 import { getUserByAuthId } from "services/supabaseUsers";
 import Loading from "components/Loading";
-import { use } from "matter-js";
 
 // TODO : GamePlayと処理がほとんど同じなのでコンポーネント化できるか…？
 export const TestPlay = () => {
-  const { user } = useAuth();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [isUserPlacement, setIsUserPlacement] = useState(false);
   const [isGameCompleted, setIsGameCompleted] = useState(false);
   const onClickPlay = useRef();
   const onClickBallReset = useRef();
@@ -25,43 +21,38 @@ export const TestPlay = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [countDown, setCountDown] = useState(3); // カウントダウン用のステート
   const [showCountDown, setShowCountDown] = useState(false); // カウントダウン表示用のステート
-  const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     try {
+      // ローカルストレージからユーザーIDを取得
+      const user_id = localStorage.getItem("_pythagora_maker_session");
+      if (!user_id) {
+        throw new Error("404");
+      }
+
       const { result, data } = await getStageById(id);
       if (result === "error") {
         throw new Error("505");
       }
-      console.log(result);
 
-      console.log(user.id);
-
-      const { result: userResult, data: userData } = await getUserByAuthId(user.id);
-      const userId = userData.data.id;
-      console.log(userResult);
-
+      const { result: userResult, data: userData } = await getUserByAuthId(user_id);
       if (userResult === "error") {
         throw new Error("505");
       }
 
-      if (data.profile_id !== userId) {
+      if (data.profile_id !== userData.id) {
         throw new Error("404");
       }
-
-      console.log(use)
 
       setGameData(data);
     } catch (error) {
       if (error.message.includes("404")) {
-        // TODO : 404ページに遷移？
         alert("存在しないページです");
-        navigate(RoutePath.stageSelect.path);
+        window.close();
         return;
       } else if (error.message.includes("505")) {
-        // TODO : 500ページに遷移？
         alert("エラーが発生しました");
-        navigate(RoutePath.stageSelect.path);
+        //window.close();
         return;
       }
     }
@@ -75,6 +66,7 @@ export const TestPlay = () => {
   useEffect(() => {
     if (gameData) {
       setLoading(false);
+      setIsUserPlacement(gameData.content.UserPlacement?.length > 0);
     }
   }, [gameData]);
 
@@ -160,7 +152,6 @@ export const TestPlay = () => {
       return;
     }
     alert("公開しました");
-    // TODO : メインタブから作成されたタブのときだけ閉じる
     window.close();
   }
 
@@ -263,14 +254,22 @@ export const TestPlay = () => {
             )}
             {isGameCompleted && (
               <section className="fixed left-0 top-[48px] z-10 w-full h-full flex justify-center items-center bg-black bg-opacity-40">
-                <div className="bg-white w-full max-w-[350px] h-full max-h-[300px] p-4 rounded mb-64 flex flex-col justify-center items-center shadow-lg">
+                <div className="bg-white w-full max-w-[350px] h-full max-h-[400px] p-4 rounded mb-64 flex flex-col justify-center items-center shadow-lg">
                   <h2 className="text-center text-2xl font-semibold">テストクリア！</h2>
                   <div className="text-center my-6 flex flex-col gap-3 w-4/5">
-                    <button type="button" className="bg-yellow-200 p-2 hover:bg-yellow-400 transition-all" onClick={handleRelease}>公開する</button>
-                    <button type="button" className="bg-yellow-200 p-2 hover:bg-yellow-400 transition-all" onClick={handleReleaseShare}>公開してXにシェア</button>
+                    {isUserPlacement && (
+                      <>
+                        <button type="button" className="bg-yellow-200 p-2 hover:bg-yellow-400 transition-all" onClick={handleRelease}>公開する</button>
+                        <button type="button" className="bg-yellow-200 p-2 hover:bg-yellow-400 transition-all" onClick={handleReleaseShare}>公開してXにシェア</button>
+                        <button type="button" className="bg-yellow-200 p-2 hover:bg-yellow-400 transition-all" onClick={() => {
+                          window.location.reload();
+                        }}>再テスト</button>
+                      </>
+                    )}
                     <button type="button" className="bg-yellow-200 p-2 hover:bg-yellow-400 transition-all" onClick={() => {
-                      window.location.reload();
-                    }}>再テスト</button>
+                      window.close()
+                    }}>編集に戻る</button>
+                    {!isUserPlacement && <p>※ユーザーが動かせるオブジェクトが1つ以上無いと公開できません</p>}
                   </div>
                 </div>
               </section>
