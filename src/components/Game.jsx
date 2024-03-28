@@ -17,6 +17,7 @@ export const Game = memo(
     setIsGameCompleted,
     stageId,
   }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
     const [isMousePosXLeft, setIsMousePosXLeft] = useState(true);
     const gameDataRef = useRef();
     const matterEngineRef = useRef();
@@ -37,7 +38,7 @@ export const Game = memo(
 
     const fetchData = useCallback(async () => {
       try {
-        await matterInitialize();
+        matterInitialize();
       } catch (error) {
         // TODO : エラー処理
         console.error(error);
@@ -75,25 +76,41 @@ export const Game = memo(
       parent.multiplyScale(MULTIPLY_SCALE);
     }, [isMousePosXLeft]);
 
-    const matterInitialize = async () => {
+    const matterInitialize = () => {
       matterEngineRef.current = new MatterEngine();
       matterEngineRef.current.setup("#Game");
       gameDataRef.current = stageData;
 
+      let stageObjects = [];
+
       // スイッチ作成
-      const switchObj = createObject(stageData.Switch, ObjectType.Switch);
+      if (stageData.Switch) {
+        const switchObj = createObject(stageData.Switch, ObjectType.Switch)
+        stageObjects.push(switchObj);
 
-      // ボールとユーザー配置作成
-      createBall(stageData.Ball);
-      createUserPlacement(stageData.UserPlacement);
+        // 衝突判定
+        const colEvents = new CollisionEvents(
+          matterEngineRef.current.getEngine()
+        );
+        colEvents.pushSwitch(() => handleSwitch(switchObj, stageData.Switch.y));
+        colEvents.onTouchEvents();
+        collisionEventsRef.current = colEvents;
+      }
 
-      // 衝突イベント登録
-      const colEvents = new CollisionEvents(
-        matterEngineRef.current.getEngine()
-      );
-      colEvents.pushSwitch(() => handleSwitch(switchObj, stageData.Switch.y));
-      colEvents.onTouchEvents();
-      collisionEventsRef.current = colEvents;
+      // ステージ
+      if (stageData.Stage) stageObjects.push(...createObjects(stageData.Stage));
+
+      //ユーザー配置作成
+      if (stageData.UserPlacement) {
+        createUserPlacement(stageData.UserPlacement);
+        stageObjects.push(userPlacementCompositeRef.current);
+      }
+
+      // ボール
+      if (stageData.Ball) {
+        createBall(stageData.Ball);
+        stageObjects.push(ballCompositeRef.current);
+      }
 
       // マウスイベント登録
       const mouseEvents = new MouseEvents(
@@ -108,10 +125,7 @@ export const Game = memo(
 
       // オブジェクト登録
       matterEngineRef.current.registerObject([
-        switchObj,
-        ...createObjects(stageData.Stage),
-        ballCompositeRef.current,
-        userPlacementCompositeRef.current,
+        ...stageObjects,
         ...createObjects(UserPlacementBox, ObjectType.Wall),
         mouseEvents.getMouseConstraint(),
       ]);
@@ -213,6 +227,7 @@ export const Game = memo(
     };
 
     const resetBall = () => {
+      setIsPlaying(false);
       // 親コンポーネントのボールリセットボタンの処理
       matterEngineRef.current.clearComposite(ballCompositeRef.current);
       const ball = createObjects(gameDataRef.current.Ball, ObjectType.Ball);
@@ -223,6 +238,7 @@ export const Game = memo(
     };
 
     const play = () => {
+      setIsPlaying(true);
       // 親コンポーネントのプレイボタンの処理
       ballCompositeRef.current.bodies.forEach((ball) => {
         ball.getParent().setStatic(false);
@@ -244,10 +260,13 @@ export const Game = memo(
     };
 
     return (
-      <div
-        id="Game"
-        className={`w-[1200px] m-auto bg-white overflow-hidden ${stageNum}`}
-      ></div>
+      <>
+        <div
+          id="Game"
+          className={`w-[1200px] m-auto bg-white overflow-hidden ${stageNum}`}
+        ></div>
+        {isPlaying && <div className="fixed top-28 left-0 w-full h-full z-10"></div>}
+      </>
     );
   }
 );

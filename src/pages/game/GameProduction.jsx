@@ -9,12 +9,12 @@ import { FiRefreshCw } from "react-icons/fi";
 import { FiPlusSquare } from "react-icons/fi";
 import { BiChevronsDown } from "react-icons/bi";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import notSet from "../../assets/imgs/notSet/NotSet.png";
 
   const UserStageList = () => {
     const [stages, setStages] = useState([]);
     const { user } = useAuth();
     const [profileId, setProfileId] = useState(null);
+    const [profileRole, setProfileRole] = useState("一般");
     const [updating, setUpdating] = useState(false);
     const [disableClick, setDisableClick] = useState(false);
     const [newData, setNewData] = useState('');
@@ -23,12 +23,17 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
       if (!user) return; 
         {
         const fetchProfileID = async () => {
-          const { data, error } = await supabase.from("profiles").select("id").eq("user_id", user.id).single();
+          const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
           if (error || !data) {
             console.error("プロフィール情報の取得に失敗しました", error);
             return;
           }
           setProfileId(data.id);
+          setProfileRole(data.role);
         };
       fetchProfileID();
     }}, [user]);
@@ -151,22 +156,41 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
 
     const handleSubmit = async (event) => {
       event.preventDefault(); // フォームのデフォルトの動作を無効にする(処理にReactを適用する)
-      if (stages.length >= 3) return;
-      const { data, error } = await supabase
-      .from('stages')
-      .insert([{
-        title: newData,
-        profile_id: profileId   
-      }]
-      );
-      if (error) {
-        console.error('データの挿入に失敗しました:', error.message);
-      } else {
-        console.log('データの挿入が成功しました:', newData);
+      if (profileRole === "管理者"){
+        const { error } = await supabase
+        .from('stages')
+        .insert([{
+          title: newData,
+          profile_id: profileId   
+        }]
+        );
+        if (error) {
+          console.error('データの挿入に失敗しました:', error.message);
+        } else {
+          console.log('データの挿入が成功しました:', newData);
+        }
+        console.log('フォームが送信されました:', newData);
+        fetchStagesData();
+        setNewData('');
+      }else if (stages.length >= 3) {
+        return;
+      }else{
+        const { error } = await supabase
+        .from('stages')
+        .insert([{
+          title: newData,
+          profile_id: profileId   
+        }]
+        );
+        if (error) {
+          console.error('データの挿入に失敗しました:', error.message);
+        } else {
+          console.log('データの挿入が成功しました:', newData);
+        }
+        console.log('フォームが送信されました:', newData);
+        fetchStagesData();
+        setNewData('');
       }
-      console.log('フォームが送信されました:', newData);
-      fetchStagesData();
-      setNewData('');
     };
 
     function cursor(stage) {
@@ -179,7 +203,31 @@ import notSet from "../../assets/imgs/notSet/NotSet.png";
     };
 
     function stagesMax() {
-      if (stages.length < 3) {
+      if (profileRole === "管理者") {
+        return (
+          <>
+            <div>
+              <h1 className="font-bold text-4xl mb-4 items-center justify-center flex"><BiChevronsDown />Stage作成</h1>
+            </div>
+            <form className="items-center justify-center flex font-bold text-xl" onSubmit={handleSubmit}>
+            <h1 className="mr-1">タイトル:</h1>
+            <input className="mr-1"
+              type="text"
+              value={newData}
+              onChange={handleInputValue}
+              placeholder="タイトルを入力"
+              name="title" // input要素にname属性を追加して送信するデータのキーを設定する
+              required
+            />
+            <div className="items-center justify-center flex">
+            <button>
+              <FiPlusSquare size={40} />
+            </button>
+            </div>
+            </form>
+          </>
+        );
+        }else if (stages.length < 3) {
         return (
           <>
             <div>
