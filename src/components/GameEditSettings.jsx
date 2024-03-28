@@ -4,7 +4,7 @@ import {
   useState
 } from 'react';
 import {
-  Composite, use
+  Composite
 } from 'matter-js';
 import {
   createObject
@@ -57,7 +57,6 @@ export const GameEditSettings = ({
   useEffect(() => {
     if (!engine) return;
     
-    // 座標、サイズ、オブジェクトタイプはオブジェクトが選択されたときもしくは移動されたときに変更
     setXY();
     setSizeSettings();
     setType();
@@ -67,7 +66,6 @@ export const GameEditSettings = ({
   useEffect(() => {
     if (!engine) return;
 
-    // 固定設定はオブジェクトが選択されたときに変更
     setStatic();
   }, [selectObjectX, objectType]);
 
@@ -84,6 +82,7 @@ export const GameEditSettings = ({
     xRef.current.value = selectObjectX ? selectObjectX - StageStartX : DEFAULT_X;
     yRef.current.value = selectObjectY ? selectObjectY : DEFAULT_Y;
 
+    // ユーザー配置にあるオブジェクトかどうかを設定
     setIsOnUser(selectObjectX < StageStartX);
   }
 
@@ -166,7 +165,13 @@ export const GameEditSettings = ({
     const x = (xRef.current.value ? Number(xRef.current.value) : DEFAULT_X) + StageStartX;
     const y = yRef.current.value ? Number(yRef.current.value) : DEFAULT_Y;
     const object = selectObjectRef.current.getParent().object;
-    const label = staticRef.current && staticRef.current.value === 'dynamic' ? 'stageMove' : object.label;
+    let label = null;
+    // ステージの場合、移動できるかどうかでラベルを変更
+    if (objectType === 'Stage') {
+      label = staticRef.current.value === 'static' ? 'stage' : 'stageMove';
+    } else {
+      label = object.label;
+    }
     const bodiesType = object.bodiesType;
     const objectId = object.objectId;
 

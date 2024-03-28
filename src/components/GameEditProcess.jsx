@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   PythagoraStartX,
   UserPlacementCenterX,
@@ -83,6 +84,7 @@ export const GameEditProcess = ({
     const isSave = await saveStage();
     if (isSave) {
       alert("保存しました");
+      window.location.reload();
     }
   };
 
@@ -95,7 +97,6 @@ export const GameEditProcess = ({
       console.error(error);
       return false;
     }
-    //window.location.reload();
     return true;
   };
 
@@ -140,6 +141,7 @@ export const GameEditProcess = ({
 
     if (objectType === 'Ball') label = 'ball';
 
+    // ステージの場合、移動できるかどうかでラベルを変更
     if (objectType === 'Stage' && object.label === 'stageMove') label = 'stageMove';
 
     if (objectType === 'Stage' && object.label !== 'stageMove') label = 'stage';
@@ -295,7 +297,16 @@ export const GameEditProcess = ({
       return false;
     }
 
-    window.open(`${RoutePath.gameTestPlay.path(stageId)}`, '_blank');
+    const ret = window.open(`${RoutePath.gameTestPlay.path(stageId)}`, '_blank');
+
+    if (ret) {
+      const intervalId = setInterval(() => {
+        if (ret.closed) {
+          window.location.reload();
+          clearInterval(intervalId);
+        }
+      }, 100);
+    }
   };
 
   return (
