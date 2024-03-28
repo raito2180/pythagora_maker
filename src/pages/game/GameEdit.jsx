@@ -3,7 +3,7 @@ import {
   useState,
   useRef
 } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Engine } from "matter-js"
 import { StageEditor } from "components/StageEditor"
 import { GameEditProcess } from "components/GameEditProcess"
@@ -27,8 +27,9 @@ export const GameEdit = () => {
 
   return (
     <div className="w-[1280px] h-[720px] m-auto font-[DotGothic16]">
-      <div className="w-full m-auto mt-14">
+      <div className="w-full m-auto mt-14 flex items-center">
         <h1 className="text-5xl">Edit</h1>
+        <Link to={`/game/new`} className="ml-auto text-2xl">一覧へ戻る</Link>
       </div>
       <div className="w-full h-full m-auto mt-2 flex flex-col">
         <div className="w-full m-auto flex">
