@@ -8,10 +8,10 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   /*
-		セッションの読み込みは非同期で行われるため、
-		ログイン判定時にユーザーが読み込めていないケースが発生します。
-		それを回避するための読み込み中か否かを判定するのが以下のステートです。
-	*/
+    セッションの読み込みは非同期で行われるため、
+    ログイン判定時にユーザーが読み込めていないケースが発生します。
+    それを回避するための読み込み中か否かを判定するのが以下のステートです。
+  */
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +24,11 @@ export const AuthProvider = ({ children }) => {
       // セッションが存在すればユーザーを設定
       setUser(session?.session?.user || null);
 
+      // ローカルストレージにuidを保存
+      if (session?.session?.user) {
+        localStorage.setItem("_pythagora_maker_session", session.session.user.id);
+      }
+
       setIsLoading(false);
     };
 
@@ -33,6 +38,11 @@ export const AuthProvider = ({ children }) => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user || null);
+        if (session?.user) {
+          localStorage.setItem("_pythagora_maker_session", session?.user.id);
+        } else {
+          localStorage.removeItem("_pythagora_maker_session");
+        }
       }
     );
 

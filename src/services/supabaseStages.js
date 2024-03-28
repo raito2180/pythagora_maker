@@ -80,7 +80,7 @@ export const getStagesCountByAdmins = async () => {
     if (profilesError) throw profilesError;
     const profileIds = adminProfiles.map(profile => profile.id);
 
-    const { count, error: countError } = await supabase.from('stages').select('id',{ count: 'exact' }).in('profile_id', profileIds);
+    const { count, error: countError } = await supabase.from('stages').select('id', { count: 'exact' }).in('profile_id', profileIds);
     if (countError) throw countError;
 
     return { result: Response.success, count };
@@ -96,7 +96,7 @@ export const getStagesCountByUsers = async () => {
     if (profilesError) throw profilesError;
     const profileIds = userProfiles.map(profile => profile.id);
 
-    const { count, error: countError } = await supabase.from('stages').select('id',{ count: 'exact' }).in('profile_id', profileIds);
+    const { count, error: countError } = await supabase.from('stages').select('id', { count: 'exact' }).in('profile_id', profileIds);
     if (countError) throw countError;
 
     return { result: Response.success, count };
@@ -113,10 +113,14 @@ export const getStagesCountByUserId = async (userId) => {
   return { result: Response.success, count: count };
 }
 
+// ステージの更新
+// TODO : 後で統一
 export const updateStage = async (stageId, stageData) => {
-  let { data, error } = await supabase.from('stages').update({content: stageData, state: State.untested, updated_at: new Date()}).eq('id', stageId);
-  if (error) {
-    return { result: Response.error, data: error };
+  try {
+    let { error } = await supabase.from('stages').update(stageData).eq('id', stageId);
+    if (error) throw error;
+    return { result: Response.success };
+  } catch (error) {
+    return { result: Response.error, data: error.message };
   }
-  return { result: Response.success, data: data };
-}
+};
