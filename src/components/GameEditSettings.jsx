@@ -1,9 +1,10 @@
 import {
   useRef,
-  useEffect
+  useEffect,
+  useState
 } from 'react';
 import {
-  Composite
+  Composite, use
 } from 'matter-js';
 import {
   createObject
@@ -34,7 +35,9 @@ export const GameEditSettings = ({
   const radiusRef = useRef();
   const sidesRef = useRef();
   const angleRef = useRef();
-  const typeRef = useRef();
+  const [ objectType, setObjectType ] = useState();
+  const [ isOnUser, setIsOnUser ] = useState(false);
+  const staticRef = useRef();
   const reGenerateObjectRef = useRef();
   const DEFAULT_X = 0;
   const DEFAULT_Y = 0;
@@ -54,11 +57,19 @@ export const GameEditSettings = ({
   useEffect(() => {
     if (!engine) return;
     
+    // 座標、サイズ、オブジェクトタイプはオブジェクトが選択されたときもしくは移動されたときに変更
     setXY();
     setSizeSettings();
     setType();
 
   }, [engine, selectObjectX, selectObjectY, selectObjectType]);
+
+  useEffect(() => {
+    if (!engine) return;
+
+    // 固定設定はオブジェクトが選択されたときに変更
+    setStatic();
+  }, [selectObjectX, objectType]);
 
   // X座標とY座標を設定
   const setXY = () => {
@@ -72,6 +83,8 @@ export const GameEditSettings = ({
     // x座標はステージの開始点を0として設定
     xRef.current.value = selectObjectX ? selectObjectX - StageStartX : DEFAULT_X;
     yRef.current.value = selectObjectY ? selectObjectY : DEFAULT_Y;
+
+    setIsOnUser(selectObjectX < StageStartX);
   }
 
   // サイズ関連の項目を設定
@@ -122,12 +135,27 @@ export const GameEditSettings = ({
   const setType = () => {
     // オブジェクトが選択されていない場合はステージを選択
     if (!selectObjectRef.current) {
-      typeRef.current.value = 'Stage';
+      setObjectType('Stage');
       return;
     }
 
-    typeRef.current.value = selectObjectRef.current.getParent().object.objectType;
+    setObjectType(selectObjectRef.current.getParent().object.objectType);
   }
+
+  // オブジェクトの固定設定を設定
+  const setStatic = () => {
+    if (objectType !== 'Stage' || isOnUser) return;
+
+    // オブジェクトが選択されていない場合は固定するを選択
+    if (!selectObjectRef.current) {
+      staticRef.current.value = 'static';
+      return;
+    }
+
+    // ラベルに応じて固定設定を設定
+    staticRef.current.value = selectObjectRef.current.getParent().object.label === 'stageMove' ? 'dynamic' : 'static';
+  }
+    
 
   // ボディタイプに応じてオブジェクトを再生成
   const reGenerateObject = () => {
@@ -138,9 +166,8 @@ export const GameEditSettings = ({
     const x = (xRef.current.value ? Number(xRef.current.value) : DEFAULT_X) + StageStartX;
     const y = yRef.current.value ? Number(yRef.current.value) : DEFAULT_Y;
     const object = selectObjectRef.current.getParent().object;
-    const label = object.label;
+    const label = staticRef.current && staticRef.current.value === 'dynamic' ? 'stageMove' : object.label;
     const bodiesType = object.bodiesType;
-    const objectType = typeRef.current.value;
     const objectId = object.objectId;
 
     let property = {
@@ -288,6 +315,11 @@ export const GameEditSettings = ({
     setSelectObjectType(null);
   }
 
+  // オブジェクトタイプが変更されたときの処理
+  const changeObjectType = (e) => {
+    setObjectType(e.target.value);
+  }
+
   // データベースから読み込んだオブジェクトの座標および大きさを編集画面に合わせて変更
   const changeScale = (object) => {
     const position = object.getPosition();
@@ -374,7 +406,7 @@ export const GameEditSettings = ({
         </div>
         <div className="w-1/6 h-full flex flex-col items-center">
           <label>種類</label>
-          <select ref={typeRef} className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
+          <select value={objectType} onChange={changeObjectType} className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
             <option value="Ball">ボール</option>
             <option value="Stage">ステージ</option>
             <option value="Switch">スイッチ</option>
@@ -383,13 +415,18 @@ export const GameEditSettings = ({
       </div>
       <div className="w-full h-1/2 flex">
         <div className="w-2/6 h-full"></div>
+        {(objectType === 'Stage' && !isOnUser) && (
         <div className="w-1/6 h-full flex flex-col items-center">
           <label>固定するか</label>
-          <select className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
+          <select ref={staticRef} className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
             <option value="static">固定する</option>
             <option value="dynamic">固定しない</option>
           </select>
         </div>
+        )}
+        {(objectType === 'Ball' || objectType === 'Switch' || isOnUser) && (
+          <div className="w-1/6 h-full"></div>
+        )}
         <div className="w-1/6 h-full flex items-center justify-center">
           <button
             type="button"

@@ -19,7 +19,11 @@ export const GameEdit = () => {
   const selectObjectRef = useRef(null);
 
   useEffect(() => {
-    setEngine(Engine.create());
+    setEngine(Engine.create(
+      {
+        gravity: { x: 0, y: 0 }
+      }
+    ));
     return () => {
       engine && Engine.clear(engine);
     };

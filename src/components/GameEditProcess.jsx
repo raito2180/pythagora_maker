@@ -138,9 +138,11 @@ export const GameEditProcess = ({
 
     if (objectType === 'Switch') label = 'switch';
 
-    if (objectType === 'Stage') label = 'stage';
-
     if (objectType === 'Ball') label = 'ball';
+
+    if (objectType === 'Stage' && object.label === 'stageMove') label = 'stageMove';
+
+    if (objectType === 'Stage' && object.label !== 'stageMove') label = 'stage';
 
 
     // 共通プロパティ
