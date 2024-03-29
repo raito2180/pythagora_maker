@@ -4,6 +4,9 @@ const helpStages = [
   { help: 'help1', imagePath: '/assets/imgs/help/help1.png' },
   { help: 'help2', imagePath: '/assets/imgs/help/help2.png' },
   { help: 'help3', imagePath: '/assets/imgs/help/help3.png' },
+  { help: 'help4', imagePath: '/assets/imgs/help/help4.png' },
+  { help: 'help5', imagePath: '/assets/imgs/help/help5.png' },
+  { help: 'help6', imagePath: '/assets/imgs/help/help6.png' },
 ];
 
 const STAGE_PER_PAGE = 1;
