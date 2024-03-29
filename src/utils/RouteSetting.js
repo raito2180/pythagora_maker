@@ -10,6 +10,7 @@ import { UserProfile } from "pages/users/UserProfile";
 import PrivacyPolicy from "pages/static/PrivacyPolicy";
 import AboutUs from "pages/static/AboutUs";
 import { TermsOfService } from "pages/static/TermsOfService";
+import { TestPlay } from "pages/game/TestPlay";
 import HelpCard from "pages/static/HelpCard";
 
 // ルートパス設定
@@ -24,15 +25,17 @@ const Path = {
   home: "/",
   signup: "/signup",
   login: "/login",
+  about: "/about",
   privacyPolicy: "/privacy_policy",
   termsOfService: "/terms_of_service",
   users: "/users",
-  usersProfile: (id = ':id') => `/users/${id}`,
+  usersProfile: (id = ":id") => `/users/${id}`,
   stageSelect: "/game",
-  gamePlay: (id = ':id') => `/game/${id}`,
-  gameEdit: (id = ':id') => `/game/${id}/edit`,
+  gamePlay: (id = ":id") => `/game/${id}`,
+  gameEdit: (id = ":id") => `/game/${id}/edit`,
   gameProduction: "/game/new",
   gameMake: "/game/make",
+  gameTestPlay: (id = ":id") => `/game/${id}/test_play`,
   about: "/about",
   helpCard: "/help",
 };
@@ -93,6 +96,10 @@ export const RouteSetting = [
   {
     path: Path.gameProduction,
     component: <GameProduction />,
+  },
+  {
+    path: Path.gameTestPlay(),
+    component: <TestPlay />,
   }
 ];
 
@@ -152,5 +159,9 @@ export const RoutePath = {
   gameProduction: {
     path: Path.gameProduction,
     name: "ゲーム制作画面",
+  },
+  gameTestPlay: {
+    path: (id) => Path.gameTestPlay(id),
+    name: "Test Play",
   }
 };

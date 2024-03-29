@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import {
   PythagoraStartX,
   UserPlacementCenterX,
@@ -8,19 +9,20 @@ import {
 } from "utils/GameSetting";
 import { State } from "utils/GameSetting";
 import { updateStage } from "services/supabaseStages";
+import { RoutePath } from "utils/RouteSetting";
 
 export const GameEditProcess = ({
   engine,
   stageId,
   gameData
 }) => {
-  const GAME_SCALE = 3/2;
+  const GAME_SCALE = 3 / 2;
   // 保存の丸め誤差の修正値
   const ROUNDING_ERROR_ADJUST = 13;
 
-  // 保存ボタンの処理
-  const handleSaveClick = () => {
-    if (!engine.world || !engine.world.bodies) return;
+  // 保存
+  const saveStage = async () => {
+    if (!engine.world || !engine.world.bodies) return false;
 
     // ステージ内のオブジェクトを取得
     const stageObjects = getStageObjects(engine.world.bodies);
@@ -50,11 +52,11 @@ export const GameEditProcess = ({
     // ボールもしくはスイッチが2つ以上ある場合はエラー
     if (retBall.length >= 2) {
       window.alert("ボールは1つだけ設置できます");
-      return;
+      return false;
     }
     if (retSwitch.length >= 2) {
       window.alert("スイッチは1つだけ設置できます");
-      return;
+      return false;
     }
 
     // ユーザーオブジェクトのプロパティを取得
@@ -73,26 +75,36 @@ export const GameEditProcess = ({
     if (retSwitch.length > 0) properties.Switch = retSwitch[0];
     if (retUserPlacements.length > 0) properties.UserPlacement = retUserPlacements;
 
-    updateData(stageId, properties);
+    return updateData(stageId, properties);
+  };
+
+  // 保存ボタンの処理
+  const handleSaveClick = async (e) => {
+    e.preventDefault();
+    const isSave = await saveStage();
+    if (isSave) {
+      alert("保存しました");
+      window.location.reload();
+    }
   };
 
   // ステージデータを更新
   const updateData = async (stageId, properties) => {
-    const { error } = await updateStage(stageId, properties);
+    const { error } = await updateStage(stageId, { content: properties, state: State.untested });
 
     // TODO: エラー処理
     if (error) {
       console.error(error);
-      return;
+      return false;
     }
-    window.location.reload();
+    return true;
   };
 
   // ステージ内のオブジェクトを取得
   const getStageObjects = (bodies) => {
     return bodies.filter((body) => {
       if (body.label === "wall") return false;
-      
+
       const position = body.position;
       return position.x >= StageStartX
         && position.x <= StageEndX
@@ -127,9 +139,12 @@ export const GameEditProcess = ({
 
     if (objectType === 'Switch') label = 'switch';
 
-    if (objectType === 'Stage') label = 'stage';
-
     if (objectType === 'Ball') label = 'ball';
+
+    // ステージの場合、移動できるかどうかでラベルを変更
+    if (objectType === 'Stage' && object.label === 'stageMove') label = 'stageMove';
+
+    if (objectType === 'Stage' && object.label !== 'stageMove') label = 'stage';
 
 
     // 共通プロパティ
@@ -272,11 +287,33 @@ export const GameEditProcess = ({
     return { x: posX, y: posY };
   };
 
+  // テストプレイ
+  const handleTestPlay = async (e) => {
+    e.preventDefault();
+    // 先に保存しておく
+    const isSave = await saveStage();
+    if (!isSave) {
+      alert("テストプレイ開始に失敗しました");
+      return false;
+    }
+
+    const ret = window.open(`${RoutePath.gameTestPlay.path(stageId)}`, '_blank');
+
+    if (ret) {
+      const intervalId = setInterval(() => {
+        if (ret.closed) {
+          window.location.reload();
+          clearInterval(intervalId);
+        }
+      }, 100);
+    }
+  };
+
   return (
     <div className="w-full h-full flex flex-col border-b-2 border-r-2 border-l-2 border-black">
       <div className="w-full h-1/2 border-b-2 border-black">
-        <button className="w-1/2 h-full border-r-2 border-black">テストプレイ</button>
-        <button onClick={handleSaveClick} className="w-1/2 h-full">保存</button>
+        <button className="w-1/2 h-full border-r-2 border-black hover:bg-yellow-200 transition-all" onClick={handleTestPlay}>テストプレイ</button>
+        <button onClick={handleSaveClick} className="w-1/2 h-full hover:bg-yellow-200 transition-all">保存</button>
       </div>
       {(gameData && gameData.state === State.untested) && (
         <div className="w-full h-1/2 flex items-center justify-center bg-red-500">

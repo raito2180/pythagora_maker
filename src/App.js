@@ -4,6 +4,8 @@ import Header from "components/Header";
 import { Footer } from "components/Footer";
 import { useDevice } from "hooks/useDevice";
 import { usePageTracking } from "utils/useTracking";
+import { Suspense } from "react";
+import Loading from "components/Loading";
 
 function App() {
   const { isPC, isMobile } = useDevice();
