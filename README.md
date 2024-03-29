@@ -45,7 +45,7 @@ https://pythagora-maker.vercel.app/
 
 | ステージ作成画面 |　テストプレイ画面 |
 | ---- | ---- |
-|<img src= "https://github.com/raito2180/pythagora_maker/assets/138564916/8bd5b63f-115d-40f9-9b83-c3adba5b9e2a" width= "3690px"> | ![テストプレイ画面](https://github.com/raito2180/pythagora_maker/assets/138564916/8bf29529-de95-4360-8c81-ed8245332b62) |
+|<img src= "https://github.com/raito2180/pythagora_maker/assets/138564916/391f7127-d299-46eb-89fb-bed04d540066" width= "3690px"> | ![テストプレイ画面](https://github.com/raito2180/pythagora_maker/assets/138564916/8bf29529-de95-4360-8c81-ed8245332b62) |
 | ユーザーがステージを作成することができる画面です。 | ユーザーが作成したステージをテストプレイする画面です。 |
 
 | ヘルプ画面 |　About us画面 |
@@ -100,7 +100,7 @@ https://www.figma.com/file/TJrwdvgpydCBUVdtDF0Ox0/%E3%83%94%E3%82%BF%E3%82%B4%E3
 
 ## 今後の展望
 
-- ランキング機能を追加予定
+- バージョンアップ以降でランキング機能を追加予定
 
 <br />
 
