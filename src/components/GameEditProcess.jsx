@@ -61,7 +61,6 @@ export const GameEditProcess = ({
 
     // ユーザーオブジェクトのプロパティを取得
     const userPlacements = getUserPlacements(engine.world.bodies);
-    console.log(userPlacements);
 
     let retUserPlacements = [];
 
