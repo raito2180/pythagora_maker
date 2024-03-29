@@ -271,8 +271,6 @@ export const Game = memo(
       );
     };
 
-    console.log(stageNum);
-
     return (
       <>
         <div
