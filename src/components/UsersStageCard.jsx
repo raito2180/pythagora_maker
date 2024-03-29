@@ -54,18 +54,17 @@ export const UsersStageCard = () => {
       {/* 1つのステージを表示する要素 */}
       <section className="grid grid-cols-2 gap-4">
         {stages.map(({ id, userName, title, image }) => (
-          <div key={id} className="relative flex m-2 p-6 border border-gray-300 shadow-lg rounded-md bg-white hover:translate-y-2 hover:shadow-none transition-all">
-            <div className='w-2/3'>
-              <img src={`/assets/imgs/defaultstage/${image}.png`} alt={title} />
-            </div>
-            <div className='w-1/3 flex flex-col justify-center items-center gap-10'>
+          <div key={id} className="relative flex justify-center items-center m-2 p-6 border border-gray-300 shadow-lg rounded-md bg-white hover:translate-y-2 hover:shadow-none transition-all">
+            <div className='w-1/2  gap-10'>
               <h4 className="text-2xl font-bold">User:{userName}</h4>
               <h4 className="text-2xl font-bold">Title:{title}</h4>
-              <Link
+            </div>
+            <div>
+            <Link
                 to={RoutePath.gamePlay.path(id)}
                 className=" bg-red-500 text-yellow-300 px-4 py-2 rounded shadow hover:bg-yellow-300 focus:outline-none hover:text-red-500 focus:ring text-4xl transition-all play-link">
                 <span className='play-text'>Play</span>
-              </Link>
+            </Link>
             </div>
           </div>
         ))}
