@@ -14,11 +14,11 @@ import { getStageById } from "services/supabaseStages";
 
 export const GameEdit = () => {
   const { id } = useParams();
-  const [ engine, setEngine ] = useState(null);
-  const [ gameData, setGameData ] = useState(null);
-  const [ selectObjectX, setSelectObjectX ] = useState(null);
-  const [ selectObjectY, setSelectObjectY ] = useState(null);
-  const [ selectObjectType, setSelectObjectType ] = useState(null);
+  const [engine, setEngine] = useState(null);
+  const [gameData, setGameData] = useState(null);
+  const [selectObjectX, setSelectObjectX] = useState(null);
+  const [selectObjectY, setSelectObjectY] = useState(null);
+  const [selectObjectType, setSelectObjectType] = useState(null);
   const selectObjectRef = useRef(null);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export const GameEdit = () => {
   return (
     <>
       {(gameData) && (
-        <div className="w-[1280px] h-[720px] m-auto font-[DotGothic16]">
+        <div className="w-[1280px] h-[740px] m-auto font-[DotGothic16]">
           <div className="w-full m-auto mt-14 flex items-center">
             <h1 className="text-5xl">Edit</h1>
             <Link to={RoutePath.gameProduction.path} className="ml-auto text-2xl">一覧へ戻る</Link>
@@ -81,7 +81,7 @@ export const GameEdit = () => {
               setSelectObjectY={setSelectObjectY}
               setSelectObjectType={setSelectObjectType}
               stageId={id}
-              />
+            />
             <div className="w-full grow m-auto mt-4 flex">
               <div className="w-4/6 h-full mr-4 flex flex-col bg-white">
                 <h2 className="text-1xl border-2 border-black">
@@ -109,7 +109,7 @@ export const GameEdit = () => {
                   setSelectObjectY={setSelectObjectY}
                   selectObjectType={selectObjectType}
                   setSelectObjectType={setSelectObjectType}
-                  />
+                />
               </div>
               <div className="w-2/6 h-full flex flex-col bg-white">
                 <h2 className="text-1xl border-2 border-black">処理</h2>
@@ -117,7 +117,7 @@ export const GameEdit = () => {
                   engine={engine}
                   stageId={id}
                   gameData={gameData}
-                  />
+                />
               </div>
             </div>
           </div>

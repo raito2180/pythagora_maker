@@ -82,6 +82,7 @@ export const StageEditor = ({
     if (gameData.content && gameData.content.Ball) {
       const ballObjects = createObjects(gameData.content.Ball, ObjectType.Ball);
       ballObjects.forEach((object) => {
+        disableTexture(object);
         changeScale(object);
         Composite.add(engine.world, object.getObject());
       });
@@ -98,6 +99,7 @@ export const StageEditor = ({
     if (gameData.content && gameData.content.Stage) {
       const stageObjects = createObjects(gameData.content.Stage, ObjectType.Stage);
       stageObjects.forEach((object) => {
+        disableTexture(object);
         changeScale(object);
         Composite.add(engine.world, object.getObject());
       });
@@ -279,6 +281,11 @@ export const StageEditor = ({
   const isOnPalette = (x) => {
     return x > StageEndX;
   }
+
+  // 編集画面で画像が貼られているとサイズ感が分かりづらいので画像を表示しない
+  const disableTexture = (object) => {
+    object.getObject().render.sprite = null;
+  };
 
   return (
     <div id="stageEditor"></div>

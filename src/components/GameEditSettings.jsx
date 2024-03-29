@@ -37,7 +37,8 @@ export const GameEditSettings = ({
   const angleRef = useRef();
   const [objectType, setObjectType] = useState();
   const [isOnUser, setIsOnUser] = useState(false);
-  const staticRef = useRef();
+  const staticRef = useRef("static");
+  const themeRef = useRef(1);
   const reGenerateObjectRef = useRef();
   const DEFAULT_X = 0;
   const DEFAULT_Y = 0;
@@ -177,6 +178,7 @@ export const GameEditSettings = ({
     }
     const bodiesType = object.bodiesType;
     const objectId = object.objectId;
+    const theme = themeRef.current.value;
 
     let property = {
       x: x,
@@ -186,9 +188,10 @@ export const GameEditSettings = ({
         isStatic: true,
         label: label,
         bodiesType: bodiesType,
-        objectType: objectType
+        objectType: objectType,
+        theme: theme
       },
-      bodiesType: bodiesType
+      bodiesType: bodiesType,
     };
 
     // 長方形の場合
@@ -421,8 +424,7 @@ export const GameEditSettings = ({
           </select>
         </div>
       </div>
-      <div className="w-full h-1/2 flex">
-        <div className="w-2/6 h-full"></div>
+      <div className="w-full h-1/2 flex items-center justify-end">
         <div className="w-1/6 h-full flex flex-col items-center">
           <label>固定するか</label>
           <select ref={staticRef} className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
@@ -430,9 +432,20 @@ export const GameEditSettings = ({
             <option value="dynamic">固定しない</option>
           </select>
         </div>
-        {(objectType === 'Ball' || objectType === 'Switch') && (
-          <div className="w-1/6 h-full"></div>
-        )}
+        <div className="w-1/6 h-full flex flex-col items-center">
+          <label>テーマ</label>
+          <select ref={themeRef} className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
+            <option value="1">RUNTEQ</option>
+            <option value="2">Cosmos</option>
+            <option value="3">Farm</option>
+            <option value="4">SweetsLand</option>
+            <option value="5">Beach</option>
+            <option value="6">Dragon</option>
+            <option value="7">Osaka</option>
+            <option value="8">Cyberpunk</option>
+          </select>
+          <small className='text-xs'>※反映はプレイ画面にて</small>
+        </div>
         <div className="w-1/6 h-full flex items-center justify-center">
           <button
             type="button"

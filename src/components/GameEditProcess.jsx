@@ -133,6 +133,7 @@ export const GameEditProcess = ({
     const objectId = object.id;
     const bodiesType = object.bodiesType;
     const objectType = object.objectType;
+    const theme = object.theme;
 
     // ラベルは小文字にしないといけないので変換
     let label = null;
@@ -146,7 +147,6 @@ export const GameEditProcess = ({
 
     if (objectType === 'Stage' && object.label !== 'stageMove') label = 'stage';
 
-
     // 共通プロパティ
     let property = {
       // 丸め誤差の修正
@@ -157,9 +157,11 @@ export const GameEditProcess = ({
         isStatic: isStatic,
         objectId: objectId,
         bodiesType: bodiesType,
-        objectType: objectType
+        objectType: objectType,
+        theme: theme
       },
-      bodiesType: bodiesType
+      bodiesType: bodiesType,
+      theme: theme
     };
 
     // 円の場合
@@ -218,6 +220,7 @@ export const GameEditProcess = ({
     const objectId = object.id;
     const bodiesType = object.bodiesType;
     const objectType = object.objectType;
+    const theme = object.theme;
 
     // 共通プロパティ
     let property = {
@@ -228,9 +231,11 @@ export const GameEditProcess = ({
         isStatic: isStatic,
         objectId: objectId,
         bodiesType: bodiesType,
-        objectType: objectType
+        objectType: objectType,
+        theme: theme
       },
-      bodiesType: bodiesType
+      bodiesType: bodiesType,
+      theme: theme
     };
 
     // 円の場合
