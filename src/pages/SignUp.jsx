@@ -50,6 +50,7 @@ const SignUpPage = () => {
         alert("ユーザー登録とプロファイル設定が完了しました。");
         setUser(data); // ユーザー情報を設定
         navigate(RoutePath.stageSelect.path);
+        window.location.reload()
       }
     } catch (error) {
       alert("エラーが発生しました: " + error.message);
