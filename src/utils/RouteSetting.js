@@ -8,9 +8,10 @@ import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
 import PrivacyPolicy from "pages/static/PrivacyPolicy";
-import AboutUs from "pages/static/about_us";
+import AboutUs from "pages/static/AboutUs";
 import { TermsOfService } from "pages/static/TermsOfService";
 import { TestPlay } from "pages/game/TestPlay";
+import HelpCard from "pages/static/HelpCard";
 
 // ルートパス設定
 /**
@@ -33,8 +34,10 @@ const Path = {
   gamePlay: (id = ":id") => `/game/${id}`,
   gameEdit: (id = ":id") => `/game/${id}/edit`,
   gameProduction: "/game/new",
+  gameMake: "/game/make",
   gameTestPlay: (id = ":id") => `/game/${id}/test_play`,
-  about: "/about"
+  about: "/about",
+  helpCard: "/help",
 };
 
 // NOTE : ルーティング設定用
@@ -63,6 +66,10 @@ export const RouteSetting = [
   {
     path: Path.about,
     component: <AboutUs />,
+  },
+  {
+    path: Path.helpCard,
+    component: <HelpCard />,
   },
   // ユーザー周り
   {
@@ -121,7 +128,11 @@ export const RoutePath = {
   },
   about: {
     path: Path.about,
-    name: "About Us...",
+    name: "About us...",
+  },
+  helpCard: {
+    path: Path.helpCard,
+    name: "ヘルプ",
   },
   // ユーザー周り
   users: {

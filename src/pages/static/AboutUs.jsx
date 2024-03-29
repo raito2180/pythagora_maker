@@ -136,31 +136,31 @@ const AboutUs = () => {
       <h2 className="text-3xl text-center font-[DotGothic16]">About us ...</h2>
       <div id="about" className="w-[1200px] h-full m-auto relative z-10 mt-6">
         <div className="absolute left-0 top-0 w-full he-full z-[-1]">
-          <section className="member absolute left-[237px] top-[180px] h-[160px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[227px] top-[180px] h-[160px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">ボド</h4>
-            <p className="my-2">ボードゲームよりは3度の飯🎲<br />
+            <p className="my-2 -mx-2">ボードゲームよりは3度の飯🎲<br />
               元医療系webエンジニア見習いのボドです✨️<br />
               RUNTEQ祭楽しんでる〜？？🥳🎊
             </p>
           </section>
-          <section className="member absolute left-[645px] top-[180px] h-[160px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[631px] top-[180px] h-[160px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">YY</h4>
-            <p className="my-2">ゲームをこよなく愛する<br />元エンジニアかつ現エンジニア見習いです！<br />
+            <p className="my-2 -mx-2">ゲームをこよなく愛する<br />元エンジニアかつ現エンジニア見習いです！<br />
               主に編集画面を頑張って作りました！<br />(バグだらけ？ははは...)</p>
           </section>
-          <section className="member absolute left-[50px] top-[530px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[23px] top-[530px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[47%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">うぅたん</h4>
-            <p className="my-2">主にステージセレクト画面の実装を担当しました！<br />チーム開発最高っ！<br />
+            <p className="my-2 -mx-2" >主にステージセレクト画面の実装を担当しました！<br />チーム開発最高っ！<br />
               みんなもどんどんチーム開発していこ〜💪</p>
           </section>
-          <section className="member absolute left-[455px] top-[530px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+          <section className="member absolute left-[436px] top-[530px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
             <h4 className="text-center font-semibold">MaTTa</h4>
-            <p className="my-2">からあげとアニメさえあれば生きていける<br />中年データサイエンティストです！！<br />
+            <p className="my-2 -mx-2">からあげとアニメさえあれば生きていける<br />中年データサイエンティストです！！<br />
               アプリイベント楽しもう〜！！</p>
           </section>
-          <section className="member absolute left-[790px] top-[530px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[45%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
-            <h4 className="text-center font-semibold">とぴ</h4>
-            <p className="my-2">一応元ゲームプログラマ、ここに見参！<br />楽しんでいただけたら嬉しいです～<br />ちなみに全員のアイコンをクリックすると…？</p>
+          <section className="member absolute left-[785px] top-[530px] h-[140px] bg-white py-3 px-6 rounded before:content[''] before:absolute before:top-[-28px] before:left-[41%] before:border-[15px] before:border-transparent before:border-b-[15px] before:border-b-white transition duration-500">
+            <h4 className="mx-32 font-semibold">とぴ</h4>
+            <p className="my-2 -mx-2">一応元ゲームプログラマ、ここに見参！<br />楽しんでいただけたら嬉しいです～<br />ちなみに全員のアイコンをクリックすると…？</p>
           </section>
         </div>
       </div>

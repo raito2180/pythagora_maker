@@ -40,15 +40,24 @@ const Header = () => {
         )}
       </div>
       <div className="mx-5">
-        <Link to={RoutePath.about.path} className="text-black mr-2 font-[DotGothic16]">
+        <Link
+          to={RoutePath.about.path}
+          className="text-black mr-6 font-[DotGothic16]"
+          >
           {RoutePath.about.name}
+        </Link>
+        <Link
+          to={RoutePath.helpCard.path}
+          className="text-black mr-2 font-[DotGothic16]"
+          >
+          {RoutePath.helpCard.name}
         </Link>
         {user ? (
           <button
             onClick={logout}
             className="text-black font-[DotGothic16] mx-2"
           >
-            Logout
+            ログアウト
           </button>
         ) : (
           <>
