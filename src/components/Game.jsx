@@ -19,6 +19,7 @@ export const Game = memo(
   }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMousePosXLeft, setIsMousePosXLeft] = useState(true);
+    const [stageNum, setStageNum] = useState(`game-stage-${stageId}`);
     const gameDataRef = useRef();
     const matterEngineRef = useRef();
     const userPlacementCompositeRef = useRef();
@@ -45,9 +46,6 @@ export const Game = memo(
         console.error(error);
       }
     }, []);
-
-    // CSSクラス名にstageIdを含める
-    const stageNum = `game-stage-${stageId}`;
 
     useEffect(() => {
       try {
@@ -115,6 +113,8 @@ export const Game = memo(
       if (stageData.Ball) {
         createCompositeObject(ballCompositeRef, stageData.Ball, ObjectType.Ball);
         stageObjects.push(ballCompositeRef.current);
+        // TODO : ボールのテーマをステージのテーマにしている
+        setStageNum(`game-stage-${stageData.Ball.theme}`);
       }
       setOnClickPlay.current = play;
       onClickStageReset.current = resetStage;
