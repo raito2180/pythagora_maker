@@ -13,7 +13,7 @@ export const TestPlay = () => {
   const [isUserPlacement, setIsUserPlacement] = useState(false);
   const [isGameCompleted, setIsGameCompleted] = useState(false);
   const onClickPlay = useRef();
-  const onClickBallReset = useRef();
+  const onClickStageReset = useRef();
   const onClickPlacementReset = useRef();
   const [gameData, setGameData] = useState(null);
   const [countTime, setCountTime] = useState(0);
@@ -135,11 +135,11 @@ export const TestPlay = () => {
     onClickPlacementReset.current();
   }, [onClickPlacementReset]);
 
-  // ボールリセットボタンの処理
-  const handleBallReset = useCallback(() => {
-    if (!onClickBallReset.current) return;
-    onClickBallReset.current();
-  }, [onClickBallReset]);
+  // ステージリセットボタンの処理
+  const handleStageReset = useCallback(() => {
+    if (!onClickStageReset.current) return;
+    onClickStageReset.current();
+  }, [onClickStageReset]);
 
   // 再生ボタンの処理
   const handleClickPlay = useCallback(() => {
@@ -206,11 +206,11 @@ export const TestPlay = () => {
                         ? "hover:bg-gray-900 bg-gray-600"
                         : "hover:bg-blue-200 bg-blue-400"
                         } transition-all py-2 px-4 my-2`}
-                      onClick={handleBallReset}
-                      aria-label="ボールの位置をリセット"
+                      onClick={handleStageReset}
+                      aria-label="ステージをリセット"
                       disabled={countDown > 0}
                     >
-                      BallReset
+                      StageReset
                     </button>
                     <button
                       className={`hover:text-slate-500 text-slate-950 ${countDown > 0
@@ -255,7 +255,7 @@ export const TestPlay = () => {
               stageData={gameData.content}
               setOnClickPlay={onClickPlay}
               setOnClickPlacementReset={onClickPlacementReset}
-              setOnClickBallReset={onClickBallReset}
+              onClickStageReset={onClickStageReset}
               setIsGameCompleted={setIsGameCompleted}
               stageId={id}
             />
