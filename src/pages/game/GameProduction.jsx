@@ -46,7 +46,7 @@ import { RiArrowGoBackFill } from "react-icons/ri";
           .from('stages')
           .select(`*`)
           .eq("profile_id", profileId )
-          .order('id');
+          .order('title');
           if (error) {
             throw error;
           }
