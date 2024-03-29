@@ -12,6 +12,7 @@ class Triangle extends MatterObject {
    * @description 三角形を生成
    */
   constructor(
+    theme,
     x,
     y,
     type = "default",

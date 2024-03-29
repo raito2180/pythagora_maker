@@ -4,13 +4,13 @@ import SignUpPage from "pages/SignUp";
 import { StageSelectPage } from "pages/game";
 import UsersIndex from "pages/users/UsersIndex";
 import { GameProduction } from "pages/game/GameProduction";
-import { GameMake } from "pages/game/GameMake";
 import { GameEdit } from "pages/game/GameEdit";
 import { GamePlay } from "pages/game/GamePlay";
 import { UserProfile } from "pages/users/UserProfile";
 import PrivacyPolicy from "pages/static/PrivacyPolicy";
 import AboutUs from "pages/static/about_us";
 import { TermsOfService } from "pages/static/TermsOfService";
+import { TestPlay } from "pages/game/TestPlay";
 
 // ルートパス設定
 /**
@@ -24,16 +24,17 @@ const Path = {
   home: "/",
   signup: "/signup",
   login: "/login",
+  about: "/about",
   privacyPolicy: "/privacy_policy",
   termsOfService: "/terms_of_service",
   users: "/users",
-  usersProfile: (id = ':id') => `/users/${id}`,
+  usersProfile: (id = ":id") => `/users/${id}`,
   stageSelect: "/game",
-  gamePlay: (id = ':id') => `/game/${id}`,
-  gameEdit: (id = ':id') => `/game/${id}/edit`,
+  gamePlay: (id = ":id") => `/game/${id}`,
+  gameEdit: (id = ":id") => `/game/${id}/edit`,
   gameProduction: "/game/new",
-  gameMake: "/game/make",
-  about: "/about",
+  gameTestPlay: (id = ":id") => `/game/${id}/test_play`,
+  about: "/about"
 };
 
 // NOTE : ルーティング設定用
@@ -90,9 +91,9 @@ export const RouteSetting = [
     component: <GameProduction />,
   },
   {
-    path: Path.gameMake,
-    component: <GameMake />,
-  },
+    path: Path.gameTestPlay(),
+    component: <TestPlay />,
+  }
 ];
 
 // 各ページのパスと名前を定義
@@ -148,8 +149,8 @@ export const RoutePath = {
     path: Path.gameProduction,
     name: "ゲーム制作画面",
   },
-  gameMake: {
-    path: Path.gameMake,
-    name: "ゲーム新規作成",
+  gameTestPlay: {
+    path: (id) => Path.gameTestPlay(id),
+    name: "Test Play",
   }
 };

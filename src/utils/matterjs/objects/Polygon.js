@@ -5,6 +5,7 @@ class Polygon extends MatterObject {
   DefaultSides = 5;
   DefaultRadius = 50;
   constructor(
+    theme,
     x,
     y,
     type = "default",
