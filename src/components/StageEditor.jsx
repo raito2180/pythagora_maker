@@ -7,7 +7,6 @@ import {
   Runner,
   Composite
 } from "matter-js";
-import { getStageById } from "services/supabaseStages";
 import {
   PythagoraStartX,
   StageEditorWidth,
@@ -57,9 +56,6 @@ export const StageEditor = ({
         }
       }
     );
-
-    // データベースからデータを取得
-    fetchData();
 
     // キャンバスの外周に影をつける
     const canvas = render.canvas;
@@ -140,13 +136,6 @@ export const StageEditor = ({
     });
 
   }, [engine, gameData]);
-
-  const fetchData = async () => {
-
-    // TODO: エラー処理未実装
-    const ret = await getStageById(stageId);
-    setGameData(ret.data);
-  };
 
   // オブジェクトをクリックしたときの処理
   const handleClick = (e) => {
