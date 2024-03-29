@@ -215,7 +215,7 @@ export const GameEditProcess = ({
   const returnUserProperty = (object) => {
     const position = changePosition(object.position);
     position.x = UserPlacementCenterX
-    const label = object.label;
+    const label = object.label.match(/user(.*)/g) ? object.label : "userStatic";
     const isStatic = object.label === "userMove" ? false : object.isStatic;
     const objectId = object.id;
     const bodiesType = object.bodiesType;
