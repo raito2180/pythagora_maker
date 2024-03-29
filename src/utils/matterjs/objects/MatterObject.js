@@ -122,7 +122,7 @@ export class MatterObject {
     }
     // レンダーオプションがなければ色設定を追加して返却
     if (option) {
-      return { ...option, render: this.getColor(option.isStatic) };
+      return { ...option, render: this.getColor(option.label === "stage" || option.label === "userStatic") };
     }
     let isStatic = option && option.isStatic !== undefined;
     // オプションがなければ色設定のみ返却
@@ -144,7 +144,7 @@ export class MatterObject {
       case ObjectType.Switch:
         colorSet = { fillStyle: ColorSetting.Switch };
         break;
-      case ObjectType.User:
+      case ObjectType.User || ObjectType.UserPlacement:
         if (isStatic) colorSet = { fillStyle: ColorSetting.UserStatic };
         else colorSet = { fillStyle: ColorSetting.UserMove };
         break;

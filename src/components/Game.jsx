@@ -13,7 +13,7 @@ export const Game = memo(
     stageData,
     setOnClickPlay,
     setOnClickPlacementReset,
-    setOnClickBallReset,
+    onClickStageReset,
     setIsGameCompleted,
     stageId,
   }) => {
@@ -23,6 +23,7 @@ export const Game = memo(
     const matterEngineRef = useRef();
     const userPlacementCompositeRef = useRef();
     const ballCompositeRef = useRef();
+    const stageCompositeRef = useRef();
     const collisionEventsRef = useRef();
     const mouseEventsRef = useRef();
     const isDragObjectRef = useRef(false);
@@ -98,19 +99,25 @@ export const Game = memo(
       }
 
       // ステージ
-      if (stageData.Stage) stageObjects.push(...createObjects(stageData.Stage));
+      if (stageData.Stage) {
+        createCompositeObject(stageCompositeRef, stageData.Stage, ObjectType.Stage);
+        stageObjects.push(stageCompositeRef.current);
+      };
 
       //ユーザー配置作成
       if (stageData.UserPlacement) {
-        createUserPlacement(stageData.UserPlacement);
+        createCompositeObject(userPlacementCompositeRef, stageData.UserPlacement, ObjectType.User);
         stageObjects.push(userPlacementCompositeRef.current);
+        setOnClickPlacementReset.current = resetPlacement;
       }
 
       // ボール
       if (stageData.Ball) {
-        createBall(stageData.Ball);
+        createCompositeObject(ballCompositeRef, stageData.Ball, ObjectType.Ball);
         stageObjects.push(ballCompositeRef.current);
       }
+      setOnClickPlay.current = play;
+      onClickStageReset.current = resetStage;
 
       // マウスイベント登録
       const mouseEvents = new MouseEvents(
@@ -134,30 +141,11 @@ export const Game = memo(
       matterEngineRef.current.run();
     };
 
-    const createBall = (ballData) => {
-      // ボールの位置を再設定するときにコンポージットをリセットしたほうが楽なのでコンポジットで管理
-      ballCompositeRef.current = createCompositeObject(
-        ballData,
-        ObjectType.Ball
-      );
-      setOnClickPlay.current = play;
-      setOnClickBallReset.current = resetBall;
-    };
-
-    const createUserPlacement = (userPlacementData) => {
-      // ユーザーが配置できるオブジェクトの位置を再設定するときにコンポージットをリセットしたほうが楽なのでコンポジットで管理
-      userPlacementCompositeRef.current = createCompositeObject(
-        userPlacementData,
-        ObjectType.User
-      );
-      setOnClickPlacementReset.current = resetPlacement;
-    };
-
-    const createCompositeObject = (objData, type) => {
+    const createCompositeObject = (compositeRef, objData, type) => {
       const object = createObjects(objData, type);
       const composite = matterEngineRef.current.createComposite();
       matterEngineRef.current.registerObjectInComposite(composite, object);
-      return composite;
+      compositeRef.current = composite;
     };
 
     const handleSwitch = (switchObj, startPos_y) => {
@@ -226,23 +214,47 @@ export const Game = memo(
       isDragObjectRef.current = false;
     };
 
-    const resetBall = () => {
+    // TODO : ステージとボールは同じコンポジットでもいいのかもしれない
+    const resetStage = () => {
       setIsPlaying(false);
       // 親コンポーネントのボールリセットボタンの処理
-      matterEngineRef.current.clearComposite(ballCompositeRef.current);
-      const ball = createObjects(gameDataRef.current.Ball, ObjectType.Ball);
-      matterEngineRef.current.registerObjectInComposite(
-        ballCompositeRef.current,
-        ball
-      );
+      if (ballCompositeRef.current) {
+        matterEngineRef.current.clearComposite(ballCompositeRef.current);
+        const ball = createObjects(gameDataRef.current.Ball, ObjectType.Ball);
+        matterEngineRef.current.registerObjectInComposite(
+          ballCompositeRef.current,
+          ball
+        );
+      }
+
+      // 親コンポーネントのステージリセット
+      if (stageCompositeRef.current) {
+        matterEngineRef.current.clearComposite(stageCompositeRef.current);
+        const stage = createObjects(gameDataRef.current.Stage, ObjectType.Stage);
+        matterEngineRef.current.registerObjectInComposite(
+          stageCompositeRef.current,
+          stage
+        );
+      }
     };
 
     const play = () => {
       setIsPlaying(true);
       // 親コンポーネントのプレイボタンの処理
-      ballCompositeRef.current.bodies.forEach((ball) => {
-        ball.getParent().setStatic(false);
-      });
+      if (ballCompositeRef.current) {
+        ballCompositeRef.current.bodies.forEach((ball) => {
+          ball.getParent().setStatic(false);
+        });
+      }
+
+      if (stageCompositeRef.current) {
+        stageCompositeRef.current.bodies.forEach((stage) => {
+          if (stage.label === "stageMove") {
+            stage.getParent().setStatic(false);
+          }
+        });
+      }
+
       setSelectObject(null);
     };
 

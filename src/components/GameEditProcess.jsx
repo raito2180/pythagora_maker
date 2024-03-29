@@ -213,11 +213,11 @@ export const GameEditProcess = ({
   const returnUserProperty = (object) => {
     const position = changePosition(object.position);
     position.x = UserPlacementCenterX
-    const isStatic = object.isStatic;
+    const label = object.label;
+    const isStatic = object.label === "userMove" ? false : object.isStatic;
     const objectId = object.id;
     const bodiesType = object.bodiesType;
     const objectType = object.objectType;
-    const label = 'userStatic';
 
     // 共通プロパティ
     let property = {

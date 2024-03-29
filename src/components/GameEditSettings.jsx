@@ -35,8 +35,8 @@ export const GameEditSettings = ({
   const radiusRef = useRef();
   const sidesRef = useRef();
   const angleRef = useRef();
-  const [ objectType, setObjectType ] = useState();
-  const [ isOnUser, setIsOnUser ] = useState(false);
+  const [objectType, setObjectType] = useState();
+  const [isOnUser, setIsOnUser] = useState(false);
   const staticRef = useRef();
   const reGenerateObjectRef = useRef();
   const DEFAULT_X = 0;
@@ -51,12 +51,12 @@ export const GameEditSettings = ({
   const WIDTH_ZERO = 0;
   const HEIGHT_ZERO = 0;
   const SELECT_OBJECT_OUTLINE_WIDTH = 5;
-  const EDIT_SCALE = 2/3;
-  const HALF_SCALE = 1/2;
+  const EDIT_SCALE = 2 / 3;
+  const HALF_SCALE = 1 / 2;
 
   useEffect(() => {
     if (!engine) return;
-    
+
     setXY();
     setSizeSettings();
     setType();
@@ -152,9 +152,10 @@ export const GameEditSettings = ({
     }
 
     // ラベルに応じて固定設定を設定
-    staticRef.current.value = selectObjectRef.current.getParent().object.label === 'stageMove' ? 'dynamic' : 'static';
+    const label = selectObjectRef.current.getParent().object.label
+    staticRef.current.value = (label === 'stageMove' || label === "userMove") ? 'dynamic' : 'static';
   }
-    
+
 
   // ボディタイプに応じてオブジェクトを再生成
   const reGenerateObject = () => {
@@ -167,7 +168,9 @@ export const GameEditSettings = ({
     const object = selectObjectRef.current.getParent().object;
     let label = null;
     // ステージの場合、移動できるかどうかでラベルを変更
-    if (objectType === 'Stage') {
+    if (isOnUser) {
+      label = staticRef.current.value === 'static' ? 'userStatic' : 'userMove';
+    } else if (objectType === 'Stage') {
       label = staticRef.current.value === 'static' ? 'stage' : 'stageMove';
     } else {
       label = object.label;
@@ -420,7 +423,6 @@ export const GameEditSettings = ({
       </div>
       <div className="w-full h-1/2 flex">
         <div className="w-2/6 h-full"></div>
-        {(objectType === 'Stage' && !isOnUser) && (
         <div className="w-1/6 h-full flex flex-col items-center">
           <label>固定するか</label>
           <select ref={staticRef} className="form-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-center">
@@ -428,8 +430,7 @@ export const GameEditSettings = ({
             <option value="dynamic">固定しない</option>
           </select>
         </div>
-        )}
-        {(objectType === 'Ball' || objectType === 'Switch' || isOnUser) && (
+        {(objectType === 'Ball' || objectType === 'Switch') && (
           <div className="w-1/6 h-full"></div>
         )}
         <div className="w-1/6 h-full flex items-center justify-center">

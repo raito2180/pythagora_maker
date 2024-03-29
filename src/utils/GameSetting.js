@@ -143,7 +143,7 @@ export const ObjectType = {
 // オブジェクトの配色
 export const ColorSetting = {
   StageStatic: "gray",
-  StageMove: "yellow",
+  StageMove: "orange",
   Switch: "red",
   UserStatic: "blue",
   UserMove: "green",

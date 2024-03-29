@@ -37,8 +37,8 @@ export const StageEditor = ({
   const isMouseDownRef = useRef(false);
   const isBeforeOnStageRef = useRef(false);
   const mouseClickPositionRef = useRef({ x: 0, y: 0 });
-  const EDIT_SCALE = 2/3;
-  const HALF_SCALE = 1/2;
+  const EDIT_SCALE = 2 / 3;
+  const HALF_SCALE = 1 / 2;
   const MULTIPLY_SCALE = 2;
   const SELECT_OBJECT_OUTLINE_WIDTH = 5;
 
@@ -107,6 +107,8 @@ export const StageEditor = ({
     if (gameData.content && gameData.content.UserPlacement) {
       const userObjects = createObjects(gameData.content.UserPlacement, ObjectType.Stage);
       userObjects.forEach((userObject) => {
+        // 動くと面倒なので静的オブジェクトに設定
+        userObject.setStatic(true);
         changeScale(userObject);
         userObject.multiplyScale(HALF_SCALE);
         const position = userObject.getPosition();
@@ -141,14 +143,14 @@ export const StageEditor = ({
   const handleClick = (e) => {
     isMouseDownRef.current = true;
     const target = e.source.body;
- 
+
     if (!setSelectObject(target)) return;
 
     // クリックしたオブジェクトがユーザーが配置できるオブジェクトなら選択する
     const diff_x = e.mouse.position.x - target.position.x;
     const diff_y = e.mouse.position.y - target.position.y;
     mouseClickPositionRef.current = { x: diff_x, y: diff_y };
-    
+
     // パレット上のオブジェクトを選択したら複製する
     if (isOnPalette(target.position.x)) cloneObject(target);
 
@@ -208,7 +210,7 @@ export const StageEditor = ({
     }
 
     parent.setPosition({ x, y });
-    
+
     setSelectObjectXY(x, y);
 
     // ドラッグ前後でステージから出入りした場合はスケールを変更
@@ -247,7 +249,7 @@ export const StageEditor = ({
     object.multiplyScale(EDIT_SCALE);
   }
 
-  
+
   // オブジェクトを複製
   const cloneObject = (object) => {
     const label = object.label;
